@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".PeopleActivity">
 
     <LinearLayout
+        android:id="@+id/PeopleScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -15,14 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:id="@+id/PeopleContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Hello World!" />
+            android:orientation="vertical"></LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/navigation"
+            android:id="@+id/PeopleNavigation"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
