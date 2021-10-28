@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/people"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/people"/>
+    <item
+        android:id="@+id/planets"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/planets"/>
+    <item
+        android:id="@+id/films"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/films"/>
+    <item
+        android:id="@+id/spaceships"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher_round"
+        android:title="@string/spaceships"/>
+</menu>
