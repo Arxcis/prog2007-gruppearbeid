@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/people"
+        android:id="@+id/PeopleMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/people"/>
     <item
-        android:id="@+id/planets"
+        android:id="@+id/PlanetsMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/planets"/>
     <item
-        android:id="@+id/films"
+        android:id="@+id/FilmsMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/films"/>
     <item
-        android:id="@+id/spaceships"
+        android:id="@+id/SpaceshipsMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/spaceships"/>
