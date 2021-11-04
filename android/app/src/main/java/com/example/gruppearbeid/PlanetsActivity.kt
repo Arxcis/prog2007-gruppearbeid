@@ -2,6 +2,9 @@ package com.example.gruppearbeid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gruppearbeid.adapters.PeopleAdapter
+import com.example.gruppearbeid.adapters.PlanetsAdapter
 import kotlinx.android.synthetic.main.activity_planets.*
 
 // Local
@@ -14,6 +17,10 @@ class PlanetsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
 
+        // Init adapter
+        val adapter = PlanetsAdapter()
+        PlanetRecycler.adapter = adapter
+        PlanetRecycler.layoutManager = LinearLayoutManager(this)
     }
     override fun onResume() {
         super.onResume()
