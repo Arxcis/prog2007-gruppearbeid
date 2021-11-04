@@ -19,5 +19,5 @@
         android:id="@+id/SpaceshipsMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
-        android:title="@string/spaceships"/>
+        android:title="@string/starships"/>
 </menu>

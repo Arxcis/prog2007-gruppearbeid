@@ -28,12 +28,12 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/spaceships"
+                android:text="@string/starships"
                 android:textSize="30sp" />
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/SpaceshipsNavigation"
+            android:id="@+id/StarshipsNavigation"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
