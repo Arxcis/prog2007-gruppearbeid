@@ -5,13 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Film
-import com.example.gruppearbeid.types.People
+import com.example.gruppearbeid.types.Person
 
 
 class PeopleAdapter(
 ) : RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {
-    private var people = ArrayList<People>();
+    private var people = ArrayList<Person>();
 
     /**
      * Provide a reference to the type of views that you are using

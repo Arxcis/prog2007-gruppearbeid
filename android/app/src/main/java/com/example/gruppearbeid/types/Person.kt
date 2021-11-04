@@ -1,6 +1,6 @@
 package com.example.gruppearbeid.types
 
-data class People(
+data class Person(
     /** "name": "Luke Skywalker" */
     val name: String
 )
