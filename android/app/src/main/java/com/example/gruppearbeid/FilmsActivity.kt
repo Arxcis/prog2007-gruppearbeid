@@ -12,6 +12,9 @@ class FilmsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_films)
 
+    }
+    override fun onResume() {
+        super.onResume()
         configureBottomNavigation(this, FilmsNavigation, R.id.FilmsMenuItem)
     }
 }
