@@ -3,7 +3,6 @@ package com.example.gruppearbeid
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.adapters.StarshipsAdapter
 import kotlinx.android.synthetic.main.activity_starships.*
 
@@ -11,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_starships.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import kotlinx.android.synthetic.main.activity_planets.*
 
-class SpaceshipsActivity : AppCompatActivity() {
+class StarshipsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_starships)
@@ -23,6 +22,6 @@ class SpaceshipsActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        configureBottomNavigation(this, StarshipsNavigation, R.id.SpaceshipsMenuItem)
+        configureBottomNavigation(this, StarshipsNavigation, R.id.StarshipsMenuItem)
     }
 }

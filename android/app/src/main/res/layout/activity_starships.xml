@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SpaceshipsActivity">
+    tools:context=".StarshipsActivity">
 
     <LinearLayout
-        android:id="@+id/SpaceshipsScreen"
+        android:id="@+id/StarshipsScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/SpaceshipsContent"
+            android:id="@+id/StarshipsContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

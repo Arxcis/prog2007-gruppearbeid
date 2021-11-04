@@ -20,9 +20,9 @@ fun configureBottomNavigation(from: AppCompatActivity, Nav: BottomNavigationView
                 PlanetsActivity::class.java
             )
             R.id.FilmsMenuItem -> replaceActivity(from, FilmsActivity::class.java)
-            R.id.SpaceshipsMenuItem -> replaceActivity(
+            R.id.StarshipsMenuItem -> replaceActivity(
                 from,
-                SpaceshipsActivity::class.java
+                StarshipsActivity::class.java
             )
             else -> logAndReturnFalse(from, item.itemId)
         }

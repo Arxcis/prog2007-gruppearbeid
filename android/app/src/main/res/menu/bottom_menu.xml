@@ -16,7 +16,7 @@
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/films"/>
     <item
-        android:id="@+id/SpaceshipsMenuItem"
+        android:id="@+id/StarshipsMenuItem"
         android:enabled="true"
         android:icon="@mipmap/ic_launcher_round"
         android:title="@string/starships"/>
