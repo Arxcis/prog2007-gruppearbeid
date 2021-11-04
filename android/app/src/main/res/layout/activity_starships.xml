@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SpaceshipsActivity">
+    tools:context=".StarshipsActivity">
 
     <LinearLayout
-        android:id="@+id/SpaceshipsScreen"
+        android:id="@+id/StarshipsScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/SpaceshipsContent"
+            android:id="@+id/StarshipsContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,12 +28,17 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/spaceships"
+                android:text="@string/starships"
                 android:textSize="30sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/StarshipRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/SpaceshipsNavigation"
+            android:id="@+id/StarshipsNavigation"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="start"
