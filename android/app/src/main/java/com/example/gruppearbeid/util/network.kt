@@ -1,8 +1,13 @@
 package com.example.gruppearbeid.util
 
+import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
@@ -21,11 +26,44 @@ import java.lang.StringBuilder
 import java.net.URL
 import java.nio.charset.Charset
 
+class subClassApplication : Application()
+{
+    override fun onCreate() {
+        super.onCreate()
+        Network.application = this
+    }
+}
 
 object Network {
+
+    private val TAG = "util.Network"
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
+
+    var connectionMng: ConnectivityManager? = null
+
+    var application: subClassApplication = subClassApplication()
+
+    val networkCallback : ConnectivityManager.NetworkCallback =
+        object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: android.net.Network)
+            {
+               Log.d(TAG, "NEtowrk is up")
+            }
+            override fun onLost(network: android.net.Network)
+            {
+                Log.d(TAG, "lost network")
+            }
+        }
+
+    fun checkInternetConnection()
+    {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N && connectionMng !== null){
+            connectionMng?.registerDefaultNetworkCallback(networkCallback)
+            Log.d(TAG, "callback registered")
+        }
+    }
 
     @Throws(IOException::class, JSONException::class)
     fun getFilms(films: ArrayList<Film>, adapter: FilmsAdapter) {

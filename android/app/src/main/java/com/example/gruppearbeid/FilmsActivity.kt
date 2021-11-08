@@ -16,7 +16,7 @@ class FilmsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_films)
 
         // Init adapter
-        val adapter = FilmsAdapter()
+        val adapter = FilmsAdapter(this)
         FilmsRecycler.adapter = adapter
         FilmsRecycler.layoutManager = LinearLayoutManager(this)
 
