@@ -9,15 +9,4 @@
     <color name="white">#FFFFFFFF</color>
 
 
-
-    <color name="night_primary">#212121</color>
-    <color name="night_primary_light">#484848</color>
-    <color name="night_primary_dark">#000000</color>
-    <color name="night_primary_text">#ffffff</color>
-
-    <color name="day_primary">#fafafa</color>
-    <color name="day_primary_light">#ffffff</color>
-    <color name="day_primary_dark">#c7c7c7</color>
-    <color name="day_primary_text">#000000</color>
-
 </resources>
