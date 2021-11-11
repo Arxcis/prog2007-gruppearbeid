@@ -16,7 +16,7 @@ class PlanetsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
-        title = "Planets"
+        title = "SWAPI / Planets"
 
         // Init adapter
         val adapter = PlanetsAdapter()

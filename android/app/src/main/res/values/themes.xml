@@ -13,14 +13,18 @@
         <!--item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item-->
 
         <!-- Customize your theme here. -->
+
+        <!-- Black -->
+        <item name="android:textColor">@color/black</item>
         <item name="colorPrimary">@color/black</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+
+        <!-- White -->
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorOnSurface">@color/white</item>
-        <item name="android:textColor">@color/black</item>
         <item name="android:textColorPrimary">@color/white</item>
-
+        <item name="subtitleTextColor">@color/white</item>
         <item name="colorSurface">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
     </style>
 </resources>
