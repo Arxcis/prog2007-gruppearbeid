@@ -36,6 +36,7 @@ class StarshipsAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val starship = starship[position]
+
         holder.name?.text = starship.name
     }
 

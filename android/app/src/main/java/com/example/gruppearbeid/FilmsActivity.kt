@@ -14,12 +14,12 @@ class FilmsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_films)
+        title = "SWAPI / Films"
 
         // Init adapter
         val adapter = FilmsAdapter()
         FilmsRecycler.adapter = adapter
         FilmsRecycler.layoutManager = LinearLayoutManager(this)
-
     }
     override fun onResume() {
         super.onResume()

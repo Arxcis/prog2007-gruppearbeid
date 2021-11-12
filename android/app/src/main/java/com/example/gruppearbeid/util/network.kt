@@ -90,7 +90,11 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val starship = Starship(name = item.getString("name"))
+
+                val starship = Starship(
+                    name = item.getString("name")
+                )
+
                 starships.add(starship)
             }
             handler.post {

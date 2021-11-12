@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 fun configureBottomNavigation(from: AppCompatActivity, Nav: BottomNavigationView, selectedItemId: Int) {
 
     Nav.setOnItemSelectedListener(null)
+    Nav.elevation = 0.0f;
     Nav.selectedItemId = selectedItemId
     Nav.setOnItemSelectedListener { item ->
 

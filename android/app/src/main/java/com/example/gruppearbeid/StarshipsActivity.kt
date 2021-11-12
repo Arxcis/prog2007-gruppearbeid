@@ -14,6 +14,7 @@ class StarshipsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_starships)
+        title = "SWAPI / Starships"
 
         // Init adapter
         val adapter = StarshipsAdapter()
