@@ -1,5 +1,6 @@
 package com.example.gruppearbeid.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ class PeopleAdapter(
 ) : RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {
     private var people = ArrayList<Person>();
     init {
+        Log.d("peopleAdapter", "before crash?")
         Network.getPeople(people, this)
     }
     /**

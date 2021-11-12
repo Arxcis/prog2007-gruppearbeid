@@ -18,15 +18,7 @@ class FilmsAdapter(theActivityRef: AppCompatActivity)
     : RecyclerView.Adapter<FilmsAdapter.ViewHolder>() {
     private var films = ArrayList<Film>();
 
-    var ActivityRef: AppCompatActivity = theActivityRef
-
     init {
-        val cm: ConnectivityManager? = ContextCompat.getSystemService(ActivityRef, ConnectivityManager::class.java)
-        if (cm !== null)
-        {
-            Network.connectionMng = cm
-            Network.checkInternetConnection()
-        }
         Network.getFilms(films, this)
     }
 
