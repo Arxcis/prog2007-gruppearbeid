@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.WorkerParameters
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
 import com.example.gruppearbeid.util.Network
+import com.example.gruppearbeid.util.WorkMngSample
 import kotlinx.android.synthetic.main.activity_people.*
 
 // Local
@@ -24,6 +26,8 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
+
+        //var backgrWork: WorkMngSample = WorkMngSample(this, WorkerParameters())
 
         val connectionMng: ConnectivityManager? = ContextCompat.getSystemService(this, ConnectivityManager::class.java)
         if (connectionMng !== null)
