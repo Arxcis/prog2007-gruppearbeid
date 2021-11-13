@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -27,7 +30,10 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
 
-        //var backgrWork: WorkMngSample = WorkMngSample(this, WorkerParameters())
+        val workRequest: WorkRequest = OneTimeWorkRequestBuilder<WorkMngSample>().build()
+        WorkManager.
+                getInstance(this)
+                .enqueue(workRequest)
 
         val connectionMng: ConnectivityManager? = ContextCompat.getSystemService(this, ConnectivityManager::class.java)
         if (connectionMng !== null)
