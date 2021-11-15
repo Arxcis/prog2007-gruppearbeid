@@ -55,33 +55,16 @@ object Network {
             }
         }
 
-    fun checkWIFISignalStrength()  //followed this link:
-                                    //https://developer.android.com/guide/topics/connectivity/wifi-scan
+    fun checkWIFISignalStrength()
+    //follow this guide: https://www.geeksforgeeks.org/programmatically-check-the-network-speed-in-android/
     {
-        if (appContext != null) {
-            val wifiManager = appContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
-            val wifiScanReceiver = object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent)
-                {
-                    //check if the WIFI scan was successful by retrieving EXTRA_RESULT_UPDATED Intent.
-                    WifiScanResult = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
-                    if (WifiScanResult)
-                    {
-                        wifiManager.scanResults
-                    }
-                }
-            }
+        if (appContext != null &&
+            (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)) {
+            val connectionManager =
+                appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val networkCapability
+                = connectionManager.getNetworkCapabilities(connectionManager.activeNetwork)
 
-            val intentFilter = IntentFilter()   //create intentFilter since it was needed for
-                                                //registerReciever().
-            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
-            appContext.registerReceiver(wifiScanReceiver,intentFilter)
-
-            WifiScanResult = wifiManager.startScan()
-            if (WifiScanResult == false)
-            {
-                Log.d(TAG, "WIFI scan was unsuccessful")
-            }
         }
 
 

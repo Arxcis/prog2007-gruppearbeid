@@ -26,8 +26,7 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
 
-        Network.appContext = applicationContext
-        Network.checkWIFISignalStrength()
+
 
         val connectionMng: ConnectivityManager? = ContextCompat.getSystemService(this, ConnectivityManager::class.java)
         if (connectionMng !== null)
@@ -35,6 +34,9 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
             Network.connectionMng = connectionMng
             Network.checkInternetConnection()
         }
+
+        Network.appContext = applicationContext
+        Network.checkWIFISignalStrength()
         if(com.example.gruppearbeid.util.Network.lostNetwork == false) {
             /*I think this if branch always runs because the ConnectivityManager's thread which operates the
                 callback for notifying about network changes doesn't have the time to notify about no internet connection
