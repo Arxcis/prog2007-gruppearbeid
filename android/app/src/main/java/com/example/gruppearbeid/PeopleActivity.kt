@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
+import com.example.gruppearbeid.util.ApplicationContext
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_people.*
 
@@ -24,6 +25,9 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
+
+        Network.appContext = applicationContext
+        Network.checkWIFISignalStrength()
 
         val connectionMng: ConnectivityManager? = ContextCompat.getSystemService(this, ConnectivityManager::class.java)
         if (connectionMng !== null)

@@ -1,8 +1,12 @@
 package com.example.gruppearbeid.util
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -33,8 +37,9 @@ object Network {
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
 
+    var WifiScanResult: Boolean = false    //true if scan performed correctly
+    lateinit var appContext: Context
     var lostNetwork: Boolean = false
-
     var connectionMng: ConnectivityManager? = null
 
     val networkCallback : ConnectivityManager.NetworkCallback =
@@ -49,6 +54,38 @@ object Network {
                 Log.d(TAG, "lost network")
             }
         }
+
+    fun checkWIFISignalStrength()  //followed this link:
+                                    //https://developer.android.com/guide/topics/connectivity/wifi-scan
+    {
+        if (appContext != null) {
+            val wifiManager = appContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val wifiScanReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent)
+                {
+                    //check if the WIFI scan was successful by retrieving EXTRA_RESULT_UPDATED Intent.
+                    WifiScanResult = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+                    if (WifiScanResult)
+                    {
+                        wifiManager.scanResults
+                    }
+                }
+            }
+
+            val intentFilter = IntentFilter()   //create intentFilter since it was needed for
+                                                //registerReciever().
+            intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+            appContext.registerReceiver(wifiScanReceiver,intentFilter)
+
+            WifiScanResult = wifiManager.startScan()
+            if (WifiScanResult == false)
+            {
+                Log.d(TAG, "WIFI scan was unsuccessful")
+            }
+        }
+
+
+    }
 
     fun checkInternetConnection()
     {
