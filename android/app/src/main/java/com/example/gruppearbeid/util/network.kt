@@ -62,9 +62,10 @@ object Network {
             (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)) {
             val connectionManager =
                 appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkCapability
+            var networkCapability
                 = connectionManager.getNetworkCapabilities(connectionManager.activeNetwork)
-
+            val downloadSpeed = (networkCapability?.linkDownstreamBandwidthKbps)?.div(1000)
+            Log.d(TAG, "MBPS: ${downloadSpeed.toString()}")
         }
 
 
