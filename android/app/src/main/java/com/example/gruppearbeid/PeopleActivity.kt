@@ -1,6 +1,7 @@
 package com.example.gruppearbeid
 
 // Third party
+import android.content.Intent
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -67,6 +68,8 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
 
     fun addImage(view: View)
     {
-        Log.d(TAG, "btnImageClick sent!")
+        Log.d(TAG, "download button was lcicked")
+        val intent = Intent(this, DownloadImage::class.java)
+        startActivity(intent)
     }
 }
