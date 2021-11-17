@@ -12,17 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import androidx.work.WorkerParameters
-import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
-import com.example.gruppearbeid.util.ApplicationContext
 import com.example.gruppearbeid.util.Network
-import com.example.gruppearbeid.util.WorkMngSample
+import com.example.gruppearbeid.util.WorkManagerImage
 import kotlinx.android.synthetic.main.activity_people.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
-import kotlinx.android.synthetic.main.activity_films.*
 
 
 class PeopleActivity : AppCompatActivity() { //This activity has been set as the first one which starts when opening up
@@ -35,7 +31,7 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
         setContentView(R.layout.activity_people)
 
 
-        val workRequest: WorkRequest = OneTimeWorkRequestBuilder<WorkMngSample>().build()
+        val workRequest: WorkRequest = OneTimeWorkRequestBuilder<WorkManagerImage>().build()
         WorkManager.
                 getInstance(this)
                 .enqueue(workRequest)
