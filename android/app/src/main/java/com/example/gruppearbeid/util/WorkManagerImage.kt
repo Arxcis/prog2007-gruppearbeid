@@ -23,10 +23,12 @@ class WorkManagerImage(appContext: Context, workParams: WorkerParameters) :
                 connectionManager.getNetworkCapabilities(connectionManager.activeNetwork)
             var downloadSpeed = (networkCapability?.linkDownstreamBandwidthKbps)?.div(1000)
             Log.d(TAG, "MBPS: ${downloadSpeed.toString()}")
-            
-            if (downloadSpeed < MbpsMinSpeed)
-            {
+
+            downloadSpeed?.let {
+                if (downloadSpeed < MbpsMinSpeed)
+                {
                 return Result.retry()
+                }
             }
             return Result.success()     //return success if fast enough network speed.
         }

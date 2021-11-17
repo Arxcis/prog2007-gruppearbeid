@@ -24,7 +24,6 @@ class DownloadImage : AppCompatActivity() {
                 OneTimeWorkRequest.MIN_BACKOFF_MILLIS,
                 TimeUnit.MILLISECONDS
             )
-            .setInitialDelay(5000, TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(this).enqueue(downImageRequest)
     }
