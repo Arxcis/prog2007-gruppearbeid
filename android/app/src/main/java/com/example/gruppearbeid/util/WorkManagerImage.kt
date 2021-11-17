@@ -12,6 +12,8 @@ class WorkManagerImage(appContext: Context, workParams: WorkerParameters) :
     private val myContext = appContext
     private val TAG = "WorkManagerImage"
 
+    private val MbpsMinSpeed = 2
+
     override fun doWork(): Result {
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -19,8 +21,14 @@ class WorkManagerImage(appContext: Context, workParams: WorkerParameters) :
                 myContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             var networkCapability =
                 connectionManager.getNetworkCapabilities(connectionManager.activeNetwork)
-            val downloadSpeed = (networkCapability?.linkDownstreamBandwidthKbps)?.div(1000)
+            var downloadSpeed = (networkCapability?.linkDownstreamBandwidthKbps)?.div(1000)
             Log.d(TAG, "MBPS: ${downloadSpeed.toString()}")
+            
+            if (downloadSpeed < MbpsMinSpeed)
+            {
+                return Result.retry()
+            }
+            return Result.success()     //return success if fast enough network speed.
         }
         return Result.success()
     }
