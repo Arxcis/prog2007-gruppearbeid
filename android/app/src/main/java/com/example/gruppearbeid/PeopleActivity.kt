@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.OneTimeWorkRequestBuilder
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_films.*
 
 class PeopleActivity : AppCompatActivity() { //This activity has been set as the first one which starts when opening up
                                              //the app.
+    private val TAG = "PeopleActivity"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,5 +63,10 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
     override fun onResume() {
         super.onResume()
         configureBottomNavigation(this, PeopleNavigation, R.id.PeopleMenuItem)
+    }
+
+    fun addImage(view: View)
+    {
+        Log.d(TAG, "btnImageClick sent!")
     }
 }

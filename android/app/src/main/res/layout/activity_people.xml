@@ -31,10 +31,18 @@
                 android:text="@string/people"
                 android:textSize="30sp" />
 
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/PeopleRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="505dp" />
+
+            <Button
+                android:id="@+id/btnImage"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:onClick="addImage"
+                android:text="@string/btnImageText" />
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView

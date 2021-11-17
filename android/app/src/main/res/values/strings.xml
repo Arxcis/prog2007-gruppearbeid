@@ -4,4 +4,5 @@
     <string name="planets">Planets</string>
     <string name="films">Films</string>
     <string name="starships">Starships</string>
+    <string name="btnImageText">Add image</string>
 </resources>
