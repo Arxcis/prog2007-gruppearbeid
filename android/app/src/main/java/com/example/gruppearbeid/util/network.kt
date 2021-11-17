@@ -1,8 +1,12 @@
 package com.example.gruppearbeid.util
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
+import android.net.wifi.WifiManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -33,8 +37,9 @@ object Network {
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
 
+    var WifiScanResult: Boolean = false    //true if scan performed correctly
+    lateinit var appContext: Context
     var lostNetwork: Boolean = false
-
     var connectionMng: ConnectivityManager? = null
 
     val networkCallback : ConnectivityManager.NetworkCallback =
@@ -49,6 +54,22 @@ object Network {
                 Log.d(TAG, "lost network")
             }
         }
+
+    fun checkWIFISignalStrength()
+    //follow this guide: https://www.geeksforgeeks.org/programmatically-check-the-network-speed-in-android/
+    {
+        if (appContext != null &&
+            (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M)) {
+            val connectionManager =
+                appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            var networkCapability
+                = connectionManager.getNetworkCapabilities(connectionManager.activeNetwork)
+            val downloadSpeed = (networkCapability?.linkDownstreamBandwidthKbps)?.div(1000)
+            Log.d(TAG, "MBPS: ${downloadSpeed.toString()}")
+        }
+
+
+    }
 
     fun checkInternetConnection()
     {

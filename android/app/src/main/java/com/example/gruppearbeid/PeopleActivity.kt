@@ -13,6 +13,7 @@ import androidx.work.WorkRequest
 import androidx.work.WorkerParameters
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
+import com.example.gruppearbeid.util.ApplicationContext
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.WorkMngSample
 import kotlinx.android.synthetic.main.activity_people.*
@@ -30,6 +31,7 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
 
+
         val workRequest: WorkRequest = OneTimeWorkRequestBuilder<WorkMngSample>().build()
         WorkManager.
                 getInstance(this)
@@ -41,6 +43,9 @@ class PeopleActivity : AppCompatActivity() { //This activity has been set as the
             Network.connectionMng = connectionMng
             Network.checkInternetConnection()
         }
+
+        Network.appContext = applicationContext
+        Network.checkWIFISignalStrength()
         if(com.example.gruppearbeid.util.Network.lostNetwork == false) {
             /*I think this if branch always runs because the ConnectivityManager's thread which operates the
                 callback for notifying about network changes doesn't have the time to notify about no internet connection
