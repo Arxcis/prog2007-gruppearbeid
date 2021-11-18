@@ -12,12 +12,9 @@ import com.example.gruppearbeid.util.Network
 
 
 class StarshipsAdapter(
+    private var starship: ArrayList<Starship>,
     private val onClick: (film: Starship) -> Unit
 ) : RecyclerView.Adapter<StarshipsAdapter.ViewHolder>() {
-    private var starship = ArrayList<Starship>();
-    init {
-        Network.getStarships(starship, this)
-    }
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).

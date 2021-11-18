@@ -22,6 +22,7 @@
         <entry key="app/src/main/res/layout/adapter_people_item.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/layout/adapter_planets_item.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/layout/adapter_starships_item.xml" value="0.14266304347826086" />
+        <entry key="app/src/main/res/layout/recycler_view_item.xml" value="0.28541666666666665" />
       </map>
     </option>
   </component>

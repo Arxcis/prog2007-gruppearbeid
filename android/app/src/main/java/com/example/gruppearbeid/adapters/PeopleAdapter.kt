@@ -12,12 +12,10 @@ import com.example.gruppearbeid.util.Network
 
 
 class PeopleAdapter(
+    private var people: ArrayList<Person>,
     private val onClick: (film: Person) -> Unit
 ) : RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {
-    private var people = ArrayList<Person>();
-    init {
-        Network.getPeople(people, this)
-    }
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).

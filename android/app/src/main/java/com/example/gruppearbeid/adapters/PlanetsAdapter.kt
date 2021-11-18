@@ -13,12 +13,10 @@ import com.example.gruppearbeid.util.Network
 
 
 class PlanetsAdapter(
+    private var planets: ArrayList<Planet>,
     private val onClick: (film: Planet) -> Unit
 ) : RecyclerView.Adapter<PlanetsAdapter.ViewHolder>() {
-    private var planets = ArrayList<Planet>();
-    init {
-        Network.getPlanets(planets, this)
-    }
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).

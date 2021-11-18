@@ -37,7 +37,7 @@ private fun <T>navigateToTab(from: AppCompatActivity, to: Class<T>): Boolean {
     val intent = Intent(from, to)
     from.startActivity(intent)
 
-    // from.overridePendingTransition(0,0) turns off the navigation animation. This is desireable
+    // from.overridePendingTransition(0,0) turns off the navigation animation. This is desirable
     // when replacing an activity, because replaceActivity() is currently being used to navigate between tabs.
     from.overridePendingTransition(0,0)
 
@@ -53,7 +53,7 @@ private fun <T>navigateToTab(from: AppCompatActivity, to: Class<T>): Boolean {
 
 fun <T>navigateToThing(from: AppCompatActivity, to: Class<T>, thing: Serializable): Boolean {
     val intent = Intent(from, to).apply {
-        putExtra("EXTRA_THING", thing)
+        putExtra(Constants.EXTRA_THING, thing)
     }
     from.startActivity(intent)
     Log.i("naviateToThing","Navigating from ${from::class.simpleName} to ${FilmActivity::class.simpleName}")

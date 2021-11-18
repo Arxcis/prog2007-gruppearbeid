@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
+import com.example.gruppearbeid.util.Constants
 import kotlinx.android.synthetic.main.activity_film.*
 
 
@@ -13,7 +14,7 @@ class FilmActivity : AppCompatActivity() {
         setContentView(R.layout.activity_film)
 
         // Get extras
-        val film = intent.extras?.getSerializable("EXTRA_THING") as? Film
+        val film = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Film
 
         // Set activity title
         title = film?.title ?: ""
