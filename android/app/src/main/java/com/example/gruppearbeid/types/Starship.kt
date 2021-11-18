@@ -7,4 +7,12 @@ data class Starship(
     val model: String,
 
     val manufacturer: String,
+
+    val length: String,
+
+    val max_atmosphering_speed: String,
+
+    val crew: String,
+
+    val passengers: String,
     )

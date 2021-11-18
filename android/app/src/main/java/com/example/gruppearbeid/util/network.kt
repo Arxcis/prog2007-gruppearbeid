@@ -92,7 +92,13 @@ object Network {
                 val item = results.getJSONObject(i)
 
                 val starship = Starship(
-                    name = item.getString("name")
+                    name = item.getString("name"),
+                    model = item.getString("model"),
+                    manufacturer = item.getString("manufacturer"),
+                    length = item.getString("length"),
+                    max_atmosphering_speed = item.getString("max_atmosphering_speed"),
+                    crew = item.getString("crew"),
+                    passengers = item.getString("passengers")
                 )
 
                 starships.add(starship)
