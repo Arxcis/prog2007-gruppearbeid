@@ -11,6 +11,7 @@ import com.example.gruppearbeid.util.Network
 
 
 class FilmsAdapter(
+    private val onClick: (film: Film) -> Unit
 ) : RecyclerView.Adapter<FilmsAdapter.ViewHolder>() {
     private var films = ArrayList<Film>();
 
@@ -24,6 +25,7 @@ class FilmsAdapter(
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView? = view.findViewById(R.id.FilmTitle)
+        val item: View? = view.findViewById(R.id.AdapterFilmsItem)
     }
 
     // Create new views (invoked by the layout manager)
@@ -39,6 +41,7 @@ class FilmsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val film = films[position]
         holder.title?.text = film.title
+        holder.item?.setOnClickListener { onClick(film) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

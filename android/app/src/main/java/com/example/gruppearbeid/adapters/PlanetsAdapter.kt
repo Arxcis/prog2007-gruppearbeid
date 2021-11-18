@@ -7,11 +7,13 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
+import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.util.Network
 
 
 class PlanetsAdapter(
+    private val onClick: (film: Planet) -> Unit
 ) : RecyclerView.Adapter<PlanetsAdapter.ViewHolder>() {
     private var planets = ArrayList<Planet>();
     init {
@@ -23,6 +25,7 @@ class PlanetsAdapter(
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val name: TextView? = view.findViewById(R.id.PlanetName)
+        val item: View? = view.findViewById(R.id.AdapterPlanetsItem)
     }
 
     // Create new views (invoked by the layout manager)
@@ -38,6 +41,7 @@ class PlanetsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val planet = planets[position]
         holder.name?.text = planet.name
+        holder.item?.setOnClickListener { onClick(planet) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

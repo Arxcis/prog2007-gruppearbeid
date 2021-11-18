@@ -9,15 +9,19 @@ import kotlinx.android.synthetic.main.activity_films.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.navigateToThing
 
 class FilmsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_films)
-        title = "SWAPI / Films"
+        title = "Films"
 
         // Init adapter
-        val adapter = FilmsAdapter()
+        val adapter = FilmsAdapter(){ film ->
+            navigateToThing(this, FilmActivity::class.java, film)
+        }
+
         FilmsRecycler.adapter = adapter
         FilmsRecycler.layoutManager = LinearLayoutManager(this)
     }
