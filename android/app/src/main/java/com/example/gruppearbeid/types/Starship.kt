@@ -17,4 +17,6 @@ data class Starship(
     val crew: String,
 
     val passengers: String,
+
+    val starship_class: String
     ) : Serializable

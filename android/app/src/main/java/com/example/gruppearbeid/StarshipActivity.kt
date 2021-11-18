@@ -21,5 +21,12 @@ class StarshipActivity : AppCompatActivity() {
 
         // Set content of activity
         ActivityStarshipName.text = starship?.name ?: ""
+        ActivityStarshipModel.text = starship?.model ?: ""
+        ActivityStarshipManufacturer.text = starship?.manufacturer ?: ""
+        ActivityStarshipLength.text = starship?.length ?: ""
+        ActivityStarshipMaxAtmospheringSpeed.text = starship?.max_atmosphering_speed ?: ""
+        ActivityStarshipCrew.text = starship?.crew ?: ""
+        ActivityStarshipPassengers.text = starship?.passengers ?: ""
+        ActivityStarshipStarshipClass.text = starship?.starship_class ?: ""
     }
 }
