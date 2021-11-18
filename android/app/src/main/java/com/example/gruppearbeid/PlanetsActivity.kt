@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_planets.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_films.*
 import kotlinx.android.synthetic.main.activity_people.*
 
@@ -16,10 +17,12 @@ class PlanetsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
-        title = "SWAPI / Planets"
+        title = "Planets"
 
         // Init adapter
-        val adapter = PlanetsAdapter()
+        val adapter = PlanetsAdapter(){ planet ->
+            navigateToThing(this, PlanetActivity::class.java, planet)
+        }
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
     }

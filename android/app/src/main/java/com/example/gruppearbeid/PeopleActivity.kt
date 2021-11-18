@@ -10,17 +10,21 @@ import kotlinx.android.synthetic.main.activity_people.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_films.*
+import java.io.Serializable
 
 
 class PeopleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
-        title = "SWAPI / People"
+        title = "People"
 
         // Init adapter
-        val adapter = PeopleAdapter()
+        val adapter = PeopleAdapter{ person ->
+            navigateToThing(this, PersonActivity::class.java, person)
+        }
         PeopleRecycler.adapter = adapter
         PeopleRecycler.layoutManager = LinearLayoutManager(this)
     }

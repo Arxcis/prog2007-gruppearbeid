@@ -8,16 +8,19 @@ import kotlinx.android.synthetic.main.activity_starships.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_planets.*
 
 class StarshipsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_starships)
-        title = "SWAPI / Starships"
+        title = "Starships"
 
         // Init adapter
-        val adapter = StarshipsAdapter()
+        val adapter = StarshipsAdapter(){ starship ->
+            navigateToThing(this, StarshipActivity::class.java, starship)
+        }
         StarshipRecycler.adapter = adapter
         StarshipRecycler.layoutManager = LinearLayoutManager(this)
     }
