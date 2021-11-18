@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
 import com.example.gruppearbeid.types.Film
@@ -11,13 +12,11 @@ import com.example.gruppearbeid.util.Network
 
 
 class FilmsAdapter(
-    private val onClick: (film: Film) -> Unit
+    private var films: ArrayList<Film>,
+    private val onClick: (film: Film) -> Unit,
 ) : RecyclerView.Adapter<FilmsAdapter.ViewHolder>() {
-    private var films = ArrayList<Film>();
 
-    init {
-        Network.getFilms(films, this)
-    }
+
 
     /**
      * Provide a reference to the type of views that you are using
