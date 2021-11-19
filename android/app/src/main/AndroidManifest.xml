@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Gruppearbeid">
         <activity
             android:name=".StarshipActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".PlanetActivity"
             android:exported="false" />
