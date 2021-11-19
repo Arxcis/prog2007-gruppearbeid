@@ -8,6 +8,7 @@ import com.example.gruppearbeid.util.Constants
 import kotlinx.android.synthetic.main.activity_person.*
 import kotlinx.android.synthetic.main.activity_starship.*
 
+// Class for a single starship
 class StarshipActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,5 +22,12 @@ class StarshipActivity : AppCompatActivity() {
 
         // Set content of activity
         ActivityStarshipName.text = starship?.name ?: ""
+        ActivityStarshipModel.text = starship?.model ?: ""
+        ActivityStarshipManufacturer.text = starship?.manufacturer ?: ""
+        ActivityStarshipLength.text = starship?.length ?: ""
+        ActivityStarshipMaxAtmospheringSpeed.text = starship?.max_atmosphering_speed ?: ""
+        ActivityStarshipCrew.text = starship?.crew ?: ""
+        ActivityStarshipPassengers.text = starship?.passengers ?: ""
+        ActivityStarshipStarshipClass.text = starship?.starship_class ?: ""
     }
 }
