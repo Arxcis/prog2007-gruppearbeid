@@ -3,6 +3,7 @@
     package="com.example.gruppearbeid" >
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +11,19 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Gruppearbeid" >
+        android:theme="@style/Theme.Gruppearbeid">
+        <activity
+            android:name=".StarshipActivity"
+            android:exported="true" />
+        <activity
+            android:name=".PlanetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PersonActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FilmActivity"
+            android:exported="false" />
         <activity
             android:name=".StarshipsActivity"
             android:exported="true" />
@@ -22,7 +35,7 @@
             android:exported="true" />
         <activity
             android:name=".PeopleActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

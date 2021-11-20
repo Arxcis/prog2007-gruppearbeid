@@ -1,13 +1,9 @@
 package com.example.gruppearbeid.util
 
-import android.app.Application
-import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
@@ -23,6 +19,7 @@ import org.json.JSONException
 import java.io.*
 import java.lang.Exception
 import java.lang.StringBuilder
+import java.net.ConnectException
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -34,7 +31,6 @@ object Network {
     private val BASE_URL = "https://swapi.dev/api"
 
     var lostNetwork: Boolean = false
-
     var connectionMng: ConnectivityManager? = null
 
     val networkCallback : ConnectivityManager.NetworkCallback =
@@ -59,9 +55,16 @@ object Network {
     }
 
     @Throws(IOException::class, JSONException::class)
-    fun getFilms(films: ArrayList<Film>, adapter: FilmsAdapter) {
+    fun getFilms(films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            val json = readJsonFromUrl("$BASE_URL/films")
+            var json: JSONObject? = null
+            try {
+                json = readJsonFromUrl("$BASE_URL/films")
+            } catch (err: IOException) {
+                Log.w("Network.getFilms", "No connection...", err)
+                handler.post { onError("No connection...") }
+                return@execute
+            }
 
             val results = json.getJSONArray("results")
 
@@ -76,11 +79,16 @@ object Network {
         }
     }
 
-    @Throws(IOException::class, JSONException::class)
-    fun getPeople(people: ArrayList<Person>, adapter: PeopleAdapter) {
+    fun getPeople(people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            val json = readJsonFromUrl("$BASE_URL/people")
-
+            var json: JSONObject? = null
+            try {
+                json = readJsonFromUrl("$BASE_URL/people")
+            } catch (err: IOException) {
+                Log.w("Network.getPeople", "No connection...", err)
+                handler.post { onError("No connection...") }
+                return@execute
+            }
             val results = json.getJSONArray("results")
 
             for (i in 0 until results.length()) {
@@ -94,10 +102,16 @@ object Network {
         }
     }
 
-    @Throws(IOException::class, JSONException::class)
-    fun getPlanets(planets: ArrayList<Planet>, adapter:PlanetsAdapter) {
+    fun getPlanets(planets: ArrayList<Planet>, adapter:PlanetsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            val json = readJsonFromUrl("$BASE_URL/planets")
+            var json: JSONObject? = null
+            try {
+                json = readJsonFromUrl("$BASE_URL/planets")
+            } catch (err: IOException) {
+                Log.w("Network.getPlanets", "No connection...", err)
+                handler.post { onError("No connection...") }
+                return@execute
+            }
 
             val results = json.getJSONArray("results")
 
@@ -112,16 +126,33 @@ object Network {
         }
     }
 
-    @Throws(IOException::class, JSONException::class)
-    fun getStarships(starships: ArrayList<Starship>, adapter: StarshipsAdapter) {
+    fun getStarships(starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            val json = readJsonFromUrl("$BASE_URL/starships")
+            var json: JSONObject? = null
+            try {
+                json = readJsonFromUrl("$BASE_URL/starships")
+            } catch (err: IOException) {
+                Log.w("Network.getStarships", "No connection...", err)
+                handler.post { onError("No connection...") }
+                return@execute
+            }
 
             val results = json.getJSONArray("results")
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val starship = Starship(name = item.getString("name"))
+
+                val starship = Starship(
+                    name = item.getString("name"),
+                    model = item.getString("model"),
+                    manufacturer = item.getString("manufacturer"),
+                    length = item.getString("length"),
+                    max_atmosphering_speed = item.getString("max_atmosphering_speed"),
+                    crew = item.getString("crew"),
+                    passengers = item.getString("passengers"),
+                    starship_class = item.getString("starship_class")
+                )
+
                 starships.add(starship)
             }
             handler.post {

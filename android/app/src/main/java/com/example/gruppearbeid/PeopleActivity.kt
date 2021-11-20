@@ -4,44 +4,42 @@ package com.example.gruppearbeid
 import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
+import android.widget.Toast
+import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_people.*
 
 // Local
 import com.example.gruppearbeid.util.configureBottomNavigation
-import kotlinx.android.synthetic.main.activity_films.*
+import com.example.gruppearbeid.util.navigateToThing
 
-
-class PeopleActivity : AppCompatActivity() { //This activity has been set as the first one which starts when opening up
-                                             //the app.
-
+class PeopleActivity : AppCompatActivity() {//This activity has been set as the first one which starts when opening up
+//the app.
+    private val people = ArrayList<Person>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
-
+        title = "People"
         val connectionMng: ConnectivityManager? = ContextCompat.getSystemService(this, ConnectivityManager::class.java)
         if (connectionMng !== null)
         {
             Network.connectionMng = connectionMng
             Network.checkInternetConnection()
         }
-        if(com.example.gruppearbeid.util.Network.lostNetwork == false) {
-            /*I think this if branch always runs because the ConnectivityManager's thread which operates the
-                callback for notifying about network changes doesn't have the time to notify about no internet connection
-                before the People acitivity updates the UI and tries to fetch data from API.
-                    */
-
-            // Init adapter
-            val adapter = PeopleAdapter()
-            PeopleRecycler.adapter = adapter
-            PeopleRecycler.layoutManager = LinearLayoutManager(this)
+        // Init adapter
+        val adapter = PeopleAdapter(people){ person ->
+            navigateToThing(this, PersonActivity::class.java, person)
         }
+        Network.getPeople(people, adapter){ error ->
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        }
+
+        PeopleRecycler.adapter = adapter
+        PeopleRecycler.layoutManager = LinearLayoutManager(this)
     }
     override fun onResume() {
         super.onResume()
