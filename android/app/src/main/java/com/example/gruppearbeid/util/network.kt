@@ -30,18 +30,20 @@ object Network {
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
 
-    var lostNetwork: Boolean = false
+
+    var connectionStatus: Boolean = false
     var connectionMng: ConnectivityManager? = null
 
     val networkCallback : ConnectivityManager.NetworkCallback =
         object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: android.net.Network)
             {
+                connectionStatus = true
                Log.d(TAG, "Network is up")
             }
             override fun onLost(network: android.net.Network)
             {
-                lostNetwork = true
+                connectionStatus = false
                 Log.d(TAG, "lost network")
             }
         }
