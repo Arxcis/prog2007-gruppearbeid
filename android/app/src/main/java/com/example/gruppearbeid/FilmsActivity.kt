@@ -17,6 +17,11 @@ import com.example.gruppearbeid.util.navigateToThing
 class FilmsActivity : AppCompatActivity() {
     private val films = ArrayList<Film>()
 
+    companion object {
+        @JvmStatic
+        val reference = this
+    }
+
     private lateinit var adapter: FilmsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

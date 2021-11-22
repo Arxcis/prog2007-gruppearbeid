@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import com.example.gruppearbeid.databinding.FragmentButtonRefreshBinding
+import com.example.gruppearbeid.util.Network
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,13 +40,13 @@ class ButtonRefresh : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        mainXML = FragmentButtonRefreshBinding.inflate(layoutInflater)
-        return inflater.inflate(R.layout.fragment_button_refresh, container, false)
-    }
+        mainXML = FragmentButtonRefreshBinding.inflate(inflater, container, false)
 
-    fun refresh(view: View)
-    {
+        mainXML.btnRefresh.setOnClickListener{
+            (activity as FilmsActivity).fetchFilms()
+        }
 
+        return mainXML.root
     }
 
     companion object {
