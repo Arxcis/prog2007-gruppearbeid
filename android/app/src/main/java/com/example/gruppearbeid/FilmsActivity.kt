@@ -17,19 +17,18 @@ import com.example.gruppearbeid.util.navigateToThing
 class FilmsActivity : AppCompatActivity() {
     private val films = ArrayList<Film>()
 
+    private lateinit var adapter: FilmsAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_films)
         title = "Films"
 
         // Init adapter
-        val adapter = FilmsAdapter(films){ film ->
+        adapter = FilmsAdapter(films){ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
-
-        Network.getFilms(films, adapter){ error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-        }
+        fetchFilms()
 
         FilmsRecycler.adapter = adapter
         FilmsRecycler.layoutManager = LinearLayoutManager(this)
@@ -37,5 +36,12 @@ class FilmsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         configureBottomNavigation(this, FilmsNavigation, R.id.FilmsMenuItem)
+    }
+
+    fun fetchFilms()
+    {
+        Network.getFilms(films, adapter){ error ->
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+        }
     }
 }
