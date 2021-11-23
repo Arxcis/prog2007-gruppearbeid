@@ -57,6 +57,7 @@ class FilmsActivity : AppCompatActivity() {
 
     fun fetchFilms()
     {
+        films.clear()
         Network.getFilms(films, adapter){ error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
