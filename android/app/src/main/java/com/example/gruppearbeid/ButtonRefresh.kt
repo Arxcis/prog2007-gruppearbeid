@@ -45,6 +45,7 @@ class ButtonRefresh : Fragment() {
             when(currentActivity.activity)
             {
                 "Films" ->(activity as FilmsActivity).fetchFilms()
+                "People" -> (activity as PeopleActivity).fetchPeople()
                 null -> Log.d("buttonRefresh", "currentActivity is null")
             }
         }

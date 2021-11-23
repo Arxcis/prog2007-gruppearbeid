@@ -41,7 +41,7 @@ class FilmsActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
-        currentActivity.activity = "Films"
+        currentActivity.activity = title.toString()
         configureBottomNavigation(this, FilmsNavigation, R.id.FilmsMenuItem)
     }
 
@@ -57,7 +57,7 @@ class FilmsActivity : AppCompatActivity() {
 
     fun fetchFilms()
     {
-        films.clear()
+        films.clear()    //prevent refresh button to display data twice.
         Network.getFilms(films, adapter){ error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
