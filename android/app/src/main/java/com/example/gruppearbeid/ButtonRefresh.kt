@@ -1,14 +1,13 @@
 package com.example.gruppearbeid
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.Toast
 import com.example.gruppearbeid.databinding.FragmentButtonRefreshBinding
-import com.example.gruppearbeid.util.Network
+import com.example.gruppearbeid.types.currentActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -43,7 +42,11 @@ class ButtonRefresh : Fragment() {
         mainXML = FragmentButtonRefreshBinding.inflate(inflater, container, false)
 
         mainXML.btnRefresh.setOnClickListener{
-            (activity as FilmsActivity).fetchFilms()
+            when(currentActivity.activity)
+            {
+                "Films" ->(activity as FilmsActivity).fetchFilms()
+                null -> Log.d("buttonRefresh", "currentActivity is null")
+            }
         }
 
         return mainXML.root

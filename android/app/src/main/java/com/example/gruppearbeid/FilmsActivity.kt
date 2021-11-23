@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.types.Film
+import com.example.gruppearbeid.types.currentActivity
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_films.*
 
@@ -40,7 +41,18 @@ class FilmsActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
+        currentActivity.activity = "Films"
         configureBottomNavigation(this, FilmsNavigation, R.id.FilmsMenuItem)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        currentActivity.activity = null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        currentActivity.activity = null
     }
 
     fun fetchFilms()
