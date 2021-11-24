@@ -1,9 +1,12 @@
 package com.example.gruppearbeid.util
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.Patterns
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -22,6 +25,7 @@ import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.ConnectException
 import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
 import java.nio.charset.Charset
 import javax.net.ssl.HttpsURLConnection
@@ -31,14 +35,39 @@ object Network {
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
+    private val TAG = "Network.util"
 
-    fun downloadImage(url: String)
+    fun downloadImage(url: String, image: ImageView)
+    //trying this:
+    //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
         executor.execute {
             if (Patterns.WEB_URL.matcher(url).matches())
             {
-                val realURL = URL(url)
-                val connection = realURL.openConnection() as HttpsURLConnection
+                try {
+                    val realURL = URL(url)
+                    val connection = realURL.openConnection() as HttpsURLConnection
+                    connection.connect()
+                    val input = connection.inputStream
+                    val bitmap = BitmapFactory.decodeStream(input)
+                    if (bitmap != null) {
+                        image.setImageBitmap(bitmap)
+                    } else {
+                        Log.d(TAG, "bitmap is null")
+                    }
+
+                } catch(ex: SocketTimeoutException) {
+                    Log.d(TAG, "socket timed out")
+                } catch(ex: IOException) {
+                    Log.d(TAG, "Input output error. Is WIFI enabled?")
+                } catch (ex: IllegalArgumentException)
+                {
+                    Log.d("Planets", "illegalARgumentException in BitmapFactory.decodeStream()")
+                }
+                catch(ex: Exception) {
+                    Log.d(TAG, "an exception occurred")
+                }
+
             }
 
         }
