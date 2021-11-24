@@ -3,6 +3,7 @@ package com.example.gruppearbeid.util
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Patterns
 import android.widget.Toast
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -20,14 +21,28 @@ import java.io.*
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.ConnectException
+import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
+import javax.net.ssl.HttpsURLConnection
 
 
 object Network {
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
+
+    fun downloadImage(url: String)
+    {
+        executor.execute {
+            if (Patterns.WEB_URL.matcher(url).matches())
+            {
+                val realURL = URL(url)
+                val connection = realURL.openConnection() as HttpsURLConnection
+            }
+
+        }
+    }
 
     fun getFilms(films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
         executor.execute{

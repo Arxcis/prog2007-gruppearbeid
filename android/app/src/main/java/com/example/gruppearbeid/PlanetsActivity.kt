@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_people.*
 class PlanetsActivity : AppCompatActivity() {
     private val planets = ArrayList<Planet>()
 
+    val URL = "https://image.slidesharecdn.com/7thingsstockimages-140124084729-phpapp01/95/7-types-of-stock-images-you-must-stop-using-today-40-638.jpg?cb=1390828351"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
@@ -35,6 +37,8 @@ class PlanetsActivity : AppCompatActivity() {
 
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
+
+        Network.downloadImage(URL)
     }
     override fun onResume() {
         super.onResume()
