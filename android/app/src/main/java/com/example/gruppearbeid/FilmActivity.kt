@@ -15,7 +15,6 @@ import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_film.*
-import kotlinx.android.synthetic.main.activity_person.*
 
 
 class FilmActivity : AppCompatActivity() {

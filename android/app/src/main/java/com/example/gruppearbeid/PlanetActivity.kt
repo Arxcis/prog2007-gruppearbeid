@@ -12,8 +12,6 @@ import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_film.*
-import kotlinx.android.synthetic.main.activity_person.*
 import kotlinx.android.synthetic.main.activity_planet.*
 
 class PlanetActivity : AppCompatActivity() {
