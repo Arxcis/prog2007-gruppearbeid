@@ -1,7 +1,9 @@
 package com.example.gruppearbeid
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -30,6 +32,12 @@ class PlanetsActivity : AppCompatActivity() {
 
         planetsXML = ActivityPlanetsBinding.inflate(layoutInflater)
 
+        val btn: Button = findViewById(R.id.btnForTestImage)
+        btn.setOnClickListener{
+            val intent = Intent(this, TestImage::class.java)
+            startActivity(intent)
+        }
+
         // Init adapter
         val adapter = PlanetsAdapter(planets){ planet ->
             navigateToThing(this, PlanetActivity::class.java, planet)
@@ -41,8 +49,6 @@ class PlanetsActivity : AppCompatActivity() {
 
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
-
-        Network.downloadImage(URL, planetsXML.image)
     }
     override fun onResume() {
         super.onResume()

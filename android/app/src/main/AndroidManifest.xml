@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gruppearbeid">
         <activity
+            android:name=".TestImage"
+            android:exported="false" />
+        <activity
             android:name=".StarshipActivity"
             android:exported="true" />
         <activity
