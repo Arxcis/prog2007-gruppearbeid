@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.types.Starship
-import com.example.gruppearbeid.util.Network
-
 
 class StarshipsAdapter(
     private var starship: ArrayList<Starship>,

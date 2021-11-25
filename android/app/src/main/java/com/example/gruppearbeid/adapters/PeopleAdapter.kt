@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
-import com.example.gruppearbeid.util.Network
 
 
 class PeopleAdapter(
