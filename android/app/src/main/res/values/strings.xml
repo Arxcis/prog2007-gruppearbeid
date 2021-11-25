@@ -7,8 +7,10 @@
     <string name="planets">Planets</string>
     <string name="films">Films</string>
     <string name="starships">Starships</string>
+    <string name="homeworld">Homeworld</string>
 
     <!-- TextView placeholders -->
     <string name="placeholder_name">Name</string>
     <string name="placeholder_title">Title</string>
+    <string name="placeholder_no_starships">No starships</string>
 </resources>
