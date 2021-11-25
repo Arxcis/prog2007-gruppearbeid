@@ -4,17 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gruppearbeid.adapters.PeopleAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_planets.*
-
-// Local
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_films.*
-import kotlinx.android.synthetic.main.activity_people.*
 
 class PlanetsActivity : AppCompatActivity() {
     private val planets = ArrayList<Planet>()

@@ -3,7 +3,6 @@ package com.example.gruppearbeid.util
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
@@ -17,9 +16,7 @@ import org.json.JSONObject
 
 import org.json.JSONException
 import java.io.*
-import java.lang.Exception
 import java.lang.StringBuilder
-import java.net.ConnectException
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -44,7 +41,7 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val film = Film(title = item.getString("title"))
+                val film = parseFilm(item)
                 films.add(film)
             }
             handler.post {
@@ -67,7 +64,7 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val person = Person(name = item.getString("name"))
+                val person = parsePerson(item)
                 people.add(person)
             }
             handler.post {
@@ -91,7 +88,7 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val planet = Planet(name = item.getString("name"))
+                val planet = parsePlanet(item)
                 planets.add(planet)
             }
             handler.post {
@@ -115,18 +112,7 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-
-                val starship = Starship(
-                    name = item.getString("name"),
-                    model = item.getString("model"),
-                    manufacturer = item.getString("manufacturer"),
-                    length = item.getString("length"),
-                    max_atmosphering_speed = item.getString("max_atmosphering_speed"),
-                    crew = item.getString("crew"),
-                    passengers = item.getString("passengers"),
-                    starship_class = item.getString("starship_class")
-                )
-
+                val starship = parseStarship(item)
                 starships.add(starship)
             }
             handler.post {
@@ -136,25 +122,227 @@ object Network {
     }
 
 
-    /** See @url https://stackoverflow.com/a/4308662 */
-    @Throws(IOException::class, JSONException::class)
-    fun readJsonFromUrl(url: String): JSONObject {
-        val `is`: InputStream = URL(url).openStream()
-        return `is`.use { `is` ->
-            val rd = BufferedReader(InputStreamReader(`is`, Charset.forName("UTF-8")))
-            val jsonText = readAll(rd)
-            JSONObject(jsonText)
+    fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (url in urls) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(url)
+                } catch (err: IOException) {
+                    Log.w("Network.getFilmsBy", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+                val film = parseFilm(json)
+                films.add(film)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
-    /** See @url https://stackoverflow.com/a/43086622 */
-    @Throws(IOException::class)
-    private fun readAll(rd: Reader): String {
-        val sb = StringBuilder()
-        var cp: Int
-        while (rd.read().also { cp = it } != -1) {
-            sb.append(cp.toChar())
+    fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (url in urls) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(url)
+                } catch (err: IOException) {
+                    Log.w("Network.getPeopleBy", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+                val person = parsePerson(json)
+                people.add(person)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
         }
-        return sb.toString()
     }
+
+    fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (url in urls) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(url)
+                } catch (err: IOException) {
+                    Log.w("Network.getStarshipsBy", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val starship = parseStarship(json)
+                starships.add(starship)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (url in urls) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(url)
+                } catch (err: IOException) {
+                    Log.w("Network.getPlanetsBy", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val planet = parsePlanet(json)
+                planets.add(planet)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+}
+
+/** See @url https://stackoverflow.com/a/4308662 */
+@Throws(IOException::class, JSONException::class)
+private fun readJsonFromUrl(url: String): JSONObject {
+    val `is`: InputStream = URL(url).openStream()
+    return `is`.use { `is` ->
+        val rd = BufferedReader(InputStreamReader(`is`, Charset.forName("UTF-8")))
+        val jsonText = readAll(rd)
+        JSONObject(jsonText)
+    }
+}
+
+/** See @url https://stackoverflow.com/a/43086622 */
+@Throws(IOException::class)
+private fun readAll(rd: Reader): String {
+    val sb = StringBuilder()
+    var cp: Int
+    while (rd.read().also { cp = it } != -1) {
+        sb.append(cp.toChar())
+    }
+    return sb.toString()
+}
+
+private fun parseStarship(item: JSONObject): Starship {
+    // films:
+    val films = ArrayList<String>()
+    val jsonFilms = item.getJSONArray("films")
+    for (k in 0 until jsonFilms.length()) {
+        films.add(jsonFilms.get(k).toString())
+    }
+
+    // pilots:
+    val pilots = ArrayList<String>()
+    val jsonPilots = item.getJSONArray("pilots")
+    for (k in 0 until jsonPilots.length()) {
+        pilots.add(jsonPilots.get(k).toString())
+    }
+
+    return Starship(
+        name = item.getString("name"),
+        model = item.getString("model"),
+        manufacturer = item.getString("manufacturer"),
+        length = item.getString("length"),
+        max_atmosphering_speed = item.getString("max_atmosphering_speed"),
+        crew = item.getString("crew"),
+        passengers = item.getString("passengers"),
+        starship_class = item.getString("starship_class"),
+        films = films,
+        pilots = pilots,
+    )
+}
+
+
+fun parsePlanet(item: JSONObject): Planet {
+    // Residents:
+    val residents = ArrayList<String>()
+    val jsonResidents = item.getJSONArray("residents")
+    for (k in 0 until jsonResidents.length()) {
+        residents.add(jsonResidents.get(k).toString())
+    }
+    // Films:
+    val films = ArrayList<String>()
+    val jsonFilms = item.getJSONArray("films")
+    for (k in 0 until jsonFilms.length()) {
+        films.add(jsonFilms.get(k).toString())
+    }
+
+    return Planet(
+        name = item.getString("name"),
+        rotation_period = item.getString("rotation_period"),
+        orbital_period = item.getString("orbital_period"),
+        climate = item.getString("climate"),
+        terrain = item.getString("terrain"),
+        population = item.getString("population"),
+        residents = residents,
+        films = films,
+    )
+}
+
+fun parsePerson(item: JSONObject): Person {
+    // Homeworld:
+    val homeworld = arrayListOf(item.getString("homeworld"))
+
+    // Films:
+    val films = ArrayList<String>()
+    val jsonFilms = item.getJSONArray("films")
+    for (k in 0 until jsonFilms.length()) {
+        films.add(jsonFilms.get(k).toString())
+    }
+    // Starships:
+    val starships = ArrayList<String>()
+    val jsonStarships = item.getJSONArray("starships")
+    for (k in 0 until jsonStarships.length()) {
+        starships.add(jsonStarships.get(k).toString())
+    }
+
+    return Person(
+        name = item.getString("name"),
+        height = item.getString("height"),
+        birth_year = item.getString("birth_year"),
+        gender = item.getString("gender"),
+        homeworld = homeworld,
+        films = films,
+        starships = starships,
+    )
+}
+
+fun parseFilm(item: JSONObject): Film {
+    // Characters:
+    val characters = ArrayList<String>()
+    val jsonCharacters = item.getJSONArray("characters")
+    for (k in 0 until jsonCharacters.length()) {
+        characters.add(jsonCharacters.get(k).toString())
+    }
+    // Planets:
+    val planets = ArrayList<String>()
+    val jsonPlanets = item.getJSONArray("planets")
+    for (k in 0 until jsonPlanets.length()) {
+        planets.add(jsonPlanets.get(k).toString())
+    }
+    // starships:
+    val starships = ArrayList<String>()
+    val jsonStarships = item.getJSONArray("starships")
+    for (k in 0 until jsonStarships.length()) {
+        starships.add(jsonStarships.get(k).toString())
+    }
+
+    return Film(
+        title = item.getString("title"),
+        episode_id = item.getInt("episode_id"),
+        director = item.getString("director"),
+        producer = item.getString("producer"),
+        release_date = item.getString("release_date"),
+        characters = characters,
+        planets = planets,
+        starships = starships
+    )
 }

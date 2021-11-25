@@ -15,4 +15,9 @@ data class Planet(
     val terrain: String,
 
     val population: String,
+    /** "residents": ["https://swapi.dev/api/people/1/", ...] */
+    val residents: ArrayList<String>,
+
+    /** "films": ["https://swapi.dev/api/films/1/", ...] */
+    val films: ArrayList<String>,
 ) : Serializable

@@ -11,6 +11,12 @@ data class Person(
     val birth_year: String,
 
     val gender: String,
+    /** "homeworld": ["https://swapi.dev/api/planets/1/", ...] */
+    val homeworld: ArrayList<String>,
 
-    val homeworld: String
+    /** "films": ["https://swapi.dev/api/films/1/", ...] */
+    val films: ArrayList<String>,
+
+    /** "starships": ["https://swapi.dev/api/starships/1/", ...] */
+    val starships: ArrayList<String>,
 ) : Serializable
