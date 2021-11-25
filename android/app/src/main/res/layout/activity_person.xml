@@ -16,6 +16,18 @@
             android:id="@+id/ActivityPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/placeholder_name" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/films" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ActivityPersonFilms"
+            style="@style/activity_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

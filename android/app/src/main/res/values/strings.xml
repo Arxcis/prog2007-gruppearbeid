@@ -4,4 +4,7 @@
     <string name="planets">Planets</string>
     <string name="films">Films</string>
     <string name="starships">Starships</string>
+
+    <!-- TextView placeholders -->
+    <string name="placeholder_name">Name</string>
 </resources>

@@ -22,6 +22,7 @@ import java.lang.StringBuilder
 import java.net.ConnectException
 import java.net.URL
 import java.nio.charset.Charset
+import java.util.stream.IntStream
 
 
 object Network {
@@ -53,6 +54,28 @@ object Network {
         }
     }
 
+    fun getFilmsByPerson(person: Person, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (film in person.films) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(film)
+                } catch (err: IOException) {
+                    Log.w("Network.getFilmsByPer..", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val film = Film(title = json.getString("title"))
+                films.add(film)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
     fun getPeople(people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             var json: JSONObject? = null
@@ -67,7 +90,16 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val person = Person(name = item.getString("name"))
+
+                val films = ArrayList<String>()
+                val jsonFilms = item.getJSONArray("films")
+                for (k in 0 until jsonFilms.length()) {
+                    films.add(jsonFilms.get(k).toString())
+                }
+
+                val person = Person(
+                    name = item.getString("name"),
+                    films = films)
                 people.add(person)
             }
             handler.post {

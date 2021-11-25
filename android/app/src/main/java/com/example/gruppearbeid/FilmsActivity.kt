@@ -22,11 +22,12 @@ class FilmsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_films)
         title = "Films"
 
-        // Init adapter
+        // Init films adapter
         val adapter = FilmsAdapter(films){ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
 
+        // Get films from network
         Network.getFilms(films, adapter){ error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }

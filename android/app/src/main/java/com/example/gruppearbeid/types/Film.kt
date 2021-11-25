@@ -7,5 +7,8 @@ import java.io.Serializable
 
 data class Film(
     /** "title": "A New Hope" */
-    val title: String
+    val title: String,
+
+    /** "characters": ["https://swapi.dev/api/characters/1/", ...] */
+    //val characters: ArrayList<String>,
 ) : Serializable
