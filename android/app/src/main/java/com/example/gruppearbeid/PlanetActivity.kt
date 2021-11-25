@@ -41,7 +41,7 @@ class PlanetActivity : AppCompatActivity() {
         ActivityPlanetFilms.adapter = filmsAdapter
         ActivityPlanetFilms.layoutManager = LinearLayoutManager(this)
 
-        // 3. Get characters for this film, from the network
+        // 3. Get data from network
         if (planet != null) {
             Network.getPeopleByURL(planet.residents, residents, residentsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()

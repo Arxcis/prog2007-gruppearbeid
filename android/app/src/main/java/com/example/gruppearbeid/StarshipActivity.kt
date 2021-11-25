@@ -48,7 +48,7 @@ class StarshipActivity : AppCompatActivity() {
         ActivityStarshipFilms.adapter = filmsAdapter
         ActivityStarshipFilms.layoutManager = LinearLayoutManager(this)
 
-        // 3. Fetch from network
+        // 3. Get data from network
         if (starship != null) {
             Network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()

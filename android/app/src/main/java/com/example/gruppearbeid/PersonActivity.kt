@@ -51,7 +51,7 @@ class PersonActivity : AppCompatActivity() {
         ActivityPersonStarships.adapter = starshipAdapter
         ActivityPersonStarships.layoutManager = LinearLayoutManager(this)
 
-        // 3. Get films of this person, from the network
+        // 3. Get data from network
         if (person != null) {
             Network.getPlanetsByUrl(person.homeworld, homeworld, homeworldAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()

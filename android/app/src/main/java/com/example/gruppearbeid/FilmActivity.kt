@@ -52,7 +52,7 @@ class FilmActivity : AppCompatActivity() {
         ActivityFilmStarships.adapter = starshipAdapter
         ActivityFilmStarships.layoutManager = LinearLayoutManager(this)
 
-        // 3. Get characters for this film, from the network
+        // 3. Get data from network
         if (film != null) {
             Network.getPeopleByURL(film.characters, characters, charactersAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
