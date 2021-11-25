@@ -8,4 +8,7 @@ data class Planet(
 
     /** "residents": ["https://swapi.dev/api/people/1/", ...] */
     val residents: ArrayList<String>,
+
+    /** "films": ["https://swapi.dev/api/films/1/", ...] */
+    val films: ArrayList<String>,
 ) : Serializable

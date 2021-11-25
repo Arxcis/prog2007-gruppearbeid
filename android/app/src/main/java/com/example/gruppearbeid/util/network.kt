@@ -268,10 +268,17 @@ fun parsePlanet(item: JSONObject): Planet {
     for (k in 0 until jsonResidents.length()) {
         residents.add(jsonResidents.get(k).toString())
     }
+    // Films:
+    val films = ArrayList<String>()
+    val jsonFilms = item.getJSONArray("films")
+    for (k in 0 until jsonFilms.length()) {
+        films.add(jsonFilms.get(k).toString())
+    }
 
     return Planet(
         name = item.getString("name"),
-        residents = residents
+        residents = residents,
+        films = films,
     )
 }
 

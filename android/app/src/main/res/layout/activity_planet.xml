@@ -6,28 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".PlanetActivity">
 
-    <LinearLayout
-        style="@style/activity_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ActivityPlanetName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/placeholder_name" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/residents" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ActivityPlanetResidents"
+        <LinearLayout
             style="@style/activity_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ActivityPlanetName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_name" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/residents" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityPlanetResidents"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/films" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityPlanetFilms"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@ data class Person(
     /** "name": "Luke Skywalker" */
     val name: String,
 
-    /** "homeworld": ["https://swapi.dev/api/planet/1/", ...] */
+    /** "homeworld": ["https://swapi.dev/api/planets/1/", ...] */
     val homeworld: ArrayList<String>,
 
     /** "films": ["https://swapi.dev/api/films/1/", ...] */
