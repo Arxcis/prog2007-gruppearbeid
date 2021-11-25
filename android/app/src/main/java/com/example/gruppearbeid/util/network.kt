@@ -45,31 +45,19 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val film = Film(title = item.getString("title"))
-                films.add(film)
-            }
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 
-    fun getFilmsByPerson(person: Person, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (film in person.films) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(film)
-                } catch (err: IOException) {
-                    Log.w("Network.getFilmsByPer..", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
+                val characters = ArrayList<String>()
+                val jsonCharacters = item.getJSONArray("characters")
+                for (k in 0 until jsonCharacters.length()) {
+                    characters.add(jsonCharacters.get(k).toString())
                 }
 
-                val film = Film(title = json.getString("title"))
+                val film = Film(
+                    title = item.getString("title"),
+                    characters = characters,
+                )
                 films.add(film)
             }
-
             handler.post {
                 adapter.notifyDataSetChanged()
             }
@@ -167,6 +155,67 @@ object Network {
         }
     }
 
+    fun getFilmsByPerson(person: Person, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (film in person.films) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(film)
+                } catch (err: IOException) {
+                    Log.w("Network.getFilmsByPer..", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val characters = ArrayList<String>()
+                val jsonCharacters = json.getJSONArray("characters")
+                for (k in 0 until jsonCharacters.length()) {
+                    characters.add(jsonCharacters.get(k).toString())
+                }
+
+                val film = Film(
+                    title = json.getString("title"),
+                    characters = characters
+                )
+                films.add(film)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun getCharactersByFilm(film: Film, characters: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (character in film.characters) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(character)
+                } catch (err: IOException) {
+                    Log.w("Network.getCharacters..", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val films = ArrayList<String>()
+                val jsonFilms = json.getJSONArray("films")
+                for (k in 0 until jsonFilms.length()) {
+                    films.add(jsonFilms.get(k).toString())
+                }
+
+                val character = Person(
+                    name = json.getString("name"),
+                    films = films
+                )
+                characters.add(character)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
 
     /** See @url https://stackoverflow.com/a/4308662 */
     @Throws(IOException::class, JSONException::class)
