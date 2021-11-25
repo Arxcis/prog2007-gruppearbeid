@@ -17,7 +17,7 @@ class PlanetActivity : AppCompatActivity() {
         val planet = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Planet
 
         // Set activity title
-        title = planet?.name ?: ""
+        title = "🪐 ${planet?.name}"
 
         // Set content of activity
         ActivityPlanetName.text = planet?.name ?: ""

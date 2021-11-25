@@ -18,7 +18,7 @@ class StarshipActivity : AppCompatActivity() {
         val starship = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Starship
 
         // Set activity title
-        title = starship?.name
+        title = "🚀 ${starship?.name}"
 
         // Set content of activity
         ActivityStarshipName.text = starship?.name ?: ""

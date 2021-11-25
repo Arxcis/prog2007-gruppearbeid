@@ -16,7 +16,7 @@ class PersonActivity : AppCompatActivity() {
         val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
 
         // Set activity title
-        title = person?.name
+        title = "👨‍🦲 ${person?.name}"
 
         // Set content of activity
         ActivityPersonName.text = person?.name ?: ""
