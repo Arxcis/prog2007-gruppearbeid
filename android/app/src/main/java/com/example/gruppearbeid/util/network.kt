@@ -68,6 +68,8 @@ object Network {
                     Log.d(TAG, "an exception occurred")
                 }
 
+            }else {
+                Log.d(TAG, "the format of the URL was incorrect.")
             }
 
         }
