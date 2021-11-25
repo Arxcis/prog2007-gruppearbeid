@@ -4,8 +4,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gruppearbeid.*
-import com.example.gruppearbeid.types.Film
-import com.example.gruppearbeid.types.Person
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.io.Serializable
 

@@ -6,16 +6,56 @@
     android:layout_height="match_parent"
     tools:context=".PersonActivity">
 
-    <LinearLayout
-        style="@style/activity_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ActivityPersonName"
+        <LinearLayout
+            style="@style/activity_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ActivityPersonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder_name" />
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/homeworld" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityPersonHomeworld"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/films" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityPersonFilms"
+                style="@style/activity_content"
+                android:layout_width="match_parent" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/starships" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityPersonStarships"
+                style="@style/activity_content"
+                android:layout_width="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

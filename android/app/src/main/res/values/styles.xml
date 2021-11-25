@@ -2,10 +2,11 @@
 <resources>
     <style name="activity_content">
         <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="adapter_item">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 </resources>
