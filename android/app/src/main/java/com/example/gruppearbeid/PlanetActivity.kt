@@ -35,7 +35,7 @@ class PlanetActivity : AppCompatActivity() {
 
         // 3. Get characters for this film, from the network
         if (planet != null) {
-            Network.getResidentsByPlanet(planet, residents, adapter){ error ->
+            Network.getPeopleByURL(planet.residents, residents, adapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

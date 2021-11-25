@@ -35,7 +35,7 @@ class PersonActivity : AppCompatActivity() {
 
         // 3. Get films of this person, from the network
         if (person != null) {
-            Network.getFilmsByPerson(person, films, adapter){ error ->
+            Network.getFilmsByURL(person.films, films, adapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

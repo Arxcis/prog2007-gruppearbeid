@@ -60,5 +60,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/pilots" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ActivityStarshipPilots"
+            style="@style/activity_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/films" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ActivityStarshipFilms"
+            style="@style/activity_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

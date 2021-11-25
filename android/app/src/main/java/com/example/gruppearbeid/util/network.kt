@@ -146,6 +146,20 @@ object Network {
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
 
+                // films:
+                val films = ArrayList<String>()
+                val jsonFilms = item.getJSONArray("films")
+                for (k in 0 until jsonFilms.length()) {
+                    films.add(jsonFilms.get(k).toString())
+                }
+
+                // pilots:
+                val pilots = ArrayList<String>()
+                val jsonPilots = item.getJSONArray("pilots")
+                for (k in 0 until jsonPilots.length()) {
+                    pilots.add(jsonPilots.get(k).toString())
+                }
+
                 val starship = Starship(
                     name = item.getString("name"),
                     model = item.getString("model"),
@@ -154,7 +168,9 @@ object Network {
                     max_atmosphering_speed = item.getString("max_atmosphering_speed"),
                     crew = item.getString("crew"),
                     passengers = item.getString("passengers"),
-                    starship_class = item.getString("starship_class")
+                    starship_class = item.getString("starship_class"),
+                    films = films,
+                    pilots = pilots,
                 )
 
                 starships.add(starship)
@@ -165,12 +181,12 @@ object Network {
         }
     }
 
-    fun getFilmsByPerson(person: Person, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+    fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            for (film in person.films) {
+            for (url in urls) {
                 var json: JSONObject? = null
                 try {
-                    json = readJsonFromUrl(film)
+                    json = readJsonFromUrl(url)
                 } catch (err: IOException) {
                     Log.w("Network.getFilmsByPer..", "No connection...", err)
                     handler.post { onError("No connection...") }
@@ -196,12 +212,12 @@ object Network {
         }
     }
 
-    fun getCharactersByFilm(film: Film, characters: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+    fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
         executor.execute{
-            for (character in film.characters) {
+            for (url in urls) {
                 var json: JSONObject? = null
                 try {
-                    json = readJsonFromUrl(character)
+                    json = readJsonFromUrl(url)
                 } catch (err: IOException) {
                     Log.w("Network.getCharacters..", "No connection...", err)
                     handler.post { onError("No connection...") }
@@ -218,7 +234,7 @@ object Network {
                     name = json.getString("name"),
                     films = films
                 )
-                characters.add(character)
+                people.add(character)
             }
 
             handler.post {
@@ -227,36 +243,6 @@ object Network {
         }
     }
 
-    fun getResidentsByPlanet(planet: Planet, residents: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (resident in planet.residents) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(resident)
-                } catch (err: IOException) {
-                    Log.w("Network.getResidents..", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-
-                val films = ArrayList<String>()
-                val jsonFilms = json.getJSONArray("films")
-                for (k in 0 until jsonFilms.length()) {
-                    films.add(jsonFilms.get(k).toString())
-                }
-
-                val resident = Person(
-                    name = json.getString("name"),
-                    films = films
-                )
-                residents.add(resident)
-            }
-
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 
     /** See @url https://stackoverflow.com/a/4308662 */
     @Throws(IOException::class, JSONException::class)

@@ -36,7 +36,7 @@ class FilmActivity : AppCompatActivity() {
 
         // 3. Get characters for this film, from the network
         if (film != null) {
-            Network.getCharactersByFilm(film, characters, adapter){ error ->
+            Network.getPeopleByURL(film.characters, characters, adapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }
