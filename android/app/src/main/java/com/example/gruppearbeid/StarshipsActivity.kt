@@ -8,11 +8,8 @@ import com.example.gruppearbeid.adapters.StarshipsAdapter
 import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_starships.*
-
-// Local
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_planets.*
 
 class StarshipsActivity : AppCompatActivity() {
     private val starships = ArrayList<Starship>()

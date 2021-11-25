@@ -1,7 +1,20 @@
 <resources>
     <string name="app_name">Gruppearbeid</string>
+    <!-- Main titles -->
     <string name="people">👨‍🦲 People</string>
     <string name="planets">🪐 Planets</string>
     <string name="films">🎬 Films</string>
     <string name="starships">🚀 Starships</string>
+
+    <!-- Secondary titles -->
+    <string name="residents">Residents</string>
+    <string name="characters">Characters</string>
+    <string name="pilots">Pilots</string>
+    <string name="homeworld">Homeworld</string>
+
+    <!-- TextView placeholders -->
+    <string name="placeholder_name">Name</string>
+    <string name="placeholder_title">Title</string>
+    <string name="placeholder_no_starships">No starships</string>
+
 </resources>

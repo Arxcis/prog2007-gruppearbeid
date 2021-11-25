@@ -7,58 +7,90 @@
     tools:context=".StarshipActivity">
 
 
-    <LinearLayout
-        style="@style/activity_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ActivityStarshipName"
+        <LinearLayout
+            style="@style/activity_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/ActivityStarshipModel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipManufacturer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipModel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipLength"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipManufacturer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipMaxAtmospheringSpeed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipLength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipCrew"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipMaxAtmospheringSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipPassengers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            <TextView
+                android:id="@+id/ActivityStarshipCrew"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
 
-        <TextView
-            android:id="@+id/ActivityStarshipStarshipClass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/ActivityStarshipPassengers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/ActivityStarshipStarshipClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pilots" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityStarshipPilots"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/films" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityStarshipFilms"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

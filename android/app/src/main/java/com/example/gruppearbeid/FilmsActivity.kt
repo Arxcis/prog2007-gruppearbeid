@@ -1,6 +1,5 @@
 package com.example.gruppearbeid
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,8 +8,6 @@ import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_films.*
-
-// Local
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.navigateToThing
 
@@ -22,11 +19,12 @@ class FilmsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_films)
         title = getString(R.string.films)
 
-        // Init adapter
+        // Init films adapter
         val adapter = FilmsAdapter(films){ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
 
+        // Get films from network
         Network.getFilms(films, adapter){ error ->
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
         }
