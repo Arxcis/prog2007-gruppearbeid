@@ -20,7 +20,7 @@ class StarshipsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_starships)
-        title = "Starships"
+        title = getString(R.string.starships)
 
         // Init adapter
         val adapter = StarshipsAdapter(starships){ starship ->

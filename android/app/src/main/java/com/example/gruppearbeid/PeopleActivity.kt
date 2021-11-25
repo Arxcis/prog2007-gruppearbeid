@@ -25,7 +25,7 @@ class PeopleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_people)
-        title = "People"
+        title = getString(R.string.people)
 
         // Init adapter
         val adapter = PeopleAdapter(people){ person ->
