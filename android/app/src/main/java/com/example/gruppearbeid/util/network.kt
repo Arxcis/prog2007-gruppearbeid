@@ -41,17 +41,7 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-
-                val characters = ArrayList<String>()
-                val jsonCharacters = item.getJSONArray("characters")
-                for (k in 0 until jsonCharacters.length()) {
-                    characters.add(jsonCharacters.get(k).toString())
-                }
-
-                val film = Film(
-                    title = item.getString("title"),
-                    characters = characters,
-                )
+                val film = parseFilm(item)
                 films.add(film)
             }
             handler.post {
@@ -143,17 +133,7 @@ object Network {
                     handler.post { onError("No connection...") }
                     return@execute
                 }
-
-                val characters = ArrayList<String>()
-                val jsonCharacters = json.getJSONArray("characters")
-                for (k in 0 until jsonCharacters.length()) {
-                    characters.add(jsonCharacters.get(k).toString())
-                }
-
-                val film = Film(
-                    title = json.getString("title"),
-                    characters = characters
-                )
+                val film = parseFilm(json)
                 films.add(film)
             }
 
@@ -317,5 +297,33 @@ fun parsePerson(item: JSONObject): Person {
         homeworld = homeworld,
         films = films,
         starships = starships,
+    )
+}
+
+fun parseFilm(item: JSONObject): Film {
+    // Characters:
+    val characters = ArrayList<String>()
+    val jsonCharacters = item.getJSONArray("characters")
+    for (k in 0 until jsonCharacters.length()) {
+        characters.add(jsonCharacters.get(k).toString())
+    }
+    // Planets:
+    val planets = ArrayList<String>()
+    val jsonPlanets = item.getJSONArray("planets")
+    for (k in 0 until jsonPlanets.length()) {
+        planets.add(jsonPlanets.get(k).toString())
+    }
+    // starships:
+    val starships = ArrayList<String>()
+    val jsonStarships = item.getJSONArray("starships")
+    for (k in 0 until jsonStarships.length()) {
+        starships.add(jsonStarships.get(k).toString())
+    }
+
+    return Film(
+        title = item.getString("title"),
+        characters = characters,
+        planets = planets,
+        starships = starships
     )
 }

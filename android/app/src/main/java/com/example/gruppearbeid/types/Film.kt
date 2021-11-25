@@ -11,4 +11,10 @@ data class Film(
 
     /** "characters": ["https://swapi.dev/api/people/1/", ...] */
     val characters: ArrayList<String>,
+
+    /** "planets": ["https://swapi.dev/api/planets/1/", ...] */
+    val planets: ArrayList<String>,
+
+    /** "starships": ["https://swapi.dev/api/starships/1/", ...] */
+    val starships: ArrayList<String>,
 ) : Serializable

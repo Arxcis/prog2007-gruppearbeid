@@ -6,28 +6,57 @@
     android:layout_height="match_parent"
     tools:context=".FilmActivity">
 
-    <LinearLayout
-        style="@style/activity_content"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/ActivityFilmName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/characters" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ActivityFilmCharacters"
+        <LinearLayout
             style="@style/activity_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ActivityFilmName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/characters" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityFilmCharacters"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/planets" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityFilmPlanets"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/starships" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/ActivityFilmStarships"
+                style="@style/activity_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
