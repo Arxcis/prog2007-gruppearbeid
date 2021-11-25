@@ -47,9 +47,15 @@ object Network {
                 try {
                     val realURL = URL(url)
                     val connection = realURL.openConnection() as HttpsURLConnection
-                    connection.connect()
+
+                    val bitmapOption = BitmapFactory.Options().apply {
+                        inSampleSize = 2    //load image where widht and height is divided by two to save memory
+                                            //when displaying picture
+                    }
+
                     val input = connection.inputStream
-                    val bitmap = BitmapFactory.decodeStream(input)
+                    val bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)
+
                     if (bitmap != null) {
                         image.setImageBitmap(bitmap)
                     } else {

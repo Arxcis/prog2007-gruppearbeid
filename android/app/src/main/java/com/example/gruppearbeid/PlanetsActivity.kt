@@ -1,9 +1,11 @@
 package com.example.gruppearbeid
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -31,12 +33,9 @@ class PlanetsActivity : AppCompatActivity() {
         title = "Planets"
 
         planetsXML = ActivityPlanetsBinding.inflate(layoutInflater)
+        val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
 
-        val btn: Button = findViewById(R.id.btnForTestImage)
-        btn.setOnClickListener{
-            val intent = Intent(this, TestImage::class.java)
-            startActivity(intent)
-        }
+        Network.downloadImage(URL, image)
 
         // Init adapter
         val adapter = PlanetsAdapter(planets){ planet ->
