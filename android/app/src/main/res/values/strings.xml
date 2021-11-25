@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Gruppearbeid</string>
     <string name="people">People</string>
+    <string name="residents">Residents</string>
+    <string name="characters">Characters</string>
     <string name="planets">Planets</string>
     <string name="films">Films</string>
     <string name="starships">Starships</string>
 
     <!-- TextView placeholders -->
     <string name="placeholder_name">Name</string>
+    <string name="placeholder_title">Title</string>
 </resources>

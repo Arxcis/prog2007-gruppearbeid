@@ -9,6 +9,6 @@ data class Film(
     /** "title": "A New Hope" */
     val title: String,
 
-    /** "characters": ["https://swapi.dev/api/characters/1/", ...] */
+    /** "characters": ["https://swapi.dev/api/people/1/", ...] */
     val characters: ArrayList<String>,
 ) : Serializable

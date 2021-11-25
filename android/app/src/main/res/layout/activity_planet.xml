@@ -16,6 +16,18 @@
             android:id="@+id/ActivityPlanetName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="@string/placeholder_name" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/residents" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ActivityPlanetResidents"
+            style="@style/activity_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

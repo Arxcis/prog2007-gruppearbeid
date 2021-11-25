@@ -111,7 +111,17 @@ object Network {
 
             for (i in 0 until results.length()) {
                 val item = results.getJSONObject(i)
-                val planet = Planet(name = item.getString("name"))
+
+                val residents = ArrayList<String>()
+                val jsonResidents = item.getJSONArray("residents")
+                for (k in 0 until jsonResidents.length()) {
+                    residents.add(jsonResidents.get(k).toString())
+                }
+
+                val planet = Planet(
+                    name = item.getString("name"),
+                    residents = residents
+                )
                 planets.add(planet)
             }
             handler.post {
@@ -209,6 +219,37 @@ object Network {
                     films = films
                 )
                 characters.add(character)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    fun getResidentsByPlanet(planet: Planet, residents: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (resident in planet.residents) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(resident)
+                } catch (err: IOException) {
+                    Log.w("Network.getResidents..", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val films = ArrayList<String>()
+                val jsonFilms = json.getJSONArray("films")
+                for (k in 0 until jsonFilms.length()) {
+                    films.add(jsonFilms.get(k).toString())
+                }
+
+                val resident = Person(
+                    name = json.getString("name"),
+                    films = films
+                )
+                residents.add(resident)
             }
 
             handler.post {

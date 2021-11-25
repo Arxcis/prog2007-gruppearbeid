@@ -18,6 +18,12 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/characters" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ActivityFilmCharacters"
             style="@style/activity_content"
