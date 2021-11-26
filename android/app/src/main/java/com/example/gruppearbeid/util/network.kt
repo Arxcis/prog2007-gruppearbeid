@@ -1,5 +1,7 @@
 package com.example.gruppearbeid.util
 
+import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
@@ -46,7 +48,9 @@ object Network : INetwork {
     private val TAG = "Network.util"
     private const val BASE_URL = "https://swapi.dev/api"
 
-    fun downloadImage(url: String, image: ImageView)
+    lateinit var bitmap: Bitmap
+
+    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit)
     //trying this:
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
@@ -63,10 +67,19 @@ object Network : INetwork {
                     }
 
                     val input = connection.inputStream
-                    val bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)
+                    bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)!!
 
                     if (bitmap != null) {
-                        image.setImageBitmap(bitmap)
+                                                            //Got the message "only the original view hierarchy
+                                                           //can touch its views. Therefore the imageView is updated
+                                                               //on its UI thread instead of through the thread from
+                                                                   //Network.util.
+                        activity.runOnUiThread(object : Runnable {
+                            override fun run() {
+                                updateImage()
+                            }
+                        })
+                        //image.setImageBitmap(bitmap)
                     } else {
                         Log.d(TAG, "bitmap is null")
                     }
@@ -81,6 +94,7 @@ object Network : INetwork {
                 }
                 catch(ex: Exception) {
                     Log.d(TAG, "an exception occurred")
+                    Log.d(TAG, "${ex.message}")
                 }
 
             }else {

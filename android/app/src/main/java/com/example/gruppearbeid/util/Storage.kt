@@ -38,6 +38,7 @@ object Storage {
                         Log.d(TAG, "Input-output exception occurred")
                     } catch (ex: Exception) {
                         Log.d(TAG, "an exception occurred. Please try again.")
+                        Log.d(TAG, "${ex.message}")
                     }
                 }
             }

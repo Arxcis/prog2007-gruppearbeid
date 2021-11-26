@@ -29,9 +29,12 @@ class PlanetsActivity : AppCompatActivity() {
         title = getString(R.string.planets)
 
         planetsXML = ActivityPlanetsBinding.inflate(layoutInflater)
-        val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
 
-        Network.downloadImage(URL, image)
+
+        Network.downloadImage(URL, this) {
+            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
+            image.setImageBitmap(Network.bitmap)
+        }
         // 1. Init adapter
 
         val adapter = PlanetsAdapter(planets){ planet ->
