@@ -26,6 +26,7 @@ fun configureBottomNavigation(from: AppCompatActivity, Nav: BottomNavigationView
                 from,
                 StarshipsActivity::class.java
             )
+            R.id.SpeciesMenuItem -> navigateToTab(from, SpeciesListActivity::class.java)
             else -> logAndReturnFalse(from, item.itemId)
         }
     }

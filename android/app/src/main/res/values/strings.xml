@@ -5,6 +5,8 @@
     <string name="planets">Planets</string>
     <string name="films">Films</string>
     <string name="starships">Starships</string>
+    <string name="species">Species</string>
+    <string name="vehicles">Vehicles</string>
 
     <!-- Secondary titles -->
     <string name="residents">Residents</string>

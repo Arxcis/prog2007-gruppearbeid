@@ -11,7 +11,7 @@ import com.example.gruppearbeid.types.Planet
 
 class PlanetsAdapter(
     private var planets: ArrayList<Planet>,
-    private val onClick: (film: Planet) -> Unit
+    private val onClick: (planet: Planet) -> Unit
 ) : RecyclerView.Adapter<PlanetsAdapter.ViewHolder>() {
 
     /**
