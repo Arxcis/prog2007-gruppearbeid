@@ -13,6 +13,7 @@ import org.json.JSONObject
 import org.json.JSONException
 import java.io.*
 import java.lang.StringBuilder
+import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
 
@@ -30,7 +31,8 @@ interface INetwork {
 }
 
 class Network(private val ctx: Context) : INetwork {
-    private val cache: ICache = SimpleCache(ctx)
+    private val etagsCache: ICache = SimpleCache(ctx, Constants.CACHE_ETAGS)
+    private val requestsCache: ICache = SimpleCache(ctx, Constants.CACHE_REQUESTS)
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
 
@@ -38,15 +40,18 @@ class Network(private val ctx: Context) : INetwork {
         val films = ArrayList<Film>()
 
         executor.execute{
-            var json: JSONObject? = null
+            // 1. Do HTTP Request
+            var text: String? = null
             try {
-                json = readJsonFromUrl("$BASE_URL/films?search=${search}")
+                text = readTextFromUrl( "$BASE_URL/films?search=${search}")
             } catch (err: IOException) {
                 Log.w("network.getFilms", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
 
+            // 2. Parse JSON
+            val json = JSONObject(text)
             val results = json.getJSONArray("results")
 
             for (i in 0 until results.length()) {
@@ -270,29 +275,61 @@ class Network(private val ctx: Context) : INetwork {
             }
         }
     }
+
+
+    /** See @url https://stackoverflow.com/a/4308662 */
+    @Throws(IOException::class, JSONException::class)
+    private fun readTextFromUrl(href: String): String? {
+        val cachedEtag = etagsCache.getValue(href, null)
+        val cachedRequest = requestsCache.getValue(cachedEtag, null)
+
+        var url = URL(href)
+        var connection = url.openConnection() as HttpURLConnection
+        cachedEtag?.apply{ connection.setRequestProperty("If-None-Match", cachedEtag) }
+
+        connection.connect() // Do network-request
+
+        var status = connection.responseCode
+        if (status == 304 && cachedRequest != null) {
+            Log.d("readTextFromURL", "Cache hit! Href: $href, ETag: $cachedEtag")
+            return cachedRequest
+        } else if (status == 304 && cachedRequest == null) {
+            Log.w("readTextFromURL", "ERROR Got 304, but no cache was found locally. Forcing re-fetch from network...")
+            url = URL(href)
+            connection = url.openConnection() as HttpURLConnection
+            connection.connect() // Retry network-request without "If-None-Match"-header
+        }
+
+        Log.w("readTextFromURL", "Status: ${connection.responseCode}")
+        val etag = connection.headerFields["ETag"]?.get(0)
+        Log.w("readTextFromURL", "ETag: $etag")
+
+        val text = connection.inputStream.bufferedReader().readText()
+
+        etagsCache.setValue(href, etag)
+        requestsCache.setValue(etag, text)
+
+        return text
+    }
 }
 
 /** See @url https://stackoverflow.com/a/4308662 */
 @Throws(IOException::class, JSONException::class)
-private fun readJsonFromUrl(url: String): JSONObject {
-    val `is`: InputStream = URL(url).openStream()
+private fun readJsonFromUrl(href: String): JSONObject {
+    val url = URL(href)
+    val `is`: InputStream = url.openStream()
     return `is`.use { `is` ->
         val rd = BufferedReader(InputStreamReader(`is`, Charset.forName("UTF-8")))
-        val jsonText = readAll(rd)
-        JSONObject(jsonText)
+        val sb = StringBuilder()
+        var cp: Int
+        while (rd.read().also { cp = it } != -1) {
+            sb.append(cp.toChar())
+        }
+        val text = sb.toString()
+        JSONObject(text)
     }
 }
 
-/** See @url https://stackoverflow.com/a/43086622 */
-@Throws(IOException::class)
-private fun readAll(rd: Reader): String {
-    val sb = StringBuilder()
-    var cp: Int
-    while (rd.read().also { cp = it } != -1) {
-        sb.append(cp.toChar())
-    }
-    return sb.toString()
-}
 
 private fun parseStarship(item: JSONObject): Starship {
     // films:
