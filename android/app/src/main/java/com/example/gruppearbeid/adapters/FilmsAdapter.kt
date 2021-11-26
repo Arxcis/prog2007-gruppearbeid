@@ -4,11 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
 import com.example.gruppearbeid.types.Film
-import com.example.gruppearbeid.util.Network
 
 
 class FilmsAdapter(
@@ -39,7 +37,7 @@ class FilmsAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val film = films[position]
-        holder.title?.text = film.title
+        holder.title?.text = "🎬 ${film.title}"
         holder.item?.setOnClickListener { onClick(film) }
     }
 

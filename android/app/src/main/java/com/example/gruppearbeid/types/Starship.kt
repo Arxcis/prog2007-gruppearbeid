@@ -18,5 +18,11 @@ data class Starship(
 
     val passengers: String,
 
-    val starship_class: String
+    val starship_class: String,
+
+    /** "films": ["https://swapi.dev/api/films/1/", ...] */
+    val films: ArrayList<String>,
+
+    /** "pilots": ["https://swapi.dev/api/people/1/", ...] */
+    val pilots: ArrayList<String>,
     ) : Serializable

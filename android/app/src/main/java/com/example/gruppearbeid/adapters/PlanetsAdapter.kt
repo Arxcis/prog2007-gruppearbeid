@@ -4,12 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Planet
-import com.example.gruppearbeid.util.Network
 
 
 class PlanetsAdapter(
@@ -38,7 +35,7 @@ class PlanetsAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val planet = planets[position]
-        holder.name?.text = planet.name
+        holder.name?.text = "🪐 ${planet.name}"
         holder.item?.setOnClickListener { onClick(planet) }
     }
 

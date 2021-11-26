@@ -2,7 +2,20 @@
 <resources>
     <style name="activity_content">
         <item name="android:layout_margin">15dp</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="adapter_item">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">5dp</item>
 
+    </style>
+    <style name="adapter_item_text">
+        <item name="android:textSize">18dp</item>
+    </style>
+    <style name="search">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

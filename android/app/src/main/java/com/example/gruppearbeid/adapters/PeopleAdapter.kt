@@ -6,9 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
-import com.example.gruppearbeid.util.Network
 
 
 class PeopleAdapter(
@@ -37,7 +35,7 @@ class PeopleAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val person = people[position]
-        holder.name?.text = person.name
+        holder.name?.text = "👨‍🦲 ${person.name}"
         holder.item?.setOnClickListener { onClick(person) }
     }
 

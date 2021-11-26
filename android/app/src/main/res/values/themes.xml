@@ -18,13 +18,14 @@
         <item name="android:textColor">@color/black</item>
         <item name="colorPrimary">@color/black</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnSurface">@color/black</item>
+        <item name="subtitleTextColor">@color/black</item>
 
         <!-- White -->
-        <item name="colorOnPrimary">@color/white</item>
-        <item name="colorOnSurface">@color/white</item>
-        <item name="android:textColorPrimary">@color/white</item>
-        <item name="subtitleTextColor">@color/white</item>
         <item name="colorSurface">@color/white</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="android:textAppearance">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 </resources>

@@ -6,10 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
-import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.types.Starship
-import com.example.gruppearbeid.util.Network
-
 
 class StarshipsAdapter(
     private var starship: ArrayList<Starship>,
@@ -37,7 +34,7 @@ class StarshipsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val starship = starship[position]
 
-        holder.name?.text = starship.name
+        holder.name?.text = "🚀 ${starship.name}"
         holder.item?.setOnClickListener { onClick(starship) }
     }
 
