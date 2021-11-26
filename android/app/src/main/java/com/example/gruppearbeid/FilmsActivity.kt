@@ -17,7 +17,7 @@ class FilmsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_films)
-        title = "Films"
+        title = getString(R.string.films)
 
         // Init films adapter
         val adapter = FilmsAdapter(films){ film ->

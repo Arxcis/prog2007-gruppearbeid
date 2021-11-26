@@ -27,7 +27,7 @@ class PersonActivity : AppCompatActivity() {
 
         // 1. Get extras
         val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
-        title = person?.name
+        title = "👨‍🦲 ${person?.name}"
         ActivityPersonName.text = person?.name ?: ""
 
         // 2. Init homeworld adapter

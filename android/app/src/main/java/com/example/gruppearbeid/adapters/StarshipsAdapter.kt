@@ -34,7 +34,7 @@ class StarshipsAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val starship = starship[position]
 
-        holder.name?.text = starship.name
+        holder.name?.text = "🚀 ${starship.name}"
         holder.item?.setOnClickListener { onClick(starship) }
     }
 
