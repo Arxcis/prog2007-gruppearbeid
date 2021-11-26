@@ -332,7 +332,8 @@ class Network(private val ctx: Context) : INetwork {
     }
 }
 
-fun parseStarships(text: String): ArrayList<Starship> {
+
+private fun parseStarships(text: String): ArrayList<Starship> {
     val json = JSONObject(text)
     val results = json.getJSONArray("results")
 
@@ -344,6 +345,63 @@ fun parseStarships(text: String): ArrayList<Starship> {
     }
     return list
 }
+
+
+private fun parsePlanets(text: String): ArrayList<Planet> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Planet>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parsePlanet(obj)
+        list.add(item)
+    }
+    return list
+}
+
+
+private fun parsePeople(text: String): ArrayList<Person> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Person>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parsePerson(obj)
+        list.add(item)
+    }
+    return list
+}
+
+
+private fun parseFilms(text: String): ArrayList<Film> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val films = ArrayList<Film>()
+    for (i in 0 until results.length()) {
+        val item = results.getJSONObject(i)
+        val film = parseFilm(item)
+        films.add(film)
+    }
+    return films
+}
+
+
+private fun parseSpeciesList(text: String): ArrayList<Species> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Species>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parseSpecies(obj)
+        list.add(item)
+    }
+    return list
+}
+
 
 private fun parseStarship(item: JSONObject): Starship {
     // films:
@@ -374,18 +432,6 @@ private fun parseStarship(item: JSONObject): Starship {
     )
 }
 
-fun parsePlanets(text: String): ArrayList<Planet> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Planet>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePlanet(obj)
-        list.add(item)
-    }
-    return list
-}
 
 fun parsePlanet(item: JSONObject): Planet {
     // Residents:
@@ -408,18 +454,6 @@ fun parsePlanet(item: JSONObject): Planet {
     )
 }
 
-fun parsePeople(text: String): ArrayList<Person> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Person>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePerson(obj)
-        list.add(item)
-    }
-    return list
-}
 
 fun parsePerson(item: JSONObject): Person {
     // Homeworld:
@@ -453,18 +487,6 @@ fun parsePerson(item: JSONObject): Person {
     )
 }
 
-fun parseFilms(text: String): ArrayList<Film> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val films = ArrayList<Film>()
-    for (i in 0 until results.length()) {
-        val item = results.getJSONObject(i)
-        val film = parseFilm(item)
-        films.add(film)
-    }
-    return films
-}
 
 fun parseFilm(item: JSONObject): Film {
     // Characters:
@@ -501,18 +523,6 @@ fun parseFilm(item: JSONObject): Film {
     )
 }
 
-fun parseSpeciesList(text: String): ArrayList<Species> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Species>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parseSpecies(obj)
-        list.add(item)
-    }
-    return list
-}
 
 fun parseSpecies(item: JSONObject): Species {
     // Planets:
