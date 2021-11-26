@@ -26,14 +26,14 @@ class StarshipActivity : AppCompatActivity() {
         // 1. Get extras
         val starship = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Starship
         title = starship?.name
-        ActivityStarshipName.text = starship?.name ?: ""
-        ActivityStarshipModel.text = starship?.model ?: ""
-        ActivityStarshipManufacturer.text = starship?.manufacturer ?: ""
-        ActivityStarshipLength.text = starship?.length ?: ""
-        ActivityStarshipMaxAtmospheringSpeed.text = starship?.max_atmosphering_speed ?: ""
-        ActivityStarshipCrew.text = starship?.crew ?: ""
-        ActivityStarshipPassengers.text = starship?.passengers ?: ""
-        ActivityStarshipStarshipClass.text = starship?.starship_class ?: ""
+        ActivityStarshipName.text = "Name: " + starship?.name ?: ""
+        ActivityStarshipModel.text = "Model: " + starship?.model ?: ""
+        ActivityStarshipManufacturer.text = "Manufacturer: " + starship?.manufacturer ?: ""
+        ActivityStarshipLength.text = "Length: " + starship?.length ?: ""
+        ActivityStarshipMaxAtmospheringSpeed.text = "Max atmosphering speed: " + starship?.max_atmosphering_speed ?: ""
+        ActivityStarshipCrew.text = "Crew: " + starship?.crew ?: ""
+        ActivityStarshipPassengers.text = "Passengers: " + starship?.passengers ?: ""
+        ActivityStarshipStarshipClass.text = "Starship class: " + starship?.starship_class ?: ""
 
         // 2. Init adapters
         val pilotsAdapter = PeopleAdapter(pilots){ character ->

@@ -29,7 +29,11 @@ class FilmActivity : AppCompatActivity() {
         // 1. Get extras
         val film = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Film
         title = film?.title ?: ""
-        ActivityFilmName.text = film?.title ?: ""
+        ActivityFilmName.text = "Title: " + film?.title ?: ""
+        ActivityFilmIdNumber.text = "Number: " + film?.episode_id ?: ""
+        ActivityFilmDirector.text = "Director: " + film?.director ?: ""
+        ActivityFilmProducer.text = "Producer: " + film?.producer ?: ""
+        ActivityFilmReleaseDate.text = "Release date: " + film?.release_date ?: ""
 
         // 2. Init characters adapter
         val charactersAdapter = PeopleAdapter(characters){ character ->
