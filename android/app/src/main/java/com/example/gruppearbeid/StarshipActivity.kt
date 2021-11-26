@@ -10,6 +10,7 @@ import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.util.Constants
+import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_starship.*
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_starship.*
 class StarshipActivity : AppCompatActivity() {
     val films = ArrayList<Film>()
     val pilots = ArrayList<Person>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +50,12 @@ class StarshipActivity : AppCompatActivity() {
         ActivityStarshipFilms.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
+        network = Network(this)
         if (starship != null) {
-            Network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
+            network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getFilmsByURL(starship.films, films, filmsAdapter){ error ->
+            network.getFilmsByURL(starship.films, films, filmsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

@@ -6,14 +6,12 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.SpeciesListAdapter
 import com.example.gruppearbeid.types.Species
-import com.example.gruppearbeid.util.Network
-import com.example.gruppearbeid.util.configureBottomNavigation
-import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
-import com.example.gruppearbeid.util.navigateToThing
+import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_species_list.*
 
 class SpeciesListActivity : AppCompatActivity() {
     private val speciesList = ArrayList<Species>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +26,9 @@ class SpeciesListActivity : AppCompatActivity() {
         SpeciesListRecycler.layoutManager = LinearLayoutManager(this)
 
         // 2. Init search
+        network = Network(this)
         val search = { text: String ->
-            Network.getSpeciesList(
+            network.getSpeciesList(
                 search = text,
                 onSuccess = { _speciesList ->
                     speciesList.clear()
