@@ -11,7 +11,7 @@ import com.example.gruppearbeid.types.Planet
 
 class PlanetsAdapter(
     private var planets: ArrayList<Planet>,
-    private val onClick: (film: Planet) -> Unit
+    private val onClick: (planet: Planet) -> Unit
 ) : RecyclerView.Adapter<PlanetsAdapter.ViewHolder>() {
 
     /**
@@ -35,7 +35,7 @@ class PlanetsAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val planet = planets[position]
-        holder.name?.text = planet.name
+        holder.name?.text = "🪐 ${planet.name}"
         holder.item?.setOnClickListener { onClick(planet) }
     }
 

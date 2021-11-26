@@ -12,17 +12,29 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Gruppearbeid">
         <activity
+            android:name=".VehiclesActivity"
+            android:exported="true" />
+        <activity
+            android:name=".VehicleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SpeciesListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".SpeciesActivity"
+            android:exported="true" />
+        <activity
             android:name=".StarshipActivity"
             android:exported="true" />
         <activity
             android:name=".PlanetActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".PersonActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".FilmActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".StarshipsActivity"
             android:exported="true" />

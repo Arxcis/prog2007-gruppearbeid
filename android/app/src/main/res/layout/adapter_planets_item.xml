@@ -18,6 +18,8 @@
             android:id="@+id/PlanetName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+
+            style="@style/adapter_item_text"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
