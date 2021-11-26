@@ -18,12 +18,6 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/ActivityStarshipName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
-
-            <TextView
                 android:id="@+id/ActivityStarshipModel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
