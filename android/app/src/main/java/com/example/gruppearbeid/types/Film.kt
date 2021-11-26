@@ -9,6 +9,14 @@ data class Film(
     /** "title": "A New Hope" */
     val title: String,
 
+    val episode_id: Int,
+
+    val director: String,
+
+    val producer: String,
+
+    val release_date: String,
+
     /** "characters": ["https://swapi.dev/api/people/1/", ...] */
     val characters: ArrayList<String>,
 
