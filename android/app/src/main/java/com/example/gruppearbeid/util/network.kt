@@ -359,12 +359,19 @@ fun parsePerson(item: JSONObject): Person {
     for (k in 0 until jsonStarships.length()) {
         starships.add(jsonStarships.get(k).toString())
     }
+    // species:
+    val species = ArrayList<String>()
+    val jsonSpecies = item.getJSONArray("species")
+    for (k in 0 until jsonSpecies.length()) {
+        species.add(jsonSpecies.get(k).toString())
+    }
 
     return Person(
         name = item.getString("name"),
         homeworld = homeworld,
         films = films,
         starships = starships,
+        species = species,
     )
 }
 
@@ -387,12 +394,19 @@ fun parseFilm(item: JSONObject): Film {
     for (k in 0 until jsonStarships.length()) {
         starships.add(jsonStarships.get(k).toString())
     }
+    // species:
+    val species = ArrayList<String>()
+    val jsonSpecies = item.getJSONArray("species")
+    for (k in 0 until jsonSpecies.length()) {
+        species.add(jsonSpecies.get(k).toString())
+    }
 
     return Film(
         title = item.getString("title"),
         characters = characters,
         planets = planets,
-        starships = starships
+        starships = starships,
+        species = species,
     )
 }
 

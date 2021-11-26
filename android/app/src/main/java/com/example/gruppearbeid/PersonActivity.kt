@@ -6,11 +6,9 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
+import com.example.gruppearbeid.adapters.SpeciesListAdapter
 import com.example.gruppearbeid.adapters.StarshipsAdapter
-import com.example.gruppearbeid.types.Film
-import com.example.gruppearbeid.types.Person
-import com.example.gruppearbeid.types.Planet
-import com.example.gruppearbeid.types.Starship
+import com.example.gruppearbeid.types.*
 import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
@@ -20,6 +18,7 @@ class PersonActivity : AppCompatActivity() {
     private val homeworld = ArrayList<Planet>()
     private val films = ArrayList<Film>()
     private val starships = ArrayList<Starship>()
+    private val speciesList = ArrayList<Species>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +48,13 @@ class PersonActivity : AppCompatActivity() {
         }
         ActivityPersonStarships.adapter = starshipAdapter
         ActivityPersonStarships.layoutManager = LinearLayoutManager(this)
+        
+        // 2. Init species adapter
+        val speciesListAdapter = SpeciesListAdapter(speciesList){ species ->
+            navigateToThing(this, SpeciesActivity::class.java, species)
+        }
+        ActivityPersonSpecies.adapter = speciesListAdapter
+        ActivityPersonSpecies.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
         if (person != null) {
@@ -59,6 +65,9 @@ class PersonActivity : AppCompatActivity() {
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
             Network.getStarshipsByURL(person.starships, starships, starshipAdapter){ error ->
+                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+            }
+            Network.getSpeciesByURL(person.species, speciesList, speciesListAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

@@ -14,4 +14,7 @@ data class Person(
 
     /** "starships": ["https://swapi.dev/api/starships/1/", ...] */
     val starships: ArrayList<String>,
+
+    /** "species": ["https://swapi.dev/api/species/1/", ...] */
+    val species: ArrayList<String>,
 ) : Serializable
