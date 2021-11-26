@@ -22,7 +22,7 @@ class SpeciesListActivity : AppCompatActivity() {
 
         // 1. Init adapter
         val adapter = SpeciesListAdapter(speciesList){ starship ->
-            navigateToThing(this, SpeciesListActivity::class.java, starship)
+            navigateToThing(this, SpeciesActivity::class.java, starship)
         }
         SpeciesListRecycler.adapter = adapter
         SpeciesListRecycler.layoutManager = LinearLayoutManager(this)
