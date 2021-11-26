@@ -1,6 +1,7 @@
 package com.example.gruppearbeid.util
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Handler
@@ -50,7 +51,7 @@ object Network : INetwork {
 
     lateinit var bitmap: Bitmap
 
-    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit)
+    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit,permission: () -> Boolean, appContext: Context)
     //trying this:
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
@@ -79,6 +80,7 @@ object Network : INetwork {
                                 updateImage()
                             }
                         })
+                        Storage.saveImage(bitmap, permission, appContext)
                         //image.setImageBitmap(bitmap)
                     } else {
                         Log.d(TAG, "bitmap is null")
@@ -88,6 +90,7 @@ object Network : INetwork {
                     Log.d(TAG, "socket timed out")
                 } catch(ex: IOException) {
                     Log.d(TAG, "Input output error. Is WIFI enabled?")
+                    Log.d(TAG, ex.message.toString())
                 } catch (ex: IllegalArgumentException)
                 {
                     Log.d("Planets", "illegalARgumentException in BitmapFactory.decodeStream()")

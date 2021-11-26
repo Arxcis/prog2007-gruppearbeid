@@ -3,8 +3,14 @@
     package="com.example.gruppearbeid">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
+
+    <!-- requestLegacyExternalStorage = true , avoid using scoped storage and enables phone
+    API level 29 or higher to access external storage.-->
     <application
+        android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
