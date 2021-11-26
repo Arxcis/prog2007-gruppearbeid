@@ -3,14 +3,8 @@ package com.example.gruppearbeid.util
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.example.gruppearbeid.adapters.FilmsAdapter
-import com.example.gruppearbeid.adapters.PeopleAdapter
-import com.example.gruppearbeid.adapters.PlanetsAdapter
-import com.example.gruppearbeid.adapters.StarshipsAdapter
-import com.example.gruppearbeid.types.Film
-import com.example.gruppearbeid.types.Person
-import com.example.gruppearbeid.types.Planet
-import com.example.gruppearbeid.types.Starship
+import com.example.gruppearbeid.adapters.*
+import com.example.gruppearbeid.types.*
 import java.util.concurrent.Executors
 import org.json.JSONObject
 
@@ -25,10 +19,12 @@ interface INetwork {
     fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit)
     fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit)
     fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit)
+    fun getSpeciesList(search: String, onSuccess: (speciesList: ArrayList<Species>) -> Unit, onError: (text: String) -> Unit)
     fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit)
     fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit)
     fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit)
-    fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit)
+    fun getPlanetsByURL(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit)
+    fun getSpeciesByURL(urls: ArrayList<String>, speciesList: ArrayList<Species>, adapter: SpeciesListAdapter, onError: (text: String) -> Unit)
 }
 
 object Network : INetwork {
@@ -139,6 +135,31 @@ object Network : INetwork {
         }
     }
 
+    override fun getSpeciesList(search: String, onSuccess: (speciesList: ArrayList<Species>) -> Unit, onError: (text: String) -> Unit) {
+        val speciesList = ArrayList<Species>()
+
+        executor.execute{
+            var json: JSONObject? = null
+            try {
+                json = readJsonFromUrl("$BASE_URL/species?search=${search}")
+            } catch (err: IOException) {
+                Log.w("Network.getSpeciesList", "No connection...", err)
+                handler.post { onError("No connection...") }
+                return@execute
+            }
+
+            val results = json.getJSONArray("results")
+
+            for (i in 0 until results.length()) {
+                val item = results.getJSONObject(i)
+                val species = parseSpecies(item)
+                speciesList.add(species)
+            }
+            handler.post {
+                onSuccess(speciesList)
+            }
+        }
+    }
 
     override fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
@@ -204,7 +225,7 @@ object Network : INetwork {
         }
     }
 
-    override fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
+    override fun getPlanetsByURL(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             for (url in urls) {
                 var json: JSONObject? = null
@@ -218,6 +239,28 @@ object Network : INetwork {
 
                 val planet = parsePlanet(json)
                 planets.add(planet)
+            }
+
+            handler.post {
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun getSpeciesByURL(urls: ArrayList<String>, speciesList: ArrayList<Species>, adapter: SpeciesListAdapter, onError: (text: String) -> Unit) {
+        executor.execute{
+            for (url in urls) {
+                var json: JSONObject? = null
+                try {
+                    json = readJsonFromUrl(url)
+                } catch (err: IOException) {
+                    Log.w("Network.getSpeciesBy", "No connection...", err)
+                    handler.post { onError("No connection...") }
+                    return@execute
+                }
+
+                val species = parseSpecies(json)
+                speciesList.add(species)
             }
 
             handler.post {
@@ -350,5 +393,27 @@ fun parseFilm(item: JSONObject): Film {
         characters = characters,
         planets = planets,
         starships = starships
+    )
+}
+
+
+fun parseSpecies(item: JSONObject): Species {
+    // Planets:
+    val people = ArrayList<String>()
+    val jsonPeople = item.getJSONArray("people")
+    for (k in 0 until jsonPeople.length()) {
+        people.add(jsonPeople.get(k).toString())
+    }
+    // films:
+    val films = ArrayList<String>()
+    val jsonFilms = item.getJSONArray("films")
+    for (k in 0 until jsonFilms.length()) {
+        films.add(jsonFilms.get(k).toString())
+    }
+
+    return Species(
+        name = item.getString("name"),
+        people = people,
+        films = films,
     )
 }

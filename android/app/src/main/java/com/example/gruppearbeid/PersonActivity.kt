@@ -53,7 +53,7 @@ class PersonActivity : AppCompatActivity() {
 
         // 3. Get data from network
         if (person != null) {
-            Network.getPlanetsByUrl(person.homeworld, homeworld, homeworldAdapter){ error ->
+            Network.getPlanetsByURL(person.homeworld, homeworld, homeworldAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
             Network.getFilmsByURL(person.films, films, filmsAdapter){ error ->

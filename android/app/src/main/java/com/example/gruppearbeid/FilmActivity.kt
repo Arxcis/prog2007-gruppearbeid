@@ -57,7 +57,7 @@ class FilmActivity : AppCompatActivity() {
             Network.getPeopleByURL(film.characters, characters, charactersAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getPlanetsByUrl(film.planets, planets, planetsAdapter){ error ->
+            Network.getPlanetsByURL(film.planets, planets, planetsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
             Network.getStarshipsByURL(film.starships, starships, starshipAdapter){ error ->
