@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_starships.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_planets.*
 
 class StarshipsActivity : AppCompatActivity() {
     private val starships = ArrayList<Starship>()

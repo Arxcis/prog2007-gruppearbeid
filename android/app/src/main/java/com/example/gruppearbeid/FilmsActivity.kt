@@ -3,7 +3,6 @@ package com.example.gruppearbeid
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.types.Film
@@ -11,11 +10,7 @@ import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_films.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.navigateToThing
-import android.text.Editable
-
-import android.text.TextWatcher
 import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
-import java.util.*
 import kotlin.collections.ArrayList
 
 

@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_planets.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_people.*
 
 class PlanetsActivity : AppCompatActivity() {
     private val planets = ArrayList<Planet>()

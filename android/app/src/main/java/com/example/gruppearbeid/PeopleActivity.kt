@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_people.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
 import com.example.gruppearbeid.util.navigateToThing
-import kotlinx.android.synthetic.main.activity_films.*
 
 
 class PeopleActivity : AppCompatActivity() {
