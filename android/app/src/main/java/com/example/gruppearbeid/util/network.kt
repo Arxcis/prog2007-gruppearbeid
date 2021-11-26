@@ -20,13 +20,23 @@ import java.lang.StringBuilder
 import java.net.URL
 import java.nio.charset.Charset
 
+interface INetwork {
+    fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit)
+    fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit)
+    fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit)
+    fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit)
+    fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit)
+    fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit)
+    fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit)
+    fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit)
+}
 
-object Network {
+object Network : INetwork {
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
-    private val BASE_URL = "https://swapi.dev/api"
+    private const val BASE_URL = "https://swapi.dev/api"
 
-    fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
+    override fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
         val films = ArrayList<Film>()
 
         executor.execute{
@@ -52,11 +62,13 @@ object Network {
         }
     }
 
-    fun getPeople(people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+    override fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit) {
+        val people = ArrayList<Person>()
+
         executor.execute{
             var json: JSONObject? = null
             try {
-                json = readJsonFromUrl("$BASE_URL/people")
+                json = readJsonFromUrl("$BASE_URL/people?search=${search}")
             } catch (err: IOException) {
                 Log.w("Network.getPeople", "No connection...", err)
                 handler.post { onError("No connection...") }
@@ -70,16 +82,18 @@ object Network {
                 people.add(person)
             }
             handler.post {
-                adapter.notifyDataSetChanged()
+                onSuccess(people)
             }
         }
     }
 
-    fun getPlanets(planets: ArrayList<Planet>, adapter:PlanetsAdapter, onError: (text: String) -> Unit) {
+    override fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit) {
+        val planets = ArrayList<Planet>()
+
         executor.execute{
             var json: JSONObject? = null
             try {
-                json = readJsonFromUrl("$BASE_URL/planets")
+                json = readJsonFromUrl("$BASE_URL/planets?search=${search}")
             } catch (err: IOException) {
                 Log.w("Network.getPlanets", "No connection...", err)
                 handler.post { onError("No connection...") }
@@ -94,16 +108,18 @@ object Network {
                 planets.add(planet)
             }
             handler.post {
-                adapter.notifyDataSetChanged()
+                onSuccess(planets)
             }
         }
     }
 
-    fun getStarships(starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
+    override fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit) {
+        val starships = ArrayList<Starship>()
+
         executor.execute{
             var json: JSONObject? = null
             try {
-                json = readJsonFromUrl("$BASE_URL/starships")
+                json = readJsonFromUrl("$BASE_URL/starships?search=${search}")
             } catch (err: IOException) {
                 Log.w("Network.getStarships", "No connection...", err)
                 handler.post { onError("No connection...") }
@@ -118,13 +134,13 @@ object Network {
                 starships.add(starship)
             }
             handler.post {
-                adapter.notifyDataSetChanged()
+                onSuccess(starships)
             }
         }
     }
 
 
-    fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+    override fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             for (url in urls) {
                 var json: JSONObject? = null
@@ -145,7 +161,7 @@ object Network {
         }
     }
 
-    fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
+    override fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             for (url in urls) {
                 var json: JSONObject? = null
@@ -166,7 +182,7 @@ object Network {
         }
     }
 
-    fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
+    override fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             for (url in urls) {
                 var json: JSONObject? = null
@@ -188,7 +204,7 @@ object Network {
         }
     }
 
-    fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
+    override fun getPlanetsByUrl(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
         executor.execute{
             for (url in urls) {
                 var json: JSONObject? = null

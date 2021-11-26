@@ -36,11 +36,11 @@ class FilmsActivity : AppCompatActivity() {
 
         // 2. Init search
         val search = { text: String ->
-            // Get films from network
-            Network.getFilms(search = text,
-                onSuccess = { newFilms ->
+            Network.getFilms(
+                search = text,
+                onSuccess = { _films ->
                     films.clear()
-                    films.addAll(newFilms)
+                    films.addAll(_films)
                     adapter.notifyDataSetChanged()
                 },
                 onError = { error ->
@@ -49,9 +49,8 @@ class FilmsActivity : AppCompatActivity() {
         }
         search("")
         FilmsSearch.addTextChangedListener(
-            makeTextWatcherWithDebounce(500) { input -> search(input)}
+            makeTextWatcherWithDebounce{ input -> search(input)}
         )
-
     }
     override fun onResume() {
         super.onResume()

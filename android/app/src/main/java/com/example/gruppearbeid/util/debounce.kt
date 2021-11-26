@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Code adopted from https://stackoverflow.com/a/12143050 2021-11-26
  */
-fun makeTextWatcherWithDebounce(DELAY: Long, run: (text: String) -> Unit): TextWatcher {
+fun makeTextWatcherWithDebounce(run: (text: String) -> Unit): TextWatcher {
     return object : TextWatcher {
         override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         override fun beforeTextChanged(
@@ -26,7 +26,7 @@ fun makeTextWatcherWithDebounce(DELAY: Long, run: (text: String) -> Unit): TextW
                 object : TimerTask() {
                     override fun run() = run(s.toString())
                 },
-                DELAY
+                Constants.TEXT_INPUT_DEBOUNCE_MS
             )
         }
     }
