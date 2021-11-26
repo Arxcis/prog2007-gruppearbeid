@@ -16,4 +16,7 @@
     <string name="placeholder_name">Name</string>
     <string name="placeholder_title">Title</string>
     <string name="placeholder_no_starships">No starships</string>
+    <string name="placeholder_search_title">Search title...</string>
+    <string name="placeholder_search_name">Search name...</string>
+    <string name="placeholder_search_name_and_model">Search name or model...</string>
 </resources>

@@ -9,6 +9,7 @@ import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.util.Network
 import kotlinx.android.synthetic.main.activity_starships.*
 import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
 import com.example.gruppearbeid.util.navigateToThing
 
 class StarshipsActivity : AppCompatActivity() {
@@ -19,17 +20,30 @@ class StarshipsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_starships)
         title = getString(R.string.starships)
 
-        // Init adapter
+        // 1. Init adapter
         val adapter = StarshipsAdapter(starships){ starship ->
             navigateToThing(this, StarshipActivity::class.java, starship)
         }
-
-        Network.getStarships(starships, adapter){ error ->
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-        }
-
         StarshipRecycler.adapter = adapter
         StarshipRecycler.layoutManager = LinearLayoutManager(this)
+
+        // 2. Init search
+        val search = { text: String ->
+            Network.getStarships(
+                search = text,
+                onSuccess = { _starships ->
+                    starships.clear()
+                    starships.addAll(_starships)
+                    adapter.notifyDataSetChanged()
+                },
+                onError = { error ->
+                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
+                })
+        }
+        search("")
+        StarshipsSearch.addTextChangedListener(
+            makeTextWatcherWithDebounce{ input -> search(input)}
+        )
     }
     override fun onResume() {
         super.onResume()
