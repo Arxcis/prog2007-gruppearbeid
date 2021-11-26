@@ -1,10 +1,12 @@
 package com.example.gruppearbeid.util
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.example.gruppearbeid.adapters.*
 import com.example.gruppearbeid.types.*
+import com.example.gruppearbeid.util.Constants.Companion.BASE_URL
 import java.util.concurrent.Executors
 import org.json.JSONObject
 
@@ -27,10 +29,10 @@ interface INetwork {
     fun getSpeciesByURL(urls: ArrayList<String>, speciesList: ArrayList<Species>, adapter: SpeciesListAdapter, onError: (text: String) -> Unit)
 }
 
-object Network : INetwork {
+class Network(private val ctx: Context) : INetwork {
+    private val cache: ICache = SimpleCache(ctx)
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
-    private const val BASE_URL = "https://swapi.dev/api"
 
     override fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
         val films = ArrayList<Film>()
@@ -40,7 +42,7 @@ object Network : INetwork {
             try {
                 json = readJsonFromUrl("$BASE_URL/films?search=${search}")
             } catch (err: IOException) {
-                Log.w("Network.getFilms", "No connection...", err)
+                Log.w("network.getFilms", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
@@ -66,7 +68,7 @@ object Network : INetwork {
             try {
                 json = readJsonFromUrl("$BASE_URL/people?search=${search}")
             } catch (err: IOException) {
-                Log.w("Network.getPeople", "No connection...", err)
+                Log.w("network.getPeople", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
@@ -91,7 +93,7 @@ object Network : INetwork {
             try {
                 json = readJsonFromUrl("$BASE_URL/planets?search=${search}")
             } catch (err: IOException) {
-                Log.w("Network.getPlanets", "No connection...", err)
+                Log.w("network.getPlanets", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
@@ -117,7 +119,7 @@ object Network : INetwork {
             try {
                 json = readJsonFromUrl("$BASE_URL/starships?search=${search}")
             } catch (err: IOException) {
-                Log.w("Network.getStarships", "No connection...", err)
+                Log.w("network.getStarships", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
@@ -143,7 +145,7 @@ object Network : INetwork {
             try {
                 json = readJsonFromUrl("$BASE_URL/species?search=${search}")
             } catch (err: IOException) {
-                Log.w("Network.getSpeciesList", "No connection...", err)
+                Log.w("network.getSpeciesList", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
@@ -168,7 +170,7 @@ object Network : INetwork {
                 try {
                     json = readJsonFromUrl(url)
                 } catch (err: IOException) {
-                    Log.w("Network.getFilmsBy", "No connection...", err)
+                    Log.w("network.getFilmsBy", "No connection...", err)
                     handler.post { onError("No connection...") }
                     return@execute
                 }
@@ -189,7 +191,7 @@ object Network : INetwork {
                 try {
                     json = readJsonFromUrl(url)
                 } catch (err: IOException) {
-                    Log.w("Network.getPeopleBy", "No connection...", err)
+                    Log.w("network.getPeopleBy", "No connection...", err)
                     handler.post { onError("No connection...") }
                     return@execute
                 }
@@ -210,7 +212,7 @@ object Network : INetwork {
                 try {
                     json = readJsonFromUrl(url)
                 } catch (err: IOException) {
-                    Log.w("Network.getStarshipsBy", "No connection...", err)
+                    Log.w("network.getStarshipsBy", "No connection...", err)
                     handler.post { onError("No connection...") }
                     return@execute
                 }
@@ -232,7 +234,7 @@ object Network : INetwork {
                 try {
                     json = readJsonFromUrl(url)
                 } catch (err: IOException) {
-                    Log.w("Network.getPlanetsBy", "No connection...", err)
+                    Log.w("network.getPlanetsBy", "No connection...", err)
                     handler.post { onError("No connection...") }
                     return@execute
                 }
@@ -254,7 +256,7 @@ object Network : INetwork {
                 try {
                     json = readJsonFromUrl(url)
                 } catch (err: IOException) {
-                    Log.w("Network.getSpeciesBy", "No connection...", err)
+                    Log.w("network.getSpeciesBy", "No connection...", err)
                     handler.post { onError("No connection...") }
                     return@execute
                 }
