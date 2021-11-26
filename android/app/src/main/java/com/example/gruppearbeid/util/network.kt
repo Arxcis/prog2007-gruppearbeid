@@ -26,11 +26,13 @@ object Network {
     private val handler = Handler(Looper.getMainLooper())
     private val BASE_URL = "https://swapi.dev/api"
 
-    fun getFilms(films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
+    fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
+        val films = ArrayList<Film>()
+
         executor.execute{
             var json: JSONObject? = null
             try {
-                json = readJsonFromUrl("$BASE_URL/films")
+                json = readJsonFromUrl("$BASE_URL/films?search=${search}")
             } catch (err: IOException) {
                 Log.w("Network.getFilms", "No connection...", err)
                 handler.post { onError("No connection...") }
@@ -45,7 +47,7 @@ object Network {
                 films.add(film)
             }
             handler.post {
-                adapter.notifyDataSetChanged()
+                onSuccess(films)
             }
         }
     }
