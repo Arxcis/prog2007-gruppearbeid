@@ -41,9 +41,9 @@ class Network(private val ctx: Context) : INetwork {
 
         executor.execute{
             // 1. Do HTTP Request
-            var text: String? = null
+            var json: JSONObject? = null
             try {
-                text = readTextFromUrl( "$BASE_URL/films?search=${search}")
+                json = readJsonFromUrl( "$BASE_URL/films?search=${search}")
             } catch (err: IOException) {
                 Log.w("network.getFilms", "No connection...", err)
                 handler.post { onError("No connection...") }
@@ -51,7 +51,6 @@ class Network(private val ctx: Context) : INetwork {
             }
 
             // 2. Parse JSON
-            val json = JSONObject(text)
             val results = json.getJSONArray("results")
 
             for (i in 0 until results.length()) {
@@ -276,10 +275,9 @@ class Network(private val ctx: Context) : INetwork {
         }
     }
 
-
     /** See @url https://stackoverflow.com/a/4308662 */
     @Throws(IOException::class, JSONException::class)
-    private fun readTextFromUrl(href: String): String? {
+    private fun readJsonFromUrl(href: String): JSONObject {
         val cachedEtag = etagsCache.getValue(href, null)
         val cachedRequest = requestsCache.getValue(cachedEtag, null)
 
@@ -291,45 +289,26 @@ class Network(private val ctx: Context) : INetwork {
 
         var status = connection.responseCode
         if (status == 304 && cachedRequest != null) {
-            Log.d("readTextFromURL", "Cache hit! Href: $href, ETag: $cachedEtag")
-            return cachedRequest
+            Log.d("readJsonFromUrl", "Cache hit! Href: $href, ETag: $cachedEtag")
+            return JSONObject(cachedRequest)
         } else if (status == 304 && cachedRequest == null) {
-            Log.w("readTextFromURL", "ERROR Got 304, but no cache was found locally. Forcing re-fetch from network...")
+            Log.w("readJsonFromUrl", "WARN Got 304, but no cache was found locally. Forcing re-fetch from network...")
             url = URL(href)
             connection = url.openConnection() as HttpURLConnection
             connection.connect() // Retry network-request without "If-None-Match"-header
+        } else {
+            Log.d("readJsonFromUrl", "Cache miss! Href: $href, ETag: $cachedEtag")
         }
 
-        Log.w("readTextFromURL", "Status: ${connection.responseCode}")
         val etag = connection.headerFields["ETag"]?.get(0)
-        Log.w("readTextFromURL", "ETag: $etag")
-
         val text = connection.inputStream.bufferedReader().readText()
 
         etagsCache.setValue(href, etag)
         requestsCache.setValue(etag, text)
 
-        return text
+        return JSONObject(text)
     }
 }
-
-/** See @url https://stackoverflow.com/a/4308662 */
-@Throws(IOException::class, JSONException::class)
-private fun readJsonFromUrl(href: String): JSONObject {
-    val url = URL(href)
-    val `is`: InputStream = url.openStream()
-    return `is`.use { `is` ->
-        val rd = BufferedReader(InputStreamReader(`is`, Charset.forName("UTF-8")))
-        val sb = StringBuilder()
-        var cp: Int
-        while (rd.read().also { cp = it } != -1) {
-            sb.append(cp.toChar())
-        }
-        val text = sb.toString()
-        JSONObject(text)
-    }
-}
-
 
 private fun parseStarship(item: JSONObject): Starship {
     // films:
