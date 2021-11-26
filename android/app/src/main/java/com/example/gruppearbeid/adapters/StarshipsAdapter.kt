@@ -9,8 +9,8 @@ import com.example.gruppearbeid.R
 import com.example.gruppearbeid.types.Starship
 
 class StarshipsAdapter(
-    private var starship: ArrayList<Starship>,
-    private val onClick: (film: Starship) -> Unit
+    private var starships: ArrayList<Starship>,
+    private val onClick: (starship: Starship) -> Unit
 ) : RecyclerView.Adapter<StarshipsAdapter.ViewHolder>() {
     /**
      * Provide a reference to the type of views that you are using
@@ -32,12 +32,12 @@ class StarshipsAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val starship = starship[position]
+        val starship = starships[position]
 
         holder.name?.text = "🚀 ${starship.name}"
         holder.item?.setOnClickListener { onClick(starship) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = starship.size
+    override fun getItemCount() = starships.size
 }
