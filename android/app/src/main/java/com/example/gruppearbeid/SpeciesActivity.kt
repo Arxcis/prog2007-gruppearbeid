@@ -10,6 +10,7 @@ import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Species
 import com.example.gruppearbeid.util.Constants
+import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_species.*
@@ -17,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_species.*
 class SpeciesActivity : AppCompatActivity() {
     private val people = ArrayList<Person>()
     private val films = ArrayList<Film>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +43,12 @@ class SpeciesActivity : AppCompatActivity() {
         ActivitySpeciesFilms.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
+        network = Network(this)
         if (species != null) {
-            Network.getPeopleByURL(species.people, people, peopleAdapter){ error ->
+            network.getPeopleByURL(species.people, people, peopleAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getFilmsByURL(species.films, films, filmsAdapter){ error ->
+            network.getFilmsByURL(species.films, films, filmsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }
