@@ -12,10 +12,8 @@ import org.json.JSONObject
 
 import org.json.JSONException
 import java.io.*
-import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
-import java.nio.charset.Charset
 
 interface INetwork {
     fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit)
@@ -32,32 +30,34 @@ interface INetwork {
 
 class Network(private val ctx: Context) : INetwork {
     private val etagsCache: ICache = SimpleCache(ctx, Constants.CACHE_ETAGS)
-    private val requestsCache: ICache = SimpleCache(ctx, Constants.CACHE_REQUESTS)
+    private val responseCache: ICache = SimpleCache(ctx, Constants.CACHE_REQUESTS)
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
 
     override fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
-        val films = ArrayList<Film>()
+        val href = "$BASE_URL/films?search=${search}"
 
         executor.execute{
+            // 0. Cache first
+            val etag = etagsCache.getValue(href, null)
+            val cachedResponse = responseCache.getValue(etag, null)
+            cachedResponse?.apply {
+                val films = parseFilms(cachedResponse)
+                handler.post {
+                    onSuccess(films)
+                }
+            }
+
             // 1. Do HTTP Request
-            var json: JSONObject? = null
+            var res: String?
             try {
-                json = readJsonFromUrl( "$BASE_URL/films?search=${search}")
+                res = readTextFromUrl(href)
             } catch (err: IOException) {
                 Log.w("network.getFilms", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-
-            // 2. Parse JSON
-            val results = json.getJSONArray("results")
-
-            for (i in 0 until results.length()) {
-                val item = results.getJSONObject(i)
-                val film = parseFilm(item)
-                films.add(film)
-            }
+            val films = parseFilms(res)
             handler.post {
                 onSuccess(films)
             }
@@ -65,24 +65,29 @@ class Network(private val ctx: Context) : INetwork {
     }
 
     override fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit) {
-        val people = ArrayList<Person>()
+        val href = "$BASE_URL/people?search=${search}"
 
         executor.execute{
-            var json: JSONObject? = null
+            // 0. Cache first
+            val etag = etagsCache.getValue(href, null)
+            val cachedResponse = responseCache.getValue(etag, null)
+            cachedResponse?.apply {
+                val people = parsePeople(cachedResponse)
+                handler.post {
+                    onSuccess(people)
+                }
+            }
+
+            // 1. Do HTTP Request
+            var res: String?
             try {
-                json = readJsonFromUrl("$BASE_URL/people?search=${search}")
+                res = readTextFromUrl(href)
             } catch (err: IOException) {
                 Log.w("network.getPeople", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-            val results = json.getJSONArray("results")
-
-            for (i in 0 until results.length()) {
-                val item = results.getJSONObject(i)
-                val person = parsePerson(item)
-                people.add(person)
-            }
+            val people = parsePeople(res)
             handler.post {
                 onSuccess(people)
             }
@@ -90,25 +95,29 @@ class Network(private val ctx: Context) : INetwork {
     }
 
     override fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit) {
-        val planets = ArrayList<Planet>()
+        val href = "$BASE_URL/planets?search=${search}"
 
         executor.execute{
-            var json: JSONObject? = null
+            // 0. Cache first
+            val etag = etagsCache.getValue(href, null)
+            val cachedResponse = responseCache.getValue(etag, null)
+            cachedResponse?.apply {
+                val planets = parsePlanets(cachedResponse)
+                handler.post {
+                    onSuccess(planets)
+                }
+            }
+
+            // 1. Do HTTP Request
+            var res: String?
             try {
-                json = readJsonFromUrl("$BASE_URL/planets?search=${search}")
+                res = readTextFromUrl(href)
             } catch (err: IOException) {
                 Log.w("network.getPlanets", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-
-            val results = json.getJSONArray("results")
-
-            for (i in 0 until results.length()) {
-                val item = results.getJSONObject(i)
-                val planet = parsePlanet(item)
-                planets.add(planet)
-            }
+            val planets = parsePlanets(res)
             handler.post {
                 onSuccess(planets)
             }
@@ -116,25 +125,29 @@ class Network(private val ctx: Context) : INetwork {
     }
 
     override fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit) {
-        val starships = ArrayList<Starship>()
+        val href = "$BASE_URL/starships?search=${search}"
 
         executor.execute{
-            var json: JSONObject? = null
+            // 0. Cache first
+            val etag = etagsCache.getValue(href, null)
+            val cachedResponse = responseCache.getValue(etag, null)
+            cachedResponse?.apply {
+                val starships = parseStarships(cachedResponse)
+                handler.post {
+                    onSuccess(starships)
+                }
+            }
+
+            // 1. Do HTTP Request
+            var res: String?
             try {
-                json = readJsonFromUrl("$BASE_URL/starships?search=${search}")
+                res = readTextFromUrl(href)
             } catch (err: IOException) {
                 Log.w("network.getStarships", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-
-            val results = json.getJSONArray("results")
-
-            for (i in 0 until results.length()) {
-                val item = results.getJSONObject(i)
-                val starship = parseStarship(item)
-                starships.add(starship)
-            }
+            val starships = parseStarships(res)
             handler.post {
                 onSuccess(starships)
             }
@@ -142,27 +155,31 @@ class Network(private val ctx: Context) : INetwork {
     }
 
     override fun getSpeciesList(search: String, onSuccess: (speciesList: ArrayList<Species>) -> Unit, onError: (text: String) -> Unit) {
-        val speciesList = ArrayList<Species>()
+        val href = "$BASE_URL/species?search=${search}"
 
         executor.execute{
-            var json: JSONObject? = null
+            // 0. Cache first
+            val etag = etagsCache.getValue(href, null)
+            val cachedResponse = responseCache.getValue(etag, null)
+            cachedResponse?.apply {
+                val list = parseSpeciesList(cachedResponse)
+                handler.post {
+                    onSuccess(list)
+                }
+            }
+
+            // 1. Do HTTP Request
+            var res: String?
             try {
-                json = readJsonFromUrl("$BASE_URL/species?search=${search}")
+                res = readTextFromUrl(href)
             } catch (err: IOException) {
                 Log.w("network.getSpeciesList", "No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-
-            val results = json.getJSONArray("results")
-
-            for (i in 0 until results.length()) {
-                val item = results.getJSONObject(i)
-                val species = parseSpecies(item)
-                speciesList.add(species)
-            }
+            val list = parseSpeciesList(res)
             handler.post {
-                onSuccess(speciesList)
+                onSuccess(list)
             }
         }
     }
@@ -278,8 +295,13 @@ class Network(private val ctx: Context) : INetwork {
     /** See @url https://stackoverflow.com/a/4308662 */
     @Throws(IOException::class, JSONException::class)
     private fun readJsonFromUrl(href: String): JSONObject {
+        return JSONObject(readTextFromUrl(href))
+    }
+    /** See @url https://stackoverflow.com/a/4308662 */
+    @Throws(IOException::class)
+    private fun readTextFromUrl(href: String): String {
         val cachedEtag = etagsCache.getValue(href, null)
-        val cachedRequest = requestsCache.getValue(cachedEtag, null)
+        val cachedResponse = responseCache.getValue(cachedEtag, null)
 
         var url = URL(href)
         var connection = url.openConnection() as HttpURLConnection
@@ -288,11 +310,11 @@ class Network(private val ctx: Context) : INetwork {
         connection.connect() // Do network-request
 
         var status = connection.responseCode
-        if (status == 304 && cachedRequest != null) {
+        if (status == 304 && cachedResponse != null) {
             Log.d("readJsonFromUrl", "Cache hit! Href: $href, ETag: $cachedEtag")
-            return JSONObject(cachedRequest)
-        } else if (status == 304 && cachedRequest == null) {
-            Log.w("readJsonFromUrl", "WARN Got 304, but no cache was found locally. Forcing re-fetch from network...")
+            return cachedResponse
+        } else if (status == 304 && cachedResponse == null) {
+            Log.w("readJsonFromUrl", "WARN Got 304, but no cached response was found locally. Forcing re-fetch from network...")
             url = URL(href)
             connection = url.openConnection() as HttpURLConnection
             connection.connect() // Retry network-request without "If-None-Match"-header
@@ -304,10 +326,23 @@ class Network(private val ctx: Context) : INetwork {
         val text = connection.inputStream.bufferedReader().readText()
 
         etagsCache.setValue(href, etag)
-        requestsCache.setValue(etag, text)
+        responseCache.setValue(etag, text)
 
-        return JSONObject(text)
+        return text
     }
+}
+
+fun parseStarships(text: String): ArrayList<Starship> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Starship>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parseStarship(obj)
+        list.add(item)
+    }
+    return list
 }
 
 private fun parseStarship(item: JSONObject): Starship {
@@ -339,6 +374,18 @@ private fun parseStarship(item: JSONObject): Starship {
     )
 }
 
+fun parsePlanets(text: String): ArrayList<Planet> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Planet>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parsePlanet(obj)
+        list.add(item)
+    }
+    return list
+}
 
 fun parsePlanet(item: JSONObject): Planet {
     // Residents:
@@ -359,6 +406,19 @@ fun parsePlanet(item: JSONObject): Planet {
         residents = residents,
         films = films,
     )
+}
+
+fun parsePeople(text: String): ArrayList<Person> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Person>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parsePerson(obj)
+        list.add(item)
+    }
+    return list
 }
 
 fun parsePerson(item: JSONObject): Person {
@@ -391,6 +451,19 @@ fun parsePerson(item: JSONObject): Person {
         starships = starships,
         species = species,
     )
+}
+
+fun parseFilms(text: String): ArrayList<Film> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val films = ArrayList<Film>()
+    for (i in 0 until results.length()) {
+        val item = results.getJSONObject(i)
+        val film = parseFilm(item)
+        films.add(film)
+    }
+    return films
 }
 
 fun parseFilm(item: JSONObject): Film {
@@ -428,6 +501,18 @@ fun parseFilm(item: JSONObject): Film {
     )
 }
 
+fun parseSpeciesList(text: String): ArrayList<Species> {
+    val json = JSONObject(text)
+    val results = json.getJSONArray("results")
+
+    val list = ArrayList<Species>()
+    for (i in 0 until results.length()) {
+        val obj = results.getJSONObject(i)
+        val item = parseSpecies(obj)
+        list.add(item)
+    }
+    return list
+}
 
 fun parseSpecies(item: JSONObject): Species {
     // Planets:
