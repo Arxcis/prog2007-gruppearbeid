@@ -28,7 +28,7 @@ class FilmActivity : AppCompatActivity() {
 
         // 1. Get extras
         val film = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Film
-        title = film?.title ?: ""
+        title = "🎬 ${film?.title}"
         ActivityFilmName.text = film?.title ?: ""
 
         // 2. Init characters adapter
