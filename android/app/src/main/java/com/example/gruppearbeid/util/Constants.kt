@@ -7,5 +7,6 @@ class Constants {
         const val BASE_URL = "https://swapi.dev/api"
         const val CACHE_ETAGS = "CACHE_ETAGS"
         const val CACHE_REQUESTS = "CACHE_REQUESTS"
+        const val RESULTS_PAGE_SIZE = 10
     }
 }

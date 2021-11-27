@@ -18,4 +18,7 @@
         <item name="android:imeOptions">actionSearch</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="button">
+        <item name="android:minHeight">48dp</item>
+    </style>
 </resources>

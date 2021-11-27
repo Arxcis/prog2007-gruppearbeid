@@ -216,6 +216,7 @@ fun <Thing>parseResults(text: String, parseThing: (text: JSONObject) -> Thing): 
     val prev: String? =  if (!json.isNull("previous")) { json.getString("previous") } else { null }
     val next: String? = if (!json.isNull("next")) { json.getString("next") } else { null }
     val results = json.getJSONArray("results")
+    val count = json.getInt("count")
 
     val things = ArrayList<Thing>()
 
@@ -224,7 +225,21 @@ fun <Thing>parseResults(text: String, parseThing: (text: JSONObject) -> Thing): 
         val item = parseThing(obj)
         things.add(item)
     }
-    return Results(things, prev, next)
+
+    val page = when {
+        next != null -> next[next.length - 1].digitToInt() - 1
+        prev != null -> prev[prev.length - 1].digitToInt() + 1
+        else -> 1
+    }
+
+    return Results(
+        things,
+        count = count,
+        pageCount = count / Constants.RESULTS_PAGE_SIZE + 1,
+        page = page,
+        prev = prev,
+        next = next
+    )
 }
 
 

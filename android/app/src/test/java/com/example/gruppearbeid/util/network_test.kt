@@ -7,7 +7,7 @@ import org.junit.Assert.*
 class ParseResultsTest {
     @Test
     fun testNext() {
-        val (people, prev, next) = parseResults("""
+        val res = parseResults("""
            { 
                 "count": 82,
                 "next": "https://swapi.dev/api/people/?page=2",
@@ -16,30 +16,36 @@ class ParseResultsTest {
             }
         """.trimIndent(), ::parsePerson)
 
-        assertEquals(people.size, 0)
-        assertEquals(next, "https://swapi.dev/api/people/?page=2")
-        assertNull(prev)
+        assertEquals(res.results.size, 0)
+        assertEquals(res.next, "https://swapi.dev/api/people/?page=2")
+        assertNull(res.prev)
+        assertEquals(res.pageCount, 9)
+        assertEquals(res.page, 1)
+        assertEquals(res.count, 82)
     }
 
     @Test
     fun testPrev() {
-        val (people, prev, next) = parseResults("""
+        val res = parseResults("""
            { 
                 "count": 82,
                 "next": null,
-                "previous": "https://swapi.dev/api/people/?page=9",
+                "previous": "https://swapi.dev/api/people/?page=8",
                 "results": [],
             }
         """.trimIndent(), ::parsePerson)
 
-        assertEquals(people.size, 0)
-        assertNull(next)
-        assertEquals(prev, "https://swapi.dev/api/people/?page=9")
+        assertEquals(res.results.size, 0)
+        assertNull(res.next)
+        assertEquals(res.prev, "https://swapi.dev/api/people/?page=8")
+        assertEquals(res.pageCount, 9)
+        assertEquals(res.page, 9)
+        assertEquals(res.count, 82)
     }
 
     @Test
     fun testPrevAndNext() {
-        val (people, prev, next) = parseResults("""
+        val res = parseResults("""
            { 
                 "count": 82,
                 "next": "https://swapi.dev/api/people/?page=3",
@@ -48,8 +54,49 @@ class ParseResultsTest {
             }
         """.trimIndent(), ::parsePerson)
 
-        assertEquals(people.size, 0)
-        assertEquals(next, "https://swapi.dev/api/people/?page=3")
-        assertNotNull(prev, "https://swapi.dev/api/people/?page=1")
+        assertEquals(res.results.size, 0)
+        assertEquals(res.next, "https://swapi.dev/api/people/?page=3")
+        assertEquals(res.prev, "https://swapi.dev/api/people/?page=1")
+        assertEquals(res.pageCount, 9)
+        assertEquals(res.page, 2)
+        assertEquals(res.count, 82)
+    }
+
+    @Test
+    fun testPrevNextBothNull() {
+        val res = parseResults("""
+           { 
+                "count": 2,
+                "next": null,
+                "previous": null,
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
+
+        assertEquals(res.results.size, 0)
+        assertNull(res.next)
+        assertNull(res.prev)
+        assertEquals(res.pageCount, 1)
+        assertEquals(res.page, 1)
+        assertEquals(res.count, 2)
+    }
+
+    @Test
+    fun testNoCount() {
+        val res = parseResults("""
+           { 
+                "count": 0,
+                "next": null,
+                "previous": null,
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
+
+        assertEquals(res.results.size, 0)
+        assertNull(res.next)
+        assertNull(res.prev)
+        assertEquals(res.pageCount, 1)
+        assertEquals(res.page, 1)
+        assertEquals(res.count, 0)
     }
 }
