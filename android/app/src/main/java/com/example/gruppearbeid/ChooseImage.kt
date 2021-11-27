@@ -9,6 +9,7 @@ import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.ChooseImageAdapter
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
+import com.example.gruppearbeid.types.myViewModel
 
 class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var _binding: ActivityChooseImageBinding

@@ -25,12 +25,12 @@ class ChooseImageAdapter : RecyclerView.Adapter<ChooseImageAdapter.ViewHolder>()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvEntity.text = "Test"
+        holder.tvEntity.text = "test"
     }
 
     override fun getItemCount(): Int {
         return 1
     }
 
-    fun disp() = Log.d("ChooseImageAda", whatToFetch)
+    fun disp() = Log.d("ChooseImage.adapter", whatToFetch)
 }
