@@ -2,7 +2,6 @@ package com.example.gruppearbeid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PeopleAdapter
@@ -42,32 +41,13 @@ class PeopleActivity : AppCompatActivity() {
 
     private val onSuccess = { res: Results<Person> ->
         adapter.refresh(res.results);
-        refreshPagination(res)
+        prev = res.prev
+        next = res.next
+        refreshPaginationViews(res, PeoplePrev, PeopleNext, PeopleDots)
     }
 
     private val onError = { err: String ->
         Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun refreshPagination(res: Results<Person>) {
-        prev = res.prev
-        next = res.next
-        when {
-            prev != null -> PeoplePrev.visibility = View.VISIBLE
-            else -> PeoplePrev.visibility = View.INVISIBLE
-        }
-        when {
-            next != null -> PeopleNext.visibility = View.VISIBLE
-            else -> PeopleNext.visibility = View.INVISIBLE
-        }
-        var dots = ""
-        for (i in (1..res.pageCount)) {
-            dots = when (i){
-                res.page -> dots.plus(Constants.DOT_BIG).plus(" ")
-                else -> dots.plus(Constants.DOT_SMALL).plus(" ")
-            }
-        }
-        PeopleDots.text = dots
     }
 
     override fun onResume() {
@@ -75,3 +55,4 @@ class PeopleActivity : AppCompatActivity() {
         configureBottomNavigation(this, PeopleNavigation, R.id.PeopleMenuItem)
     }
 }
+
