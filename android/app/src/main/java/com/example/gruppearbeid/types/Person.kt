@@ -6,6 +6,11 @@ data class Person(
     /** "name": "Luke Skywalker" */
     val name: String,
 
+    val height: String,
+
+    val birth_year: String,
+
+    val gender: String,
     /** "homeworld": ["https://swapi.dev/api/planets/1/", ...] */
     val homeworld: ArrayList<String>,
 

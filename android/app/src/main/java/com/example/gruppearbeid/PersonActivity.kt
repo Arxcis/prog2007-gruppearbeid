@@ -10,6 +10,7 @@ import com.example.gruppearbeid.adapters.SpeciesListAdapter
 import com.example.gruppearbeid.adapters.StarshipsAdapter
 import com.example.gruppearbeid.types.*
 import com.example.gruppearbeid.util.Constants
+import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_person.*
@@ -19,6 +20,7 @@ class PersonActivity : AppCompatActivity() {
     private val films = ArrayList<Film>()
     private val starships = ArrayList<Starship>()
     private val speciesList = ArrayList<Species>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,17 +59,18 @@ class PersonActivity : AppCompatActivity() {
         ActivityPersonSpecies.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
+        network = Network(this)
         if (person != null) {
-            Network.getPlanetsByURL(person.homeworld, homeworld, homeworldAdapter){ error ->
+            network.getPlanetsByURL(person.homeworld, homeworld, homeworldAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getFilmsByURL(person.films, films, filmsAdapter){ error ->
+            network.getFilmsByURL(person.films, films, filmsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getStarshipsByURL(person.starships, starships, starshipAdapter){ error ->
+            network.getStarshipsByURL(person.starships, starships, starshipAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getSpeciesByURL(person.species, speciesList, speciesListAdapter){ error ->
+            network.getSpeciesByURL(person.species, speciesList, speciesListAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

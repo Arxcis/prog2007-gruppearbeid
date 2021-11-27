@@ -10,6 +10,7 @@ import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.util.Constants
+import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_starship.*
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_starship.*
 class StarshipActivity : AppCompatActivity() {
     val films = ArrayList<Film>()
     val pilots = ArrayList<Person>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,13 +28,14 @@ class StarshipActivity : AppCompatActivity() {
         // 1. Get extras
         val starship = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Starship
         title = "🚀 ${starship?.name}"
-        ActivityStarshipModel.text = starship?.model ?: ""
-        ActivityStarshipManufacturer.text = starship?.manufacturer ?: ""
-        ActivityStarshipLength.text = starship?.length ?: ""
-        ActivityStarshipMaxAtmospheringSpeed.text = starship?.max_atmosphering_speed ?: ""
-        ActivityStarshipCrew.text = starship?.crew ?: ""
-        ActivityStarshipPassengers.text = starship?.passengers ?: ""
-        ActivityStarshipStarshipClass.text = starship?.starship_class ?: ""
+        ActivityStarshipModel.text = "Model: " + starship?.model ?: ""
+        ActivityStarshipManufacturer.text = "Manufacturer: " + starship?.manufacturer ?: ""
+        ActivityStarshipLength.text = "Length: " + starship?.length ?: ""
+        ActivityStarshipMaxAtmospheringSpeed.text = "Max atmosphering speed: " + starship?.max_atmosphering_speed ?: ""
+        ActivityStarshipCrew.text = "Crew: " + starship?.crew ?: ""
+        ActivityStarshipPassengers.text = "Passengers: " + starship?.passengers ?: ""
+        ActivityStarshipStarshipClass.text = "Starship class: " + starship?.starship_class ?: ""
+
 
         // 2. Init adapters
         val pilotsAdapter = PeopleAdapter(pilots){ character ->
@@ -48,11 +51,12 @@ class StarshipActivity : AppCompatActivity() {
         ActivityStarshipFilms.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
+        network = Network(this)
         if (starship != null) {
-            Network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
+            network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getFilmsByURL(starship.films, films, filmsAdapter){ error ->
+            network.getFilmsByURL(starship.films, films, filmsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

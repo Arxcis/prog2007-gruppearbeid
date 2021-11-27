@@ -10,6 +10,7 @@ import com.example.gruppearbeid.adapters.SpeciesListAdapter
 import com.example.gruppearbeid.adapters.StarshipsAdapter
 import com.example.gruppearbeid.types.*
 import com.example.gruppearbeid.util.Constants
+import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_film.*
@@ -20,6 +21,7 @@ class FilmActivity : AppCompatActivity() {
     private val planets = ArrayList<Planet>()
     private val starships = ArrayList<Starship>()
     private val speciesList = ArrayList<Species>()
+    private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,12 @@ class FilmActivity : AppCompatActivity() {
         // 1. Get extras
         val film = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Film
         title = "🎬 ${film?.title}"
+        ActivityFilmName.text = "Title: " + film?.title ?: ""
+        ActivityFilmIdNumber.text = "Number: " + film?.episode_id ?: ""
+        ActivityFilmDirector.text = "Director: " + film?.director ?: ""
+        ActivityFilmProducer.text = "Producer: " + film?.producer ?: ""
+        ActivityFilmReleaseDate.text = "Release date: " + film?.release_date ?: ""
+
 
         // 2. Init characters adapter
         val charactersAdapter = PeopleAdapter(characters){ character ->
@@ -58,17 +66,18 @@ class FilmActivity : AppCompatActivity() {
         ActivityFilmSpecies.layoutManager = LinearLayoutManager(this)
 
         // 3. Get data from network
+        network = Network(this)
         if (film != null) {
-            Network.getPeopleByURL(film.characters, characters, charactersAdapter){ error ->
+            network.getPeopleByURL(film.characters, characters, charactersAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getPlanetsByURL(film.planets, planets, planetsAdapter){ error ->
+            network.getPlanetsByURL(film.planets, planets, planetsAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getStarshipsByURL(film.starships, starships, starshipAdapter){ error ->
+            network.getStarshipsByURL(film.starships, starships, starshipAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
-            Network.getSpeciesByURL(film.species, speciesList, speciesListAdapter){ error ->
+            network.getSpeciesByURL(film.species, speciesList, speciesListAdapter){ error ->
                 Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
             }
         }

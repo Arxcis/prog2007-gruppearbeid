@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.databinding.ActivityPlanetsBinding
 import com.example.gruppearbeid.types.Planet
-import com.example.gruppearbeid.util.Network
+import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_planets.*
 import com.example.gruppearbeid.util.configureBottomNavigation
 import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
@@ -25,26 +25,21 @@ import java.util.jar.Manifest
 
 class PlanetsActivity : AppCompatActivity() {
     private val planets = ArrayList<Planet>()
-    private lateinit var planetsXML: ActivityPlanetsBinding
+    private lateinit var network: INetwork
 
     private lateinit var requestCode: ActivityResultLauncher<String>
-
     val URL = "https://image.slidesharecdn.com/7thingsstockimages-140124084729-phpapp01/95/7-types-of-stock-images-you-must-stop-using-today-40-638.jpg?cb=1390828351"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
         title = getString(R.string.planets)
 
-        planetsXML = ActivityPlanetsBinding.inflate(layoutInflater)
         requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         }
 
-        Network.downloadImage(URL, this, {
-            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
-            image.setImageBitmap(Network.bitmap)
-        },this::checkPermission, applicationContext)
-        // 1. Init adapter
+
 
         val adapter = PlanetsAdapter(planets){ planet ->
             navigateToThing(this, PlanetActivity::class.java, planet)
@@ -53,8 +48,9 @@ class PlanetsActivity : AppCompatActivity() {
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
 
         // 2. Init search
+        network = Network(this)
         val search = { text: String ->
-            Network.getPlanets(
+            network.getPlanets(
                 search = text,
                 onSuccess = { _planets ->
                     planets.clear()
@@ -69,6 +65,12 @@ class PlanetsActivity : AppCompatActivity() {
         PlanetsSearch.addTextChangedListener(
             makeTextWatcherWithDebounce{ input -> search(input)}
         )
+
+        network.downloadImage(URL, this, {
+            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
+            image.setImageBitmap(network.bitmap)
+        },this::checkPermission, applicationContext)
+        // 1. Init adapter
     }
     override fun onResume() {
         super.onResume()
