@@ -68,18 +68,22 @@ class FilmActivity : AppCompatActivity() {
         // 3. Get data from network
         network = Network(this)
         if (film != null) {
-            network.getPeopleByURL(film.characters, characters, charactersAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getPlanetsByURL(film.planets, planets, planetsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getStarshipsByURL(film.starships, starships, starshipAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getSpeciesByURL(film.species, speciesList, speciesListAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
+            network.getPeopleByURL(film.characters,
+                onSuccess = { _characters -> characters.clear(); characters.addAll(_characters); charactersAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getPlanetsByURL(film.planets,
+                onSuccess = { _planets -> planets.clear(); planets.addAll(_planets); planetsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getStarshipsByURL(film.starships,
+                onSuccess = { _starships -> starships.clear(); starships.addAll(_starships); starshipAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getSpeciesByURL(film.species,
+                onSuccess = { _species -> speciesList.clear(); speciesList.addAll(_species); planetsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
     }
 }

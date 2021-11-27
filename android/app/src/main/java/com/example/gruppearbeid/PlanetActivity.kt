@@ -45,12 +45,14 @@ class PlanetActivity : AppCompatActivity() {
         // 3. Get data from network
         network = Network(this)
         if (planet != null) {
-            network.getPeopleByURL(planet.residents, residents, residentsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getFilmsByURL(planet.films, films, filmsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
+            network.getPeopleByURL(planet.residents,
+                onSuccess = { _residents -> residents.clear(); residents.addAll(_residents); residentsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getFilmsByURL(planet.films,
+                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
     }
 }
