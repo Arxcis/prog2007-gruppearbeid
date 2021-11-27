@@ -53,12 +53,14 @@ class StarshipActivity : AppCompatActivity() {
         // 3. Get data from network
         network = Network(this)
         if (starship != null) {
-            network.getPeopleByURL(starship.pilots, pilots, pilotsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getFilmsByURL(starship.films, films, filmsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
+            network.getPeopleByURL(starship.pilots,
+                onSuccess = { _pilots -> pilots.clear(); pilots.addAll(_pilots); pilotsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getFilmsByURL(starship.films,
+                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
     }
 }

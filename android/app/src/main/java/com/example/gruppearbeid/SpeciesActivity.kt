@@ -45,12 +45,14 @@ class SpeciesActivity : AppCompatActivity() {
         // 3. Get data from network
         network = Network(this)
         if (species != null) {
-            network.getPeopleByURL(species.people, people, peopleAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getFilmsByURL(species.films, films, filmsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
+            network.getPeopleByURL(species.people,
+                onSuccess = { _people -> people.clear(); people.addAll(_people); peopleAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getFilmsByURL(species.films,
+                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
     }
 }
