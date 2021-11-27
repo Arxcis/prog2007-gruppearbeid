@@ -13,9 +13,9 @@ import kotlinx.android.synthetic.main.activity_people.*
 
 class PeopleActivity : AppCompatActivity() {
     private lateinit var network: INetwork
+    private val adapter = PeopleAdapter{ person -> navigateToThing(this, PersonActivity::class.java, person) }
     private var prev: String? = null
     private var next: String? = null
-    private val adapter = PeopleAdapter{ person -> navigateToThing(this, PersonActivity::class.java, person) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class PeopleActivity : AppCompatActivity() {
 
         // 2. Init search
         network = Network(this)
-        val search = { text: String -> network.searchPeople(text, onSuccess, onError) }
+        val search = { search: String -> network.searchPeople(search, onSuccess, onError) }
         search("")
         PeopleSearch.addTextChangedListener(
             makeTextWatcherWithDebounce{ input -> search(input)}
