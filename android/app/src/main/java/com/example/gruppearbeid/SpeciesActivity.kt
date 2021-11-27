@@ -16,8 +16,6 @@ import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_species.*
 
 class SpeciesActivity : AppCompatActivity() {
-    private val people = ArrayList<Person>()
-    private val films = ArrayList<Film>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,15 +26,15 @@ class SpeciesActivity : AppCompatActivity() {
         val species = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Species
         title = "🧬 ${species?.name}"
 
-        // 2. Init homeworld adapter
-        val peopleAdapter = PeopleAdapter(people){ person ->
+        // 2. Init people adapter
+        val peopleAdapter = PeopleAdapter{ person ->
             navigateToThing(this, PersonActivity::class.java, person)
         }
         ActivitySpeciesPeople.adapter = peopleAdapter
         ActivitySpeciesPeople.layoutManager = LinearLayoutManager(this)
 
         // 2. Init films adapter
-        val filmsAdapter = FilmsAdapter(films){ film ->
+        val filmsAdapter = FilmsAdapter{ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
         ActivitySpeciesFilms.adapter = filmsAdapter
@@ -46,11 +44,11 @@ class SpeciesActivity : AppCompatActivity() {
         network = Network(this)
         if (species != null) {
             network.getPeopleByURL(species.people,
-                onSuccess = { _people -> people.clear(); people.addAll(_people); peopleAdapter.notifyDataSetChanged() },
+                onSuccess = { people -> peopleAdapter.refresh(people) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getFilmsByURL(species.films,
-                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onSuccess = { films -> filmsAdapter.refresh(films) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

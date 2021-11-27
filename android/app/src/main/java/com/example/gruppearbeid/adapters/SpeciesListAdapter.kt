@@ -9,9 +9,16 @@ import com.example.gruppearbeid.R
 import com.example.gruppearbeid.types.Species
 
 class SpeciesListAdapter(
-    private var speciesList: ArrayList<Species>,
     private val onClick: (species: Species) -> Unit
 ) : RecyclerView.Adapter<SpeciesListAdapter.ViewHolder>() {
+    private var things = ArrayList<Species>()
+
+    fun refresh(newThings: List<Species>) {
+        things.clear()
+        things.addAll(newThings)
+        this.notifyDataSetChanged()
+    }
+
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -32,12 +39,12 @@ class SpeciesListAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val species = speciesList[position]
+        val species = things[position]
 
         holder.name?.text = "🧬 ${species.name}"
         holder.item?.setOnClickListener { onClick(species) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = speciesList.size
+    override fun getItemCount() = things.size
 }

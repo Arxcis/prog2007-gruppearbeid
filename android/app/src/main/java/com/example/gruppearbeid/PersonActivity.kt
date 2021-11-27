@@ -16,10 +16,6 @@ import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_person.*
 
 class PersonActivity : AppCompatActivity() {
-    private val homeworld = ArrayList<Planet>()
-    private val films = ArrayList<Film>()
-    private val starships = ArrayList<Starship>()
-    private val speciesList = ArrayList<Species>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,28 +27,28 @@ class PersonActivity : AppCompatActivity() {
         title = "👨‍🦲 ${person?.name}"
 
         // 2. Init homeworld adapter
-        val homeworldAdapter = PlanetsAdapter(homeworld){ homeworld ->
+        val homeworldAdapter = PlanetsAdapter{ homeworld ->
             navigateToThing(this, PlanetActivity::class.java, homeworld)
         }
         ActivityPersonHomeworld.adapter = homeworldAdapter
         ActivityPersonHomeworld.layoutManager = LinearLayoutManager(this)
 
         // 2. Init films adapter
-        val filmsAdapter = FilmsAdapter(films){ film ->
+        val filmsAdapter = FilmsAdapter{ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
         ActivityPersonFilms.adapter = filmsAdapter
         ActivityPersonFilms.layoutManager = LinearLayoutManager(this)
 
         // 2. Init starships adapter
-        val starshipAdapter = StarshipsAdapter(starships){ starship ->
+        val starshipAdapter = StarshipsAdapter{ starship ->
             navigateToThing(this, StarshipActivity::class.java, starship)
         }
         ActivityPersonStarships.adapter = starshipAdapter
         ActivityPersonStarships.layoutManager = LinearLayoutManager(this)
         
         // 2. Init species adapter
-        val speciesListAdapter = SpeciesListAdapter(speciesList){ species ->
+        val speciesListAdapter = SpeciesListAdapter{ species ->
             navigateToThing(this, SpeciesActivity::class.java, species)
         }
         ActivityPersonSpecies.adapter = speciesListAdapter
@@ -62,19 +58,19 @@ class PersonActivity : AppCompatActivity() {
         network = Network(this)
         if (person != null) {
             network.getPlanetsByURL(person.homeworld,
-                onSuccess = { _homeworld -> homeworld.clear(); homeworld.addAll(_homeworld); homeworldAdapter.notifyDataSetChanged() },
+                onSuccess = { homeworld -> homeworldAdapter.refresh(homeworld) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getFilmsByURL(person.films,
-                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onSuccess = { films -> filmsAdapter.refresh(films) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getStarshipsByURL(person.starships,
-                onSuccess = { _starships -> starships.clear(); starships.addAll(_starships); starshipAdapter.notifyDataSetChanged() },
+                onSuccess = { starships -> starshipAdapter.refresh(starships) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getSpeciesByURL(person.species,
-                onSuccess = { _species -> speciesList.clear(); speciesList.addAll(_species); speciesListAdapter.notifyDataSetChanged() },
+                onSuccess = { species -> speciesListAdapter.refresh(species) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }
