@@ -8,10 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.Patterns
-import com.example.gruppearbeid.adapters.FilmsAdapter
-import com.example.gruppearbeid.adapters.PeopleAdapter
-import com.example.gruppearbeid.adapters.PlanetsAdapter
-import com.example.gruppearbeid.adapters.StarshipsAdapter
 import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Planet
@@ -31,17 +27,18 @@ import java.net.HttpURLConnection
 interface INetwork {
     var bitmap: Bitmap
 
-    fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit)
-    fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit)
-    fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit)
-    fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit)
-    fun getSpeciesList(search: String, onSuccess: (speciesList: ArrayList<Species>) -> Unit, onError: (text: String) -> Unit)
-    fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit)
-    fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit)
-    fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit)
-    fun getPlanetsByURL(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit)
-    fun getSpeciesByURL(urls: ArrayList<String>, speciesList: ArrayList<Species>, adapter: SpeciesListAdapter, onError: (text: String) -> Unit)
+    fun getFilms(search: String,       onSuccess: (films: List<Film>) -> Unit,          onError: (text: String) -> Unit)
     fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit,permission: () -> Boolean, appContext: Context)
+    fun getPeople(search: String,      onSuccess: (people: List<Person>) -> Unit,       onError: (text: String) -> Unit)
+    fun getPlanets(search: String,     onSuccess: (planets: List<Planet>) -> Unit,      onError: (text: String) -> Unit)
+    fun getStarships(search: String,   onSuccess: (starships: List<Starship>) -> Unit,  onError: (text: String) -> Unit)
+    fun getSpeciesList(search: String, onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit)
+
+    fun getFilmsByURL(urls: List<String>,     onSuccess: (films: List<Film>) -> Unit,          onError: (text: String) -> Unit)
+    fun getPeopleByURL(urls: List<String>,    onSuccess: (people: List<Person>) -> Unit,       onError: (text: String) -> Unit)
+    fun getPlanetsByURL(urls: List<String>,   onSuccess: (planets: List<Planet>) -> Unit,      onError: (text: String) -> Unit)
+    fun getStarshipsByURL(urls: List<String>, onSuccess: (starships: List<Starship>) -> Unit,  onError: (text: String) -> Unit)
+    fun getSpeciesByURL(urls: List<String>,   onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit)
 }
 
 class Network(private val ctx: Context) : INetwork {
@@ -111,263 +108,109 @@ class Network(private val ctx: Context) : INetwork {
         }
     }
 
-    override fun getFilms(search: String, onSuccess: (films: ArrayList<Film>) -> Unit, onError: (text: String) -> Unit) {
-        val href = "$BASE_URL/films?search=${search}"
-
-        executor.execute{
-            // 0. Cache first
-            val etag = etagsCache.getValue(href, null)
-            val cachedResponse = responseCache.getValue(etag, null)
-            cachedResponse?.apply {
-                val films = parseFilms(cachedResponse)
-                handler.post {
-                    onSuccess(films)
-                }
-            }
-
-            // 1. Do HTTP Request
-            var res: String?
-            try {
-                res = readTextFromUrl(href)
-            } catch (err: IOException) {
-                Log.w("network.getFilms", "No connection...", err)
-                handler.post { onError("No connection...") }
-                return@execute
-            }
-            val films = parseFilms(res)
-            handler.post {
-                onSuccess(films)
-            }
-        }
+    override fun getFilms(search: String, onSuccess: (films: List<Film>) -> Unit, onError: (text: String) -> Unit) {
+        getThings("$BASE_URL/films?search=${search}", ::parseFilms, onSuccess, onError)
     }
 
-    override fun getPeople(search: String, onSuccess: (people: ArrayList<Person>) -> Unit, onError: (text: String) -> Unit) {
-        val href = "$BASE_URL/people?search=${search}"
-
-        executor.execute{
-            // 0. Cache first
-            val etag = etagsCache.getValue(href, null)
-            val cachedResponse = responseCache.getValue(etag, null)
-            cachedResponse?.apply {
-                val people = parsePeople(cachedResponse)
-                handler.post {
-                    onSuccess(people)
-                }
-            }
-
-            // 1. Do HTTP Request
-            var res: String?
-            try {
-                res = readTextFromUrl(href)
-            } catch (err: IOException) {
-                Log.w("network.getPeople", "No connection...", err)
-                handler.post { onError("No connection...") }
-                return@execute
-            }
-            val people = parsePeople(res)
-            handler.post {
-                onSuccess(people)
-            }
-        }
+    override fun getPeople(search: String, onSuccess: (people: List<Person>) -> Unit, onError: (text: String) -> Unit) {
+        getThings("$BASE_URL/people?search=${search}", ::parsePeople, onSuccess, onError)
     }
 
-    override fun getPlanets(search: String, onSuccess: (planets: ArrayList<Planet>) -> Unit, onError: (text: String) -> Unit) {
-        val href = "$BASE_URL/planets?search=${search}"
-
-        executor.execute{
-            // 0. Cache first
-            val etag = etagsCache.getValue(href, null)
-            val cachedResponse = responseCache.getValue(etag, null)
-            cachedResponse?.apply {
-                val planets = parsePlanets(cachedResponse)
-                handler.post {
-                    onSuccess(planets)
-                }
-            }
-
-            // 1. Do HTTP Request
-            var res: String?
-            try {
-                res = readTextFromUrl(href)
-            } catch (err: IOException) {
-                Log.w("network.getPlanets", "No connection...", err)
-                handler.post { onError("No connection...") }
-                return@execute
-            }
-            val planets = parsePlanets(res)
-            handler.post {
-                onSuccess(planets)
-            }
-        }
+    override fun getPlanets(search: String, onSuccess: (planets: List<Planet>) -> Unit, onError: (text: String) -> Unit) {
+        getThings("$BASE_URL/planets?search=${search}", ::parsePlanets, onSuccess, onError)
     }
 
-    override fun getStarships(search: String, onSuccess: (starships: ArrayList<Starship>) -> Unit, onError: (text: String) -> Unit) {
-        val href = "$BASE_URL/starships?search=${search}"
-
-        executor.execute{
-            // 0. Cache first
-            val etag = etagsCache.getValue(href, null)
-            val cachedResponse = responseCache.getValue(etag, null)
-            cachedResponse?.apply {
-                val starships = parseStarships(cachedResponse)
-                handler.post {
-                    onSuccess(starships)
-                }
-            }
-
-            // 1. Do HTTP Request
-            var res: String?
-            try {
-                res = readTextFromUrl(href)
-            } catch (err: IOException) {
-                Log.w("network.getStarships", "No connection...", err)
-                handler.post { onError("No connection...") }
-                return@execute
-            }
-            val starships = parseStarships(res)
-            handler.post {
-                onSuccess(starships)
-            }
-        }
+    override fun getStarships(search: String, onSuccess: (starships: List<Starship>) -> Unit, onError: (text: String) -> Unit) {
+        getThings("$BASE_URL/starships?search=${search}", ::parseStarships, onSuccess, onError)
     }
 
-    override fun getSpeciesList(search: String, onSuccess: (speciesList: ArrayList<Species>) -> Unit, onError: (text: String) -> Unit) {
-        val href = "$BASE_URL/species?search=${search}"
+    override fun getSpeciesList(search: String, onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit) {
+        getThings("$BASE_URL/species?search=${search}", ::parseSpeciesList, onSuccess, onError)
+    }
 
+    private fun <Thing>getThings(
+        url: String,
+        parse: (text: String) -> List<Thing>,
+        onSuccess: (speciesList: List<Thing>) -> Unit,
+        onError: (text: String) -> Unit,
+    ) {
         executor.execute{
-            // 0. Cache first
-            val etag = etagsCache.getValue(href, null)
-            val cachedResponse = responseCache.getValue(etag, null)
-            cachedResponse?.apply {
-                val list = parseSpeciesList(cachedResponse)
-                handler.post {
-                    onSuccess(list)
-                }
+            // 1. Cache first
+            val cachedEtag = etagsCache.getValue(url, null)
+            val cachedResponse = responseCache.getValue(cachedEtag, null)
+            cachedResponse?.run {
+                val list = parse(cachedResponse)
+                handler.post{ onSuccess(list) }
             }
 
-            // 1. Do HTTP Request
-            var res: String?
-            try {
-                res = readTextFromUrl(href)
+            // 2. Do HTTP Request
+            var text: String = try {
+                readTextFromUrl(url)
             } catch (err: IOException) {
-                Log.w("network.getSpeciesList", "No connection...", err)
+                Log.w("network.getThings", "Tried to GET $url: No connection...", err)
                 handler.post { onError("No connection...") }
                 return@execute
             }
-            val list = parseSpeciesList(res)
+            val list = parse(text)
             handler.post {
                 onSuccess(list)
             }
         }
     }
 
-    override fun getFilmsByURL(urls: ArrayList<String>, films: ArrayList<Film>, adapter: FilmsAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (url in urls) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(url)
-                } catch (err: IOException) {
-                    Log.w("network.getFilmsBy", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-                val film = parseFilm(json)
-                films.add(film)
-            }
+    override fun getFilmsByURL(urls: List<String>, onSuccess: (films: List<Film>) -> Unit, onError: (text: String) -> Unit) {
+        getThingsByURL(urls, ::parseFilm, onSuccess, onError)
+    }
 
-            handler.post {
-                adapter.notifyDataSetChanged()
+    override fun getPeopleByURL(urls: List<String>, onSuccess: (people: List<Person>) -> Unit, onError: (text: String) -> Unit) {
+        getThingsByURL(urls, ::parsePerson, onSuccess, onError)
+    }
+
+    override fun getStarshipsByURL(urls: List<String>, onSuccess: (starships: List<Starship>) -> Unit, onError: (text: String) -> Unit) {
+        getThingsByURL(urls, ::parseStarship, onSuccess, onError)
+    }
+
+    override fun getPlanetsByURL(urls: List<String>, onSuccess: (planets: List<Planet>) -> Unit, onError: (text: String) -> Unit) {
+        getThingsByURL(urls, ::parsePlanet, onSuccess, onError)
+    }
+
+    override fun getSpeciesByURL(urls: List<String>, onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit) {
+        getThingsByURL(urls, ::parseSpecies, onSuccess, onError)
+    }
+
+    private fun <Thing>getThingsByURL(
+        urls: List<String>,
+        parse: (json: JSONObject) -> Thing,
+        onSuccess: (films: List<Thing>) -> Unit,
+        onError: (text: String) -> Unit,
+    ) {
+        executor.execute{
+            // 1. Cache first
+            var cachedThings = urls.mapNotNull{ url ->
+                val cachedEtag = etagsCache.getValue(url, null)
+                val cachedResponse = responseCache.getValue(cachedEtag, null)
+                cachedResponse?.run {
+                    val json = JSONObject(cachedResponse)
+                    parse(json)
+                }
             }
+            handler.post {  onSuccess(cachedThings) }
+
+            // 2. Do HTTP requests
+            val fetchedThings = urls.mapNotNull{ url ->
+                try {
+                    val json = readJsonFromUrl(url)
+                    parse(json)
+                } catch (err: IOException) {
+                    Log.w("getThingsByURL", "Tried to GET ${url}: No connection...", err)
+                    handler.post { onError("No connection...") }
+                    null
+                }
+            }
+            handler.post { onSuccess(fetchedThings) }
         }
     }
 
-    override fun getPeopleByURL(urls: ArrayList<String>, people: ArrayList<Person>, adapter: PeopleAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (url in urls) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(url)
-                } catch (err: IOException) {
-                    Log.w("network.getPeopleBy", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-                val person = parsePerson(json)
-                people.add(person)
-            }
-
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun getStarshipsByURL(urls: ArrayList<String>, starships: ArrayList<Starship>, adapter: StarshipsAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (url in urls) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(url)
-                } catch (err: IOException) {
-                    Log.w("network.getStarshipsBy", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-
-                val starship = parseStarship(json)
-                starships.add(starship)
-            }
-
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun getPlanetsByURL(urls: ArrayList<String>, planets: ArrayList<Planet>, adapter: PlanetsAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (url in urls) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(url)
-                } catch (err: IOException) {
-                    Log.w("network.getPlanetsBy", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-
-                val planet = parsePlanet(json)
-                planets.add(planet)
-            }
-
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
-
-    override fun getSpeciesByURL(urls: ArrayList<String>, speciesList: ArrayList<Species>, adapter: SpeciesListAdapter, onError: (text: String) -> Unit) {
-        executor.execute{
-            for (url in urls) {
-                var json: JSONObject? = null
-                try {
-                    json = readJsonFromUrl(url)
-                } catch (err: IOException) {
-                    Log.w("network.getSpeciesBy", "No connection...", err)
-                    handler.post { onError("No connection...") }
-                    return@execute
-                }
-
-                val species = parseSpecies(json)
-                speciesList.add(species)
-            }
-
-            handler.post {
-                adapter.notifyDataSetChanged()
-            }
-        }
-    }
 
     /** See @url https://stackoverflow.com/a/4308662 */
     @Throws(IOException::class, JSONException::class)
