@@ -12,7 +12,6 @@ import kotlin.collections.ArrayList
 
 
 class FilmsActivity : AppCompatActivity() {
-    private val films = ArrayList<Film>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +20,7 @@ class FilmsActivity : AppCompatActivity() {
         title = getString(R.string.films)
 
         // 1. Init  adapter
-        val adapter = FilmsAdapter(films){ film ->
+        val adapter = FilmsAdapter{ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
         FilmsRecycler.adapter = adapter
@@ -32,7 +31,7 @@ class FilmsActivity : AppCompatActivity() {
         val search = { text: String ->
             network.searchFilms(
                 search = text,
-                onSuccess = { res -> films.clear(); films.addAll(res.results); adapter.notifyDataSetChanged() },
+                onSuccess = { res -> adapter.refresh(res.results) },
                 onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

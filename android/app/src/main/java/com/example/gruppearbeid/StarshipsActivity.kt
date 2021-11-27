@@ -19,7 +19,7 @@ class StarshipsActivity : AppCompatActivity() {
         title = getString(R.string.starships)
 
         // 1. Init adapter
-        val adapter = StarshipsAdapter(starships){ starship ->
+        val adapter = StarshipsAdapter{ starship ->
             navigateToThing(this, StarshipActivity::class.java, starship)
         }
         StarshipRecycler.adapter = adapter
@@ -30,7 +30,7 @@ class StarshipsActivity : AppCompatActivity() {
         val search = { text: String ->
             network.searchStarships(
                 search = text,
-                onSuccess = { res -> starships.clear(); starships.addAll(res.results); adapter.notifyDataSetChanged() },
+                onSuccess = { res -> adapter.refresh(res.results) },
                 onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

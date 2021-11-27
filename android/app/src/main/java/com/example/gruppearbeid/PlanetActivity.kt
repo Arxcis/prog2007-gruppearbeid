@@ -16,8 +16,6 @@ import com.example.gruppearbeid.util.navigateToThing
 import kotlinx.android.synthetic.main.activity_planet.*
 
 class PlanetActivity : AppCompatActivity() {
-    private val residents = ArrayList<Person>()
-    private val films = ArrayList<Film>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +27,14 @@ class PlanetActivity : AppCompatActivity() {
         title = "🪐 ${planet?.name}"
 
         // 2. Init residents adapter
-        val residentsAdapter = PeopleAdapter(residents){ character ->
-            navigateToThing(this, PersonActivity::class.java, character)
+        val residentsAdapter = PeopleAdapter{ resident ->
+            navigateToThing(this, PersonActivity::class.java, resident)
         }
         ActivityPlanetResidents.adapter = residentsAdapter
         ActivityPlanetResidents.layoutManager = LinearLayoutManager(this)
 
         // 2. Init films adapter
-        val filmsAdapter = FilmsAdapter(films){ film ->
+        val filmsAdapter = FilmsAdapter{ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
         ActivityPlanetFilms.adapter = filmsAdapter
@@ -46,11 +44,11 @@ class PlanetActivity : AppCompatActivity() {
         network = Network(this)
         if (planet != null) {
             network.getPeopleByURL(planet.residents,
-                onSuccess = { _residents -> residents.clear(); residents.addAll(_residents); residentsAdapter.notifyDataSetChanged() },
+                onSuccess = { residents -> residentsAdapter.refresh(residents) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getFilmsByURL(planet.films,
-                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onSuccess = { films -> filmsAdapter.refresh(films) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

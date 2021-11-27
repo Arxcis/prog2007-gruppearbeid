@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_people.*
 
 
 class PeopleActivity : AppCompatActivity() {
-    private val people = ArrayList<Person>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +19,7 @@ class PeopleActivity : AppCompatActivity() {
         title = getString(R.string.people)
 
         // 1. Init adapter
-        val adapter = PeopleAdapter(people){ person ->
+        val adapter = PeopleAdapter{ person ->
             navigateToThing(this, PersonActivity::class.java, person)
         }
         PeopleRecycler.adapter = adapter
@@ -31,7 +30,7 @@ class PeopleActivity : AppCompatActivity() {
         val search = { text: String ->
             network.searchPeople(
                 search = text,
-                onSuccess = { res -> people.clear(); people.addAll(res.results); adapter.notifyDataSetChanged() },
+                onSuccess = { res -> adapter.refresh(res.results) },
                 onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }
