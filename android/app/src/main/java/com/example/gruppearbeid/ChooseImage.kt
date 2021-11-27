@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.gruppearbeid.adapters.ChooseImageAdapter
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
 
 class ChooseImage : AppCompatActivity() {
@@ -21,6 +23,11 @@ class ChooseImage : AppCompatActivity() {
 
         val spinnerActivity = SpinnerActivity()
         _binding.spinnerListEntities.onItemSelectedListener = spinnerActivity        //link SpinnerActivity to the onSelectedListener
-                                                                                     //of spinner.
+                                                                                       //of spinner.
+
+        val adapter = ChooseImageAdapter()
+
+        _binding.rvChooseImage.adapter = adapter
+        _binding.rvChooseImage.layoutManager = LinearLayoutManager(this)
     }
 }
