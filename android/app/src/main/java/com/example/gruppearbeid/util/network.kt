@@ -449,6 +449,11 @@ fun parsePlanet(item: JSONObject): Planet {
 
     return Planet(
         name = item.getString("name"),
+        rotation_period = item.getString("rotation_period"),
+        orbital_period = item.getString("orbital_period"),
+        climate = item.getString("climate"),
+        terrain = item.getString("terrain"),
+        population = item.getString("population"),
         residents = residents,
         films = films,
     )
@@ -480,6 +485,9 @@ fun parsePerson(item: JSONObject): Person {
 
     return Person(
         name = item.getString("name"),
+        height = item.getString("height"),
+        birth_year = item.getString("birth_year"),
+        gender = item.getString("gender"),
         homeworld = homeworld,
         films = films,
         starships = starships,
@@ -516,6 +524,10 @@ fun parseFilm(item: JSONObject): Film {
 
     return Film(
         title = item.getString("title"),
+        episode_id = item.getInt("episode_id"),
+        director = item.getString("director"),
+        producer = item.getString("producer"),
+        release_date = item.getString("release_date"),
         characters = characters,
         planets = planets,
         starships = starships,
