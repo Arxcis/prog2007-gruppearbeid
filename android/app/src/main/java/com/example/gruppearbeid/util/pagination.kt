@@ -14,8 +14,8 @@ fun <Thing>refreshPaginationViews(res: Results<Thing>, PrevView: View, NextView:
         res.next != null -> NextView.visibility = View.VISIBLE
         else -> NextView.visibility = View.INVISIBLE
     }
+
     var dots = ""
-    Log.d("refreshPaginationViews", "page: ${res.page}, pagecount: ${res.pageCount}, count: ${res.count}")
     for (i in (1..res.pageCount)) {
         dots = when (i){
             res.page -> dots.plus(Constants.DOT_BIG).plus(" ")
