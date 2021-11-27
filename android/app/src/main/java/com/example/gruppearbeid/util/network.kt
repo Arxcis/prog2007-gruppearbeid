@@ -190,8 +190,8 @@ data class ParsedThings<Thing>(val things: ArrayList<Thing>, val prev: String?, 
 
 fun <Thing>parseThings(text: String, parseThing: (text: JSONObject) -> Thing): ParsedThings<Thing> {
     val json = JSONObject(text)
-    val prev: String? =  if (json.isNull("previous")) { null } else { json.getString("previous") }
-    val next: String? = if (json.isNull("next")) { null } else { json.getString("next") }
+    val prev: String? =  if (!json.isNull("previous")) { json.getString("previous") } else { null }
+    val next: String? = if (!json.isNull("next")) { json.getString("next") } else { null }
     val results = json.getJSONArray("results")
 
     val things = ArrayList<Thing>()
