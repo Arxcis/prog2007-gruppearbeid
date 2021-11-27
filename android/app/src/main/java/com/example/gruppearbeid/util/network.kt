@@ -443,7 +443,7 @@ fun parseFilm(item: JSONObject): Film {
     }
 
     return Film(
-        name = item.getString("title"),
+        title = item.getString("title"),
         episode_id = item.getInt("episode_id"),
         director = item.getString("director"),
         producer = item.getString("producer"),

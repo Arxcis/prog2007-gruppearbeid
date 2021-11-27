@@ -28,7 +28,7 @@ class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         _binding.spinnerListEntities.onItemSelectedListener = this        //link SpinnerActivity to the onSelectedListener
                                                                                        //of spinner.
 
-        adapter = ChooseImageAdapter()
+        adapter = ChooseImageAdapter(this)
 
         _binding.rvChooseImage.adapter = adapter
         _binding.rvChooseImage.layoutManager = LinearLayoutManager(this)
@@ -36,10 +36,15 @@ class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         adapter.whatToFetch = parent?.getItemAtPosition(position).toString()
-        adapter.disp()
+        adapter.fetchData()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         TODO("Not yet implemented")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        adapter.onDestroy()
     }
 }

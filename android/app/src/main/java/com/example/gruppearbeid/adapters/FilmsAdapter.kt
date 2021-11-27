@@ -37,7 +37,7 @@ class FilmsAdapter(
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val film = films[position]
-        holder.title?.text = "🎬 ${film.name}"
+        holder.title?.text = "🎬 ${film.title}"
         holder.item?.setOnClickListener { onClick(film) }
     }
 

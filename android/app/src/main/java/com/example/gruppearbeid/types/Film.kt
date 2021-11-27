@@ -7,7 +7,7 @@ import java.io.Serializable
 
 data class Film(
     /** "title": "A New Hope" */
-    override val name: String,
+    val title: String,
 
     val episode_id: Int,
 
@@ -28,4 +28,4 @@ data class Film(
     
     /** "species": ["https://swapi.dev/api/species/1/", ...] */
     val species: ArrayList<String>,
-) : Serializable, Type
+) : Serializable
