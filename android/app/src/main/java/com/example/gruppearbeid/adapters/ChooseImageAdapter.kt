@@ -1,5 +1,6 @@
 package com.example.gruppearbeid.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gruppearbeid.R
 
 class ChooseImageAdapter : RecyclerView.Adapter<ChooseImageAdapter.ViewHolder>() {
+    var dataFromSWAPI: ArrayList<String> = ArrayList()
+    lateinit var whatToFetch: String
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
     {
@@ -28,4 +31,6 @@ class ChooseImageAdapter : RecyclerView.Adapter<ChooseImageAdapter.ViewHolder>()
     override fun getItemCount(): Int {
         return 1
     }
+
+    fun disp() = Log.d("ChooseImageAda", whatToFetch)
 }
