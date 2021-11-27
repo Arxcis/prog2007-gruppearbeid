@@ -57,7 +57,7 @@ class Network(private val ctx: Context) : INetwork {
 
     private fun <Thing>getThings(
         url: String,
-        parse: (text: String) -> List<Thing>,
+        parse: (text: String) -> ParsedThings<Thing>,
         onSuccess: (speciesList: List<Thing>) -> Unit,
         onError: (text: String) -> Unit,
     ) {
@@ -66,8 +66,8 @@ class Network(private val ctx: Context) : INetwork {
             val cachedEtag = etagsCache.getValue(url, null)
             val cachedResponse = responseCache.getValue(cachedEtag, null)
             cachedResponse?.run {
-                val list = parse(cachedResponse)
-                handler.post{ onSuccess(list) }
+                val (things) = parse(cachedResponse)
+                handler.post{ onSuccess(things) }
             }
 
             // 2. Do HTTP Request
@@ -78,9 +78,9 @@ class Network(private val ctx: Context) : INetwork {
                 handler.post { onError("No connection...") }
                 return@execute
             }
-            val list = parse(text)
+            val (things) = parse(text)
             handler.post {
-                onSuccess(list)
+                onSuccess(things)
             }
         }
     }
@@ -180,77 +180,32 @@ class Network(private val ctx: Context) : INetwork {
 }
 
 
-private fun parseStarships(text: String): ArrayList<Starship> {
+private fun parseStarships(text: String) = parseThings(text, ::parseStarship)
+private fun parsePlanets(text: String) = parseThings(text, ::parsePlanet)
+private fun parsePeople(text: String) = parseThings(text, ::parsePerson)
+private fun parseFilms(text: String) = parseThings(text, ::parseFilm)
+private fun parseSpeciesList(text: String) = parseThings(text, ::parseSpecies)
+
+data class ParsedThings<Thing>(val things: ArrayList<Thing>, val prev: String?, val next: String?)
+
+fun <Thing>parseThings(text: String, parseThing: (text: JSONObject) -> Thing): ParsedThings<Thing> {
     val json = JSONObject(text)
+    val prev: String? =  if (json.isNull("previous")) { null } else { json.getString("previous") }
+    val next: String? = if (json.isNull("next")) { null } else { json.getString("next") }
     val results = json.getJSONArray("results")
 
-    val list = ArrayList<Starship>()
+    val things = ArrayList<Thing>()
+
     for (i in 0 until results.length()) {
         val obj = results.getJSONObject(i)
-        val item = parseStarship(obj)
-        list.add(item)
+        val item = parseThing(obj)
+        things.add(item)
     }
-    return list
+    return ParsedThings(things, prev, next)
 }
 
 
-private fun parsePlanets(text: String): ArrayList<Planet> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Planet>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePlanet(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parsePeople(text: String): ArrayList<Person> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Person>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePerson(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parseFilms(text: String): ArrayList<Film> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val films = ArrayList<Film>()
-    for (i in 0 until results.length()) {
-        val item = results.getJSONObject(i)
-        val film = parseFilm(item)
-        films.add(film)
-    }
-    return films
-}
-
-
-private fun parseSpeciesList(text: String): ArrayList<Species> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Species>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parseSpecies(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parseStarship(item: JSONObject): Starship {
+fun parseStarship(item: JSONObject): Starship {
     // films:
     val films = ArrayList<String>()
     val jsonFilms = item.getJSONArray("films")
