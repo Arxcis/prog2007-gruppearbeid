@@ -21,7 +21,7 @@
     <string name="placeholder_search_title">Search title...</string>
     <string name="placeholder_search_name">Search name...</string>
     <string name="placeholder_search_name_and_model">Search name or model...</string>
-    <string name="placeholder_dots">∙ • ∙ ∙ ∙</string>
+    <string name="placeholder_dots"></string>
 
     <!-- Button -->
     <string name="prev">Prev</string>
