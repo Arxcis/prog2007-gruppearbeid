@@ -18,5 +18,9 @@ class ChooseImage : AppCompatActivity() {
         val spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.choices_select_image,android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         _binding.spinnerListEntities.adapter = spinnerAdapter
+
+        val spinnerActivity = SpinnerActivity()
+        _binding.spinnerListEntities.onItemSelectedListener = spinnerActivity        //link SpinnerActivity to the onSelectedListener
+                                                                                     //of spinner.
     }
 }
