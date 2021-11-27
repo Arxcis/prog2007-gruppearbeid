@@ -61,18 +61,22 @@ class PersonActivity : AppCompatActivity() {
         // 3. Get data from network
         network = Network(this)
         if (person != null) {
-            network.getPlanetsByURL(person.homeworld, homeworld, homeworldAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getFilmsByURL(person.films, films, filmsAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getStarshipsByURL(person.starships, starships, starshipAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
-            network.getSpeciesByURL(person.species, speciesList, speciesListAdapter){ error ->
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-            }
+            network.getPlanetsByURL(person.homeworld,
+                onSuccess = { _homeworld -> homeworld.clear(); homeworld.addAll(_homeworld); homeworldAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getFilmsByURL(person.films,
+                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getStarshipsByURL(person.starships,
+                onSuccess = { _starships -> starships.clear(); starships.addAll(_starships); starshipAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
+            network.getSpeciesByURL(person.species,
+                onSuccess = { _species -> speciesList.clear(); speciesList.addAll(_species); speciesListAdapter.notifyDataSetChanged() },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
     }
 }
