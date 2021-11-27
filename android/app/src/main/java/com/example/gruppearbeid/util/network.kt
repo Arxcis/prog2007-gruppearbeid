@@ -36,7 +36,7 @@ class Network(private val ctx: Context) : INetwork {
     private val handler = Handler(Looper.getMainLooper())
 
     override fun getFilms(search: String, onSuccess: (films: List<Film>) -> Unit, onError: (text: String) -> Unit) {
-        getThings("$BASE_URL/people?search=${search}", ::parseFilms, onSuccess, onError)
+        getThings("$BASE_URL/films?search=${search}", ::parseFilms, onSuccess, onError)
     }
 
     override fun getPeople(search: String, onSuccess: (people: List<Person>) -> Unit, onError: (text: String) -> Unit) {
@@ -67,9 +67,7 @@ class Network(private val ctx: Context) : INetwork {
             val cachedResponse = responseCache.getValue(cachedEtag, null)
             cachedResponse?.run {
                 val list = parse(cachedResponse)
-                handler.post {
-                    onSuccess(list)
-                }
+                handler.post{ onSuccess(list) }
             }
 
             // 2. Do HTTP Request
