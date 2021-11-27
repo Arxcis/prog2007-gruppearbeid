@@ -23,6 +23,7 @@ class ChooseImageAdapter(context: Context) : RecyclerView.Adapter<ChooseImageAda
     val getTheFilms = { text: String ->
         network.getFilms(text,
             onSuccess = { _films ->
+                dataFromSWAPI.clear()
                 for (i in _films.indices)
                 {
                     dataFromSWAPI.add(_films[i].title)
@@ -30,6 +31,21 @@ class ChooseImageAdapter(context: Context) : RecyclerView.Adapter<ChooseImageAda
                 dispAll(dataFromSWAPI)
             }, onError = { error ->
                 Toast.makeText(contextRef, error, Toast.LENGTH_LONG)
+            })
+    }
+
+    val getTheStarships = {text:String ->
+        network.getStarships(
+            search = text,
+            onSuccess = { _starships ->
+                dataFromSWAPI.clear()
+                for (i in _starships.indices) {
+                    dataFromSWAPI.add(_starships[i].name)
+                }
+                dispAll(dataFromSWAPI)
+            },
+            onError = { error ->
+                Toast.makeText(contextRef, error, Toast.LENGTH_SHORT).show()
             })
     }
 
@@ -62,6 +78,7 @@ class ChooseImageAdapter(context: Context) : RecyclerView.Adapter<ChooseImageAda
         {
             "People" ->
            getTheFilms("")
+           "Starships" -> getTheStarships("")
         }
     }
 
