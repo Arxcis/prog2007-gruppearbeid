@@ -30,16 +30,11 @@ class FilmsActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getFilms(
+            network.searchFilms(
                 search = text,
-                onSuccess = { _films ->
-                    films.clear()
-                    films.addAll(_films)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> films.clear(); films.addAll(res.results); adapter.notifyDataSetChanged() },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         FilmsSearch.addTextChangedListener(

@@ -29,16 +29,11 @@ class PeopleActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getPeople(
+            network.searchPeople(
                 search = text,
-                onSuccess = { _people ->
-                    people.clear()
-                    people.addAll(_people)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> people.clear(); people.addAll(res.results); adapter.notifyDataSetChanged() },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         PeopleSearch.addTextChangedListener(

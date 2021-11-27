@@ -28,16 +28,11 @@ class StarshipsActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getStarships(
+            network.searchStarships(
                 search = text,
-                onSuccess = { _starships ->
-                    starships.clear()
-                    starships.addAll(_starships)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> starships.clear(); starships.addAll(res.results); adapter.notifyDataSetChanged() },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         StarshipsSearch.addTextChangedListener(

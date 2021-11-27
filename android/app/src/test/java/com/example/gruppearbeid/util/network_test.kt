@@ -4,18 +4,17 @@ import org.junit.Test
 
 import org.junit.Assert.*
 
-
-class ParseThingsTest {
+class ParseResultsTest {
     @Test
     fun testNext() {
-        val (people, prev, next) = parseThings("""
-   { 
-        "count": 82,
-	    "next": "https://swapi.dev/api/people/?page=2",
-        "previous": null,
-        "results": [],
-    }
-""".trimIndent(), ::parsePerson)
+        val (people, prev, next) = parseResults("""
+           { 
+                "count": 82,
+                "next": "https://swapi.dev/api/people/?page=2",
+                "previous": null,
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
 
         assertEquals(people.size, 0)
         assertEquals(next, "https://swapi.dev/api/people/?page=2")
@@ -24,14 +23,14 @@ class ParseThingsTest {
 
     @Test
     fun testPrev() {
-        val (people, prev, next) = parseThings("""
-   { 
-        "count": 82,
-	    "next": null,
-        "previous": "https://swapi.dev/api/people/?page=9",
-        "results": [],
-    }
-""".trimIndent(), ::parsePerson)
+        val (people, prev, next) = parseResults("""
+           { 
+                "count": 82,
+                "next": null,
+                "previous": "https://swapi.dev/api/people/?page=9",
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
 
         assertEquals(people.size, 0)
         assertNull(next)
@@ -40,14 +39,14 @@ class ParseThingsTest {
 
     @Test
     fun testPrevAndNext() {
-        val (people, prev, next) = parseThings("""
-   { 
-	    "count": 82,
-	    "next": "https://swapi.dev/api/people/?page=3",
-	    "previous": "https://swapi.dev/api/people/?page=1",
-        "results": [],
-    }
-""".trimIndent(), ::parsePerson)
+        val (people, prev, next) = parseResults("""
+           { 
+                "count": 82,
+                "next": "https://swapi.dev/api/people/?page=3",
+                "previous": "https://swapi.dev/api/people/?page=1",
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
 
         assertEquals(people.size, 0)
         assertEquals(next, "https://swapi.dev/api/people/?page=3")

@@ -28,16 +28,11 @@ class SpeciesListActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getSpeciesList(
+            network.searchSpeciesList(
                 search = text,
-                onSuccess = { _speciesList ->
-                    speciesList.clear()
-                    speciesList.addAll(_speciesList)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> speciesList.clear(); speciesList.addAll(res.results); adapter.notifyDataSetChanged() },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         SpeciesListSearch.addTextChangedListener(

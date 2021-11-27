@@ -28,16 +28,11 @@ class PlanetsActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getPlanets(
+            network.searchPlanets(
                 search = text,
-                onSuccess = { _planets ->
-                    planets.clear()
-                    planets.addAll(_planets)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> planets.clear(); planets.addAll(res.results); adapter.notifyDataSetChanged() },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         PlanetsSearch.addTextChangedListener(
