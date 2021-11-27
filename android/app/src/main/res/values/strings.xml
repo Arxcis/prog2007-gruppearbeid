@@ -22,4 +22,13 @@
     <string name="placeholder_search_name">Search name...</string>
     <string name="placeholder_search_name_and_model">Search name or model...</string>
     <string name="btnAddImageText">Add image</string>
+
+    <string-array name="choices_select_image">
+        <item>@string/planets</item>
+        <item>@string/people</item>
+        <item>@string/films</item>
+        <item>@string/starships</item>
+        <item>@string/species</item>
+        <item>@string/vehicles</item>
+    </string-array>
 </resources>

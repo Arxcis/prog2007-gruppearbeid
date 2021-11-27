@@ -3,34 +3,46 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../../layout/custom_preview.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_films.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_people.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_starship.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_starships.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_starships_item.xml" value="0.27447916666666666" />
+        <entry key="..\:/NTNU/21-22/Mobile/project/prog2007-gruppearbeid/android/app/src/main/res/menu/bottom_menu.xml" value="0.27447916666666666" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_choose_image.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_film.xml" value="0.25052083333333336" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_films.xml" value="0.20199275362318841" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_people.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_person.xml" value="0.2033514492753623" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_planet.xml" value="0.2033514492753623" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_planets.xml" value="0.2" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_species.xml" value="0.25052083333333336" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_species_list.xml" value="0.25052083333333336" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_starship.xml" value="0.25052083333333336" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/activity_test_image.xml" value="0.264" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_films_item.xml" value="0.15989583333333332" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_people_item.xml" value="0.15989583333333332" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_planets_item.xml" value="0.15989583333333332" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_species_list_item.xml" value="0.25052083333333336" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/adapter_starships_item.xml" value="0.15989583333333332" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/fragment_add_image.xml" value="0.21458333333333332" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/fragment_button_refresh.xml" value="0.264" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/fragment_refresh_button.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/layout/image_test.xml" value="0.18125" />
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.27291666666666664" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.27291666666666664" />
-        <entry key="app/src/main/res/layout/activity_film.xml" value="0.1" />
+        <entry key="..\:/Users/oscar/Downloads/prog2007-gruppearbeid/android/app/src/main/res/menu/bottom_menu.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/activity_film.xml" value="0.16077898550724637" />
         <entry key="app/src/main/res/layout/activity_films.xml" value="0.182518115942029" />
         <entry key="app/src/main/res/layout/activity_people.xml" value="0.245018115942029" />
-       <entry key="app/src/main/res/layout/activity_person.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/activity_planet.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_person.xml" value="0.14266304347826086" />
+        <entry key="app/src/main/res/layout/activity_planet.xml" value="0.16077898550724637" />
         <entry key="app/src/main/res/layout/activity_planets.xml" value="0.182518115942029" />
-        <entry key="app/src/main/res/layout/activity_species.xml" value="0.4161458333333333" />
-        <entry key="app/src/main/res/layout/activity_species_list.xml" value="0.2786458333333333" />
         <entry key="app/src/main/res/layout/activity_starship.xml" value="0.16077898550724637" />
         <entry key="app/src/main/res/layout/activity_starships.xml" value="0.182518115942029" />
         <entry key="app/src/main/res/layout/adapter_films_item.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/layout/adapter_people_item.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/layout/adapter_planets_item.xml" value="0.14266304347826086" />
-        <entry key="app/src/main/res/layout/adapter_species_list_item.xml" value="0.4161458333333333" />
         <entry key="app/src/main/res/layout/adapter_starships_item.xml" value="0.14266304347826086" />
         <entry key="app/src/main/res/layout/recycler_view_item.xml" value="0.28541666666666665" />
       </map>

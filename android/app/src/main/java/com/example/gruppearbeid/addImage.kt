@@ -1,10 +1,13 @@
 package com.example.gruppearbeid
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import com.example.gruppearbeid.databinding.FragmentAddImageBinding
 import com.example.gruppearbeid.types.myViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -22,12 +25,16 @@ class addImage : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    lateinit var fragmentXML: FragmentAddImageBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
@@ -35,7 +42,13 @@ class addImage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_image, container, false)
+        fragmentXML = FragmentAddImageBinding.inflate(inflater, container, false)
+        fragmentXML.btnAddImageFragment.setOnClickListener {
+            val intent = Intent(activity, ChooseImage::class.java)
+            startActivity(intent)
+        }
+
+        return fragmentXML.root
     }
 
     companion object {
