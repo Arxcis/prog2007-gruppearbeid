@@ -326,6 +326,8 @@ fun parsePerson(item: JSONObject): Person {
     return Person(
         name = item.getString("name"),
         height = item.getString("height"),
+        mass = item.getString("mass"),
+        hair_color = item.getString("hair_color"),
         birth_year = item.getString("birth_year"),
         gender = item.getString("gender"),
         homeworld = homeworld,
@@ -392,6 +394,12 @@ fun parseSpecies(item: JSONObject): Species {
 
     return Species(
         name = item.getString("name"),
+        classification = item.getString("classification"),
+        designation = item.getString("designation"),
+        average_height = item.getString("average_height"),
+        average_lifespan = item.getString("average_lifespan"),
+        homeworld = item.getString("homeworld"),
+        language = item.getString("language"),
         people = people,
         films = films,
     )

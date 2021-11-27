@@ -25,6 +25,11 @@ class PersonActivity : AppCompatActivity() {
         // 1. Get extras
         val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
         title = "👨‍🦲 ${person?.name}"
+        ActivityPersonHeight.text = "Height: " + person?.height ?: ""
+        ActivityPersonWeight.text = "Weight: " + person?.mass ?: ""
+        ActivityPersonHairColor.text = "Hair color: " + person?.hair_color ?: ""
+        ActivityPersonBirthYear.text = "Birth year: " + person?.birth_year ?: ""
+        ActivityPersonGender.text = "Gender: " + person?.gender ?: ""
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->
@@ -46,7 +51,7 @@ class PersonActivity : AppCompatActivity() {
         }
         ActivityPersonStarships.adapter = starshipAdapter
         ActivityPersonStarships.layoutManager = LinearLayoutManager(this)
-        
+
         // 2. Init species adapter
         val speciesListAdapter = SpeciesListAdapter{ species ->
             navigateToThing(this, SpeciesActivity::class.java, species)
