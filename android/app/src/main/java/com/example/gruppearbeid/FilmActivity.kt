@@ -29,8 +29,8 @@ class FilmActivity : AppCompatActivity() {
 
         // 1. Get extras
         val film = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Film
-        title = "🎬 ${film?.title}"
-        ActivityFilmName.text = "Title: " + film?.title ?: ""
+        title = "🎬 ${film?.name}"
+        ActivityFilmName.text = "Title: " + film?.name ?: ""
         ActivityFilmIdNumber.text = "Number: " + film?.episode_id ?: ""
         ActivityFilmDirector.text = "Director: " + film?.director ?: ""
         ActivityFilmProducer.text = "Producer: " + film?.producer ?: ""
