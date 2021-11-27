@@ -2,12 +2,10 @@ package com.example.gruppearbeid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PeopleAdapter
-import com.example.gruppearbeid.types.Pagination
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Results
 import com.example.gruppearbeid.util.*
@@ -51,10 +49,9 @@ class PeopleActivity : AppCompatActivity() {
         Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
     }
 
-    private fun refreshPagination(pag: Pagination) {
-        prev = pag.prev
-        next = pag.next
-        Log.d("refreshPagination", "${pag.page},${pag.count},${pag.pageCount}")
+    private fun refreshPagination(res: Results<Person>) {
+        prev = res.prev
+        next = res.next
         when {
             prev != null -> PeoplePrev.visibility = View.VISIBLE
             else -> PeoplePrev.visibility = View.INVISIBLE
@@ -64,9 +61,9 @@ class PeopleActivity : AppCompatActivity() {
             else -> PeopleNext.visibility = View.INVISIBLE
         }
         var dots = ""
-        for (i in 1..pag.pageCount) {
+        for (i in (1..res.pageCount)) {
             dots = when (i){
-                pag.page -> dots.plus(Constants.DOT_BIG).plus(" ")
+                res.page -> dots.plus(Constants.DOT_BIG).plus(" ")
                 else -> dots.plus(Constants.DOT_SMALL).plus(" ")
             }
         }
