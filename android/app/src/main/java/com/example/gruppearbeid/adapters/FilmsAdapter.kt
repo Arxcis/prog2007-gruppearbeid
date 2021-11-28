@@ -10,11 +10,15 @@ import com.example.gruppearbeid.types.Film
 
 
 class FilmsAdapter(
-    private var films: ArrayList<Film>,
     private val onClick: (film: Film) -> Unit,
 ) : RecyclerView.Adapter<FilmsAdapter.ViewHolder>() {
+    private var things = ArrayList<Film>()
 
-
+    fun refresh(newThings: List<Film>) {
+        things.clear()
+        things.addAll(newThings)
+        this.notifyDataSetChanged()
+    }
 
     /**
      * Provide a reference to the type of views that you are using
@@ -36,11 +40,11 @@ class FilmsAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val film = films[position]
+        val film = things[position]
         holder.title?.text = "🎬 ${film.title}"
         holder.item?.setOnClickListener { onClick(film) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = films.size
+    override fun getItemCount() = things.size
 }

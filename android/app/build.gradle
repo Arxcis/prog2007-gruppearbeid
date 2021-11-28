@@ -47,4 +47,7 @@ dependencies {
 
     // Material bottom navigation bar
     implementation 'com.google.android.material:material:1.4.0'
+
+    // Test implementation
+    testImplementation 'org.json:json:20140107'
 }

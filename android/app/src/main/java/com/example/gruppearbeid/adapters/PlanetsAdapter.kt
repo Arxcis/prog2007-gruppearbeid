@@ -10,10 +10,16 @@ import com.example.gruppearbeid.types.Planet
 
 
 class PlanetsAdapter(
-    private var planets: ArrayList<Planet>,
     private val onClick: (planet: Planet) -> Unit
 ) : RecyclerView.Adapter<PlanetsAdapter.ViewHolder>() {
+    private var things = ArrayList<Planet>()
 
+    fun refresh(newThings: List<Planet>) {
+        things.clear()
+        things.addAll(newThings)
+        this.notifyDataSetChanged()
+    }
+    
     /**
      * Provide a reference to the type of views that you are using
      * (custom ViewHolder).
@@ -34,11 +40,11 @@ class PlanetsAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val planet = planets[position]
+        val planet = things[position]
         holder.name?.text = "🪐 ${planet.name}"
         holder.item?.setOnClickListener { onClick(planet) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = planets.size
+    override fun getItemCount() = things.size
 }
