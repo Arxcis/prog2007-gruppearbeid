@@ -14,6 +14,8 @@ import org.json.JSONException
 import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
+import kotlin.math.ceil
+import kotlin.math.max
 
 interface INetwork {
     fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
@@ -232,10 +234,12 @@ fun <Thing>parseResults(text: String, parseThing: (text: JSONObject) -> Thing): 
         else -> 1
     }
 
+    val pageCount = max(ceil(count.toDouble() / Constants.RESULTS_PAGE_SIZE).toInt(), 1)
+
     return Results(
         things,
         count = count,
-        pageCount = count / Constants.RESULTS_PAGE_SIZE + 1,
+        pageCount = pageCount,
         page = page,
         prev = prev,
         next = next

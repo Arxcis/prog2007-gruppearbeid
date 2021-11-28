@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".StarshipsActivity">
-
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".StarshipsActivity"
         android:id="@+id/StarshipsScreen"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -37,7 +34,53 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/StarshipRecycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent" 
+                android:layout_weight="1"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/StarshipsDots"
+                    style="@style/dots"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/placeholder_dots"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/StarshipsPrev"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="7dp"
+                    android:text="@string/prev"
+                    android:textAlignment="center"
+                    android:visibility="invisible" />
+
+                <Button
+                    android:id="@+id/StarshipsNext"
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="@string/next"
+                    android:textAlignment="center"
+                    android:visibility="invisible" />
+            </LinearLayout>
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,4 +90,3 @@
             android:layout_gravity="start"
             app:menu="@menu/bottom_menu" />
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
