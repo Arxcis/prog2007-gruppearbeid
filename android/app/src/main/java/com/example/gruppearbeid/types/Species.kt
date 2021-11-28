@@ -14,9 +14,9 @@ data class Species(
 
     val average_lifespan: String,
 
-    val homeworld: String,
-
     val language: String,
+
+    val homeworld: ArrayList<String>,
 
     /** "people": ["https://swapi.dev/api/people/1/", ...] */
     val people: ArrayList<String>,
