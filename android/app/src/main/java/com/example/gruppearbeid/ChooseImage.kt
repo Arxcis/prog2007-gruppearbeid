@@ -8,13 +8,21 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
+import com.example.gruppearbeid.util.Constants
 
 class ChooseImage : AppCompatActivity() {
     private lateinit var _binding: ActivityChooseImageBinding
+
+    private lateinit var searchTerm: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
         setContentView(_binding.root)
+
+        searchTerm = intent.getStringExtra(Constants.API_DATA_ENTITY)!!
+        searchTerm?.let {
+            Log.d("chooseImage", "searchTerm in ChooseImageActivity ${it}")
+        }
     }
 }

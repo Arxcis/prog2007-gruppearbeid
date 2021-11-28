@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.gruppearbeid.databinding.FragmentAddImageBinding
 import com.example.gruppearbeid.types.myViewModel
+import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.ItemViewModel
 
 // TODO: Rename parameter arguments, choose names that match
@@ -54,7 +55,9 @@ class addImage : Fragment() {
         // Inflate the layout for this fragment
         fragmentXML = FragmentAddImageBinding.inflate(inflater, container, false)
         fragmentXML.btnAddImageFragment.setOnClickListener {
-            val intent = Intent(activity, ChooseImage::class.java)
+            val intent = Intent(activity, ChooseImage::class.java).apply {
+                putExtra(Constants.API_DATA_ENTITY, searchTerm)
+            }
             startActivity(intent)
         }
 
