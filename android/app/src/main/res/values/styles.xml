@@ -10,6 +10,9 @@
         <item name="android:paddingBottom">5dp</item>
 
     </style>
+    <style name="make_text_visible_dark_mode_and_normal_mode">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
     <style name="adapter_item_text">
         <item name="android:textSize">18dp</item>
     </style>

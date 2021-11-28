@@ -16,14 +16,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <EditText
+        android:textColor="#6f8693"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/etURLChooseImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/URL_hint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvURLInfo"
+        app:layout_constraintBottom_toTopOf="@id/btn_URL_chooseImage"
+        />
+
     <Button
         android:id="@+id/btn_URL_chooseImage"
         android:text="@string/Btn_URL_text"
-        android:textColor="?android:attr/textColorPrimary"
+        style="@style/make_text_visible_dark_mode_and_normal_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvURLInfo"
+        app:layout_constraintTop_toBottomOf="@id/etURLChooseImage"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
@@ -38,7 +52,7 @@
 
     <Button
         android:text="@string/Btn_chooseFinalImage_text"
-        android:textColor="?android:attr/textColorPrimary"
+        style="@style/make_text_visible_dark_mode_and_normal_mode"
         android:id="@+id/btn_chooseFinalImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
