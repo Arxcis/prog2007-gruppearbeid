@@ -8,6 +8,10 @@ data class Person(
 
     val height: String,
 
+    val mass: String,
+
+    val hair_color: String,
+
     val birth_year: String,
 
     val gender: String,

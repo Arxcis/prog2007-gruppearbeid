@@ -25,6 +25,11 @@ class PlanetActivity : AppCompatActivity() {
         // 1. Get extras
         val planet = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Planet
         title = "🪐 ${planet?.name}"
+        ActivityPlanetRotationPeriod.text = "Rotation period: ${planet?.rotation_period} standard hours"
+        ActivityPlanetOrbitalPeriod.text = "Orbital period: ${planet?.orbital_period} local days"
+        ActivityPlanetClimate.text = "Climate: ${planet?.climate}"
+        ActivityPlanetTerrain.text = "Terrain: ${planet?.terrain}"
+        ActivityPlanetPopulation.text = "Population: ${planet?.population}"
 
         // 2. Init residents adapter
         val residentsAdapter = PeopleAdapter{ resident ->

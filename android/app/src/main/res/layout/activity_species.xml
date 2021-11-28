@@ -12,6 +12,48 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/ActivitySpeciesClassification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/ActivitySpeciesDesignation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/ActivitySpeciesAverageHeight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/ActivitySpeciesAverageLifespan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/ActivitySpeciesLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView16"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/homeworld" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ActivitySpeciesHomeworld"
+            style="@style/activity_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
             android:id="@+id/textView6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
