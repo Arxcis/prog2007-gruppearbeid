@@ -42,12 +42,6 @@ class PlanetsActivity : AppCompatActivity() {
         // WIP: Just for testing
         requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean -> }
 
-        network = Network(this)
-        network.downloadImage(URL, this, {
-            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
-            image.setImageBitmap(network.bitmap)
-        },this::checkPermission, applicationContext)
-        
         // 1. Init adapter
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)

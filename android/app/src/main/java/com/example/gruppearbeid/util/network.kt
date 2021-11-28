@@ -90,7 +90,6 @@ class Network(private val ctx: Context) : INetwork {
                             }
                         })
                         Storage.saveImage(bitmap, permission, appContext)
-                        //image.setImageBitmap(bitmap)
                     } else {
                         Log.d(TAG, "bitmap is null")
                     }

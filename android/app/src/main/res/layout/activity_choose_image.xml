@@ -16,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- added a color which is both visible in dark mode and normal mode in textColor-->
     <EditText
         android:textColor="#6f8693"
         android:paddingLeft="10dp"
