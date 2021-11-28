@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.databinding.ActivityPlanetsBinding
 import com.example.gruppearbeid.types.Planet
+import com.example.gruppearbeid.types.Results
 import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_planets.*
 import com.example.gruppearbeid.util.configureBottomNavigation
@@ -25,6 +26,9 @@ import java.util.jar.Manifest
 
 class PlanetsActivity : AppCompatActivity() {
     private lateinit var network: INetwork
+    private val adapter = PlanetsAdapter{ planet -> navigateToThing(this, PlanetActivity::class.java, planet) }
+    private var prev: String? = null
+    private var next: String? = null
 
     private lateinit var requestCode: ActivityResultLauncher<String>
     val URL = "https://image.slidesharecdn.com/7thingsstockimages-140124084729-phpapp01/95/7-types-of-stock-images-you-must-stop-using-today-40-638.jpg?cb=1390828351"
@@ -34,36 +38,42 @@ class PlanetsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
         title = getString(R.string.planets)
-
-        requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
-        }
-
-        val adapter = PlanetsAdapter{ planet ->
-            navigateToThing(this, PlanetActivity::class.java, planet)
-        }
+        
+        // WIP: Just for testing
+        requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean -> }
+        network.downloadImage(URL, this, {
+            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
+            image.setImageBitmap(network.bitmap)
+        },this::checkPermission, applicationContext)
+        
+        // 1. Init adapter
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
 
         // 2. Init search
         network = Network(this)
-        val search = { text: String ->
-            network.searchPlanets(
-                search = text,
-                onSuccess = { res -> adapter.refresh(res.results) },
-                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
-            )
-        }
+        val search = { search: String -> network.searchPlanets(search, onSuccess, onError) }
         search("")
         PlanetsSearch.addTextChangedListener(
             makeTextWatcherWithDebounce{ input -> search(input)}
         )
 
-        network.downloadImage(URL, this, {
-            val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
-            image.setImageBitmap(network.bitmap)
-        },this::checkPermission, applicationContext)
-        // 1. Init adapter
+        // 3. Init pagination
+        PlanetsPrev.setOnClickListener{ prev?.let { this.network.getPlanets(it, onSuccess, onError) } }
+        PlanetsNext.setOnClickListener{ next?.let { this.network.getPlanets(it, onSuccess, onError) } }
     }
+
+    private val onSuccess = { res: Results<Planet> ->
+        adapter.refresh(res.results);
+        prev = res.prev
+        next = res.next
+        refreshPaginationViews(res, PlanetsPrev, PlanetsNext, PlanetsDots)
+    }
+
+    private val onError = { err: String ->
+        Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onResume() {
         super.onResume()
         configureBottomNavigation(this, PlanetsNavigation, R.id.PlanetsMenuItem)
