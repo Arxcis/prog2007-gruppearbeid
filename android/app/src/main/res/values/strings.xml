@@ -22,6 +22,9 @@
     <string name="placeholder_search_name">Search name...</string>
     <string name="placeholder_search_name_and_model">Search name or model...</string>
     <string name="btnAddImageText">Add image</string>
+    <string name="URL_choose_image">Insert URL of image down below</string>
+    <string name="Btn_URL_text">Load image from URL</string>
+    <string name="Btn_chooseFinalImage_text">Add Image</string>
 
     <string-array name="choices_select_image">
         <item>@string/planets</item>
