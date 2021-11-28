@@ -22,7 +22,7 @@ object Storage {
 
     private val TAG = "Storage.util"
 
-    fun saveImage(bitmap: Bitmap, permission: () -> Boolean, appContext: Context)
+    fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context)
     {
         if (Environment.MEDIA_MOUNTED == state)
         {
@@ -33,7 +33,7 @@ object Storage {
                 {  //if have permissiion to write to external storage.
 
                     val values: ContentValues = ContentValues().apply {
-                        put(MediaStore.Images.ImageColumns.DISPLAY_NAME, "test1.jpg")
+                        put(MediaStore.Images.ImageColumns.DISPLAY_NAME, "${fileName}.jpg")
                     }
 
                     val imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI

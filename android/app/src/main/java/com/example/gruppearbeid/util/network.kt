@@ -29,7 +29,7 @@ import kotlin.math.max
 interface INetwork {
     var bitmap: Bitmap
 
-    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit,permission: () -> Boolean, appContext: Context)
+    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, permission: () -> Boolean, appContext: Context)
     fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
     fun searchPeople(search: String,      onSuccess: (res: Results<Person>) -> Unit,   onError: (text: String) -> Unit)
     fun searchPlanets(search: String,     onSuccess: (res: Results<Planet>) -> Unit,   onError: (text: String) -> Unit)
@@ -60,7 +60,7 @@ class Network(private val ctx: Context) : INetwork {
 
     override lateinit var bitmap: Bitmap
 
-    override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit,permission: () -> Boolean, appContext: Context)
+    override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, permission: () -> Boolean, appContext: Context)
     //trying this:
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
@@ -89,7 +89,7 @@ class Network(private val ctx: Context) : INetwork {
                                 updateImage()
                             }
                         })
-                        Storage.saveImage(bitmap, permission, appContext)
+                        Storage.saveImage(bitmap, fileName, permission, appContext)
                     } else {
                         Log.d(TAG, "bitmap is null")
                     }

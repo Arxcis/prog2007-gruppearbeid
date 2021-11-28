@@ -4,18 +4,13 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
 import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
-import com.example.gruppearbeid.util.Storage
 
 class ChooseImage : AppCompatActivity() {
     private lateinit var _binding: ActivityChooseImageBinding
@@ -38,27 +33,31 @@ class ChooseImage : AppCompatActivity() {
             Log.d("chooseImage", "url: ${it}")
         }
 
+        val fileName = url.substring(("https://").length, url.lastIndex)            //remove https:// from filename.
+                                                                                    //the other "/" in fileName will be replaced with underscore character.
+
         _binding.btnURLChooseImage.setOnClickListener {
 
             val urlText = _binding.etURLChooseImage.text.toString()
             network.downloadImage(urlText,
                 this, {
-                _binding.imageChooseImage.setImageBitmap(network.bitmap)
-            }, {
+                    _binding.imageChooseImage.setImageBitmap(network.bitmap)
+                }, fileName, {
                     if (ContextCompat.checkSelfPermission(
-                        this,
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) ==
-                    PackageManager.PERMISSION_GRANTED
-                ) {
-                    return@downloadImage true
-                } else {
-                    requestCode.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    return@downloadImage true
-                }
+                            this,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ) ==
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        return@downloadImage true
+                    } else {
+                        requestCode.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        return@downloadImage true
+                    }
                     return@downloadImage false
 
-                }, this)
+                }, this
+            )
 
         }
     }
