@@ -2,18 +2,15 @@ package com.example.gruppearbeid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.gruppearbeid.adapters.ChooseImageAdapter
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
-import com.example.gruppearbeid.types.myViewModel
 
 class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var _binding: ActivityChooseImageBinding
-    private lateinit var adapter: ChooseImageAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,16 +24,10 @@ class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         _binding.spinnerListEntities.onItemSelectedListener = this        //link SpinnerActivity to the onSelectedListener
                                                                                        //of spinner.
-
-        adapter = ChooseImageAdapter(this)
-
-        _binding.rvChooseImage.adapter = adapter
-        _binding.rvChooseImage.layoutManager = LinearLayoutManager(this)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        adapter.whatToFetch = parent?.getItemAtPosition(position).toString()
-        adapter.fetchData()
+        Log.d("ChooseImageActi", parent?.getItemAtPosition(position).toString())
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -45,6 +36,5 @@ class ChooseImage : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onDestroy() {
         super.onDestroy()
-        adapter.onDestroy()
     }
 }

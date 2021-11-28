@@ -24,7 +24,6 @@ import com.example.gruppearbeid.util.navigateToThing
 import java.util.jar.Manifest
 
 class PlanetsActivity : AppCompatActivity() {
-    private val planets = ArrayList<Planet>()
     private lateinit var network: INetwork
 
     private lateinit var requestCode: ActivityResultLauncher<String>
@@ -39,9 +38,7 @@ class PlanetsActivity : AppCompatActivity() {
         requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
         }
 
-
-
-        val adapter = PlanetsAdapter(planets){ planet ->
+        val adapter = PlanetsAdapter{ planet ->
             navigateToThing(this, PlanetActivity::class.java, planet)
         }
         PlanetRecycler.adapter = adapter
@@ -50,16 +47,11 @@ class PlanetsActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getPlanets(
+            network.searchPlanets(
                 search = text,
-                onSuccess = { _planets ->
-                    planets.clear()
-                    planets.addAll(_planets)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> adapter.refresh(res.results) },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         PlanetsSearch.addTextChangedListener(

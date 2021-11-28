@@ -17,8 +17,6 @@ import kotlinx.android.synthetic.main.activity_starship.*
 
 // Class for a single starship
 class StarshipActivity : AppCompatActivity() {
-    val films = ArrayList<Film>()
-    val pilots = ArrayList<Person>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,13 +36,13 @@ class StarshipActivity : AppCompatActivity() {
 
 
         // 2. Init adapters
-        val pilotsAdapter = PeopleAdapter(pilots){ character ->
-            navigateToThing(this, PersonActivity::class.java, character)
+        val pilotsAdapter = PeopleAdapter{ pilot ->
+            navigateToThing(this, PersonActivity::class.java, pilot)
         }
         ActivityStarshipPilots.adapter = pilotsAdapter
         ActivityStarshipPilots.layoutManager = LinearLayoutManager(this)
 
-        val filmsAdapter = FilmsAdapter(films){ film ->
+        val filmsAdapter = FilmsAdapter{ film ->
             navigateToThing(this, FilmActivity::class.java, film)
         }
         ActivityStarshipFilms.adapter = filmsAdapter
@@ -54,11 +52,11 @@ class StarshipActivity : AppCompatActivity() {
         network = Network(this)
         if (starship != null) {
             network.getPeopleByURL(starship.pilots,
-                onSuccess = { _pilots -> pilots.clear(); pilots.addAll(_pilots); pilotsAdapter.notifyDataSetChanged() },
+                onSuccess = { pilots -> pilotsAdapter.refresh(pilots) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getFilmsByURL(starship.films,
-                onSuccess = { _films -> films.clear(); films.addAll(_films); filmsAdapter.notifyDataSetChanged() },
+                onSuccess = { films -> filmsAdapter.refresh(films) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

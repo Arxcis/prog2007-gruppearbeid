@@ -31,4 +31,9 @@
         <item>@string/species</item>
         <item>@string/vehicles</item>
     </string-array>
+    <string name="placeholder_dots">∙ • ∙ ∙ ∙</string>
+
+    <!-- Button -->
+    <string name="prev">Prev</string>
+    <string name="next">Next</string>
 </resources>

@@ -10,7 +10,6 @@ import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_species_list.*
 
 class SpeciesListActivity : AppCompatActivity() {
-    private val speciesList = ArrayList<Species>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,8 +18,8 @@ class SpeciesListActivity : AppCompatActivity() {
         title = getString(R.string.species)
 
         // 1. Init adapter
-        val adapter = SpeciesListAdapter(speciesList){ starship ->
-            navigateToThing(this, SpeciesActivity::class.java, starship)
+        val adapter = SpeciesListAdapter{ species ->
+            navigateToThing(this, SpeciesActivity::class.java, species)
         }
         SpeciesListRecycler.adapter = adapter
         SpeciesListRecycler.layoutManager = LinearLayoutManager(this)
@@ -28,16 +27,11 @@ class SpeciesListActivity : AppCompatActivity() {
         // 2. Init search
         network = Network(this)
         val search = { text: String ->
-            network.getSpeciesList(
+            network.searchSpeciesList(
                 search = text,
-                onSuccess = { _speciesList ->
-                    speciesList.clear()
-                    speciesList.addAll(_speciesList)
-                    adapter.notifyDataSetChanged()
-                },
-                onError = { error ->
-                    Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
-                })
+                onSuccess = { res -> adapter.refresh(res.results) },
+                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
         }
         search("")
         SpeciesListSearch.addTextChangedListener(

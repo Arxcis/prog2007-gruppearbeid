@@ -17,10 +17,6 @@ import kotlinx.android.synthetic.main.activity_film.*
 
 
 class FilmActivity : AppCompatActivity() {
-    private val characters = ArrayList<Person>()
-    private val planets = ArrayList<Planet>()
-    private val starships = ArrayList<Starship>()
-    private val speciesList = ArrayList<Species>()
     private lateinit var network: INetwork
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,28 +34,28 @@ class FilmActivity : AppCompatActivity() {
 
 
         // 2. Init characters adapter
-        val charactersAdapter = PeopleAdapter(characters){ character ->
+        val charactersAdapter = PeopleAdapter{ character ->
             navigateToThing(this, PersonActivity::class.java, character)
         }
         ActivityFilmCharacters.adapter = charactersAdapter
         ActivityFilmCharacters.layoutManager = LinearLayoutManager(this)
 
         // 2. Init planets adapter
-        val planetsAdapter = PlanetsAdapter(planets){ planet ->
+        val planetsAdapter = PlanetsAdapter{ planet ->
             navigateToThing(this, PlanetActivity::class.java, planet)
         }
         ActivityFilmPlanets.adapter = planetsAdapter
         ActivityFilmPlanets.layoutManager = LinearLayoutManager(this)
 
         // 2. Init starships adapter
-        val starshipAdapter = StarshipsAdapter(starships){ starship ->
+        val starshipAdapter = StarshipsAdapter{ starship ->
             navigateToThing(this, StarshipActivity::class.java, starship)
         }
         ActivityFilmStarships.adapter = starshipAdapter
         ActivityFilmStarships.layoutManager = LinearLayoutManager(this)
 
         // 2. Init species adapter
-        val speciesListAdapter = SpeciesListAdapter(speciesList){ species ->
+        val speciesListAdapter = SpeciesListAdapter{ species ->
             navigateToThing(this, SpeciesActivity::class.java, species)
         }
         ActivityFilmSpecies.adapter = speciesListAdapter
@@ -69,19 +65,19 @@ class FilmActivity : AppCompatActivity() {
         network = Network(this)
         if (film != null) {
             network.getPeopleByURL(film.characters,
-                onSuccess = { _characters -> characters.clear(); characters.addAll(_characters); charactersAdapter.notifyDataSetChanged() },
+                onSuccess = { characters -> charactersAdapter.refresh(characters) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getPlanetsByURL(film.planets,
-                onSuccess = { _planets -> planets.clear(); planets.addAll(_planets); planetsAdapter.notifyDataSetChanged() },
+                onSuccess = { planets -> planetsAdapter.refresh(planets) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getStarshipsByURL(film.starships,
-                onSuccess = { _starships -> starships.clear(); starships.addAll(_starships); starshipAdapter.notifyDataSetChanged() },
+                onSuccess = { starships -> starshipAdapter.refresh(starships) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
             network.getSpeciesByURL(film.species,
-                onSuccess = { _species -> speciesList.clear(); speciesList.addAll(_species); planetsAdapter.notifyDataSetChanged() },
+                onSuccess = { species -> speciesListAdapter.refresh(species) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }

@@ -10,9 +10,15 @@ import com.example.gruppearbeid.types.Person
 
 
 class PeopleAdapter(
-    private var people: ArrayList<Person>,
     private val onClick: (person: Person) -> Unit
 ) : RecyclerView.Adapter<PeopleAdapter.ViewHolder>() {
+    private var things = ArrayList<Person>()
+
+    fun refresh(newThings: List<Person>) {
+        things.clear()
+        things.addAll(newThings)
+        this.notifyDataSetChanged()
+    }
 
     /**
      * Provide a reference to the type of views that you are using
@@ -34,11 +40,11 @@ class PeopleAdapter(
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val person = people[position]
+        val person = things[position]
         holder.name?.text = "👨‍🦲 ${person.name}"
         holder.item?.setOnClickListener { onClick(person) }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
-    override fun getItemCount() = people.size
+    override fun getItemCount() = things.size
 }

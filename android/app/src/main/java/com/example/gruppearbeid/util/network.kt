@@ -27,12 +27,18 @@ import java.net.HttpURLConnection
 interface INetwork {
     var bitmap: Bitmap
 
-    fun getFilms(search: String,       onSuccess: (films: List<Film>) -> Unit,          onError: (text: String) -> Unit)
     fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit,permission: () -> Boolean, appContext: Context)
-    fun getPeople(search: String,      onSuccess: (people: List<Person>) -> Unit,       onError: (text: String) -> Unit)
-    fun getPlanets(search: String,     onSuccess: (planets: List<Planet>) -> Unit,      onError: (text: String) -> Unit)
-    fun getStarships(search: String,   onSuccess: (starships: List<Starship>) -> Unit,  onError: (text: String) -> Unit)
-    fun getSpeciesList(search: String, onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit)
+    fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
+    fun searchPeople(search: String,      onSuccess: (res: Results<Person>) -> Unit,   onError: (text: String) -> Unit)
+    fun searchPlanets(search: String,     onSuccess: (res: Results<Planet>) -> Unit,   onError: (text: String) -> Unit)
+    fun searchStarships(search: String,   onSuccess: (res: Results<Starship>) -> Unit, onError: (text: String) -> Unit)
+    fun searchSpeciesList(search: String, onSuccess: (res: Results<Species>) -> Unit,  onError: (text: String) -> Unit)
+
+    fun getFilms(url: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
+    fun getPeople(url: String,      onSuccess: (res: Results<Person>) -> Unit,   onError: (text: String) -> Unit)
+    fun getPlanets(url: String,     onSuccess: (res: Results<Planet>) -> Unit,   onError: (text: String) -> Unit)
+    fun getStarships(url: String,   onSuccess: (res: Results<Starship>) -> Unit, onError: (text: String) -> Unit)
+    fun getSpeciesList(url: String, onSuccess: (res: Results<Species>) -> Unit,  onError: (text: String) -> Unit)
 
     fun getFilmsByURL(urls: List<String>,     onSuccess: (films: List<Film>) -> Unit,          onError: (text: String) -> Unit)
     fun getPeopleByURL(urls: List<String>,    onSuccess: (people: List<Person>) -> Unit,       onError: (text: String) -> Unit)
@@ -108,30 +114,50 @@ class Network(private val ctx: Context) : INetwork {
         }
     }
 
-    override fun getFilms(search: String, onSuccess: (films: List<Film>) -> Unit, onError: (text: String) -> Unit) {
+    override fun searchFilms(search: String, onSuccess: (res: Results<Film>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/films?search=${search}", ::parseFilms, onSuccess, onError)
     }
 
-    override fun getPeople(search: String, onSuccess: (people: List<Person>) -> Unit, onError: (text: String) -> Unit) {
+    override fun searchPeople(search: String, onSuccess: (res: Results<Person>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/people?search=${search}", ::parsePeople, onSuccess, onError)
     }
 
-    override fun getPlanets(search: String, onSuccess: (planets: List<Planet>) -> Unit, onError: (text: String) -> Unit) {
+    override fun searchPlanets(search: String, onSuccess: (res: Results<Planet>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/planets?search=${search}", ::parsePlanets, onSuccess, onError)
     }
 
-    override fun getStarships(search: String, onSuccess: (starships: List<Starship>) -> Unit, onError: (text: String) -> Unit) {
+    override fun searchStarships(search: String, onSuccess: (res: Results<Starship>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/starships?search=${search}", ::parseStarships, onSuccess, onError)
     }
 
-    override fun getSpeciesList(search: String, onSuccess: (speciesList: List<Species>) -> Unit, onError: (text: String) -> Unit) {
+    override fun searchSpeciesList(search: String, onSuccess: (res: Results<Species>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/species?search=${search}", ::parseSpeciesList, onSuccess, onError)
+    }
+
+    override fun getFilms(url: String, onSuccess: (res: Results<Film>) -> Unit, onError: (text: String) -> Unit) {
+        getThings(url, ::parseFilms, onSuccess, onError)
+    }
+
+    override fun getPeople(url: String, onSuccess: (res: Results<Person>) -> Unit, onError: (text: String) -> Unit) {
+        getThings(url, ::parsePeople, onSuccess, onError)
+    }
+
+    override fun getPlanets(url: String, onSuccess: (res: Results<Planet>) -> Unit, onError: (text: String) -> Unit) {
+        getThings(url, ::parsePlanets, onSuccess, onError)
+    }
+
+    override fun getStarships(url: String, onSuccess: (res: Results<Starship>) -> Unit, onError: (text: String) -> Unit) {
+        getThings(url, ::parseStarships, onSuccess, onError)
+    }
+
+    override fun getSpeciesList(url: String, onSuccess: (res: Results<Species>) -> Unit, onError: (text: String) -> Unit) {
+        getThings(url, ::parseSpeciesList, onSuccess, onError)
     }
 
     private fun <Thing>getThings(
         url: String,
-        parse: (text: String) -> List<Thing>,
-        onSuccess: (speciesList: List<Thing>) -> Unit,
+        parse: (text: String) -> Results<Thing>,
+        onSuccess: (results: Results<Thing>) -> Unit,
         onError: (text: String) -> Unit,
     ) {
         executor.execute{
@@ -139,8 +165,8 @@ class Network(private val ctx: Context) : INetwork {
             val cachedEtag = etagsCache.getValue(url, null)
             val cachedResponse = responseCache.getValue(cachedEtag, null)
             cachedResponse?.run {
-                val list = parse(cachedResponse)
-                handler.post{ onSuccess(list) }
+                val things = parse(cachedResponse)
+                handler.post{ onSuccess(things) }
             }
 
             // 2. Do HTTP Request
@@ -151,9 +177,9 @@ class Network(private val ctx: Context) : INetwork {
                 handler.post { onError("No connection...") }
                 return@execute
             }
-            val list = parse(text)
+            val things = parse(text)
             handler.post {
-                onSuccess(list)
+                onSuccess(things)
             }
         }
     }
@@ -252,78 +278,45 @@ class Network(private val ctx: Context) : INetwork {
     }
 }
 
+private fun parseStarships(res: String) = parseResults(res, ::parseStarship)
+private fun parsePlanets(res: String) = parseResults(res, ::parsePlanet)
+private fun parsePeople(res: String) = parseResults(res, ::parsePerson)
+private fun parseFilms(res: String) = parseResults(res, ::parseFilm)
+private fun parseSpeciesList(res: String) = parseResults(res, ::parseSpecies)
 
-private fun parseStarships(text: String): ArrayList<Starship> {
+fun <Thing>parseResults(text: String, parseThing: (text: JSONObject) -> Thing): Results<Thing> {
     val json = JSONObject(text)
+    val prev: String? =  if (!json.isNull("previous")) { json.getString("previous") } else { null }
+    val next: String? = if (!json.isNull("next")) { json.getString("next") } else { null }
     val results = json.getJSONArray("results")
+    val count = json.getInt("count")
 
-    val list = ArrayList<Starship>()
+    val things = ArrayList<Thing>()
+
     for (i in 0 until results.length()) {
         val obj = results.getJSONObject(i)
-        val item = parseStarship(obj)
-        list.add(item)
+        val item = parseThing(obj)
+        things.add(item)
     }
-    return list
+
+    val page = when {
+        next != null -> next[next.length - 1].digitToInt() - 1
+        prev != null -> prev[prev.length - 1].digitToInt() + 1
+        else -> 1
+    }
+
+    return Results(
+        things,
+        count = count,
+        pageCount = count / Constants.RESULTS_PAGE_SIZE + 1,
+        page = page,
+        prev = prev,
+        next = next
+    )
 }
 
 
-private fun parsePlanets(text: String): ArrayList<Planet> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Planet>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePlanet(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parsePeople(text: String): ArrayList<Person> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Person>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parsePerson(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parseFilms(text: String): ArrayList<Film> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val films = ArrayList<Film>()
-    for (i in 0 until results.length()) {
-        val item = results.getJSONObject(i)
-        val film = parseFilm(item)
-        films.add(film)
-    }
-    return films
-}
-
-
-private fun parseSpeciesList(text: String): ArrayList<Species> {
-    val json = JSONObject(text)
-    val results = json.getJSONArray("results")
-
-    val list = ArrayList<Species>()
-    for (i in 0 until results.length()) {
-        val obj = results.getJSONObject(i)
-        val item = parseSpecies(obj)
-        list.add(item)
-    }
-    return list
-}
-
-
-private fun parseStarship(item: JSONObject): Starship {
+fun parseStarship(item: JSONObject): Starship {
     // films:
     val films = ArrayList<String>()
     val jsonFilms = item.getJSONArray("films")
