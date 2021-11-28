@@ -3,6 +3,7 @@ package com.example.gruppearbeid.util
 import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
@@ -13,6 +14,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
+import java.lang.NullPointerException
 import java.util.concurrent.Executors
 
 object Storage {
@@ -82,4 +84,17 @@ object Storage {
                 }
             }
         }
+
+    fun listFilesDirectory() {
+        try {
+            val uriStorage: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val fileObject = File(uriStorage.path)
+
+            val filesInDirectory = fileObject.listFiles()  //use this, loop through this. 
+        }catch(ex: NullPointerException)
+        {
+            Log.d(TAG, "null exception")
+        }
+
+    }
 }
