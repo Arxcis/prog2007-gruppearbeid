@@ -29,7 +29,7 @@ class PersonActivity : AppCompatActivity() {
         val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
         title = "👨‍🦲 ${person?.name}"
 
-        viewModel.selectItem(title.toString())
+        viewModel.selectItem(person?.url ?: "")
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->

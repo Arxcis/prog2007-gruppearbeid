@@ -401,6 +401,7 @@ fun parsePerson(item: JSONObject): Person {
     }
 
     return Person(
+        url = item.getString("url"),
         name = item.getString("name"),
         height = item.getString("height"),
         birth_year = item.getString("birth_year"),

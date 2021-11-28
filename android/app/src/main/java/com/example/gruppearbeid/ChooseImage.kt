@@ -13,16 +13,16 @@ import com.example.gruppearbeid.util.Constants
 class ChooseImage : AppCompatActivity() {
     private lateinit var _binding: ActivityChooseImageBinding
 
-    private lateinit var searchTerm: String
+    private lateinit var url: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
-        searchTerm = intent.getStringExtra(Constants.API_DATA_ENTITY)!!
-        searchTerm?.let {
-            Log.d("chooseImage", "searchTerm in ChooseImageActivity ${it}")
+        url = intent.getStringExtra(Constants.API_DATA_ENTITY)!!
+        url?.let {
+            Log.d("chooseImage", "url: ${it}")
         }
     }
 }

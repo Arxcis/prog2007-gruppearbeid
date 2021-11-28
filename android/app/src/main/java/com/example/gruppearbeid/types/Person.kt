@@ -3,6 +3,8 @@ package com.example.gruppearbeid.types
 import java.io.Serializable
 
 data class Person(
+    val url: String,
+
     /** "name": "Luke Skywalker" */
     val name: String,
 
