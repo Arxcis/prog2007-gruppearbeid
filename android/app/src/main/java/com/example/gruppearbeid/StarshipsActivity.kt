@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.StarshipsAdapter
+import com.example.gruppearbeid.types.Results
 import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_starships.*
 
 class StarshipsActivity : AppCompatActivity() {
-    private val starships = ArrayList<Starship>()
     private lateinit var network: INetwork
+    val adapter = StarshipsAdapter{ starship -> navigateToThing(this, StarshipActivity::class.java, starship) }
+    private var prev: String? = null
+    private var next: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,26 +22,33 @@ class StarshipsActivity : AppCompatActivity() {
         title = getString(R.string.starships)
 
         // 1. Init adapter
-        val adapter = StarshipsAdapter{ starship ->
-            navigateToThing(this, StarshipActivity::class.java, starship)
-        }
         StarshipRecycler.adapter = adapter
         StarshipRecycler.layoutManager = LinearLayoutManager(this)
 
         // 2. Init search
         network = Network(this)
-        val search = { text: String ->
-            network.searchStarships(
-                search = text,
-                onSuccess = { res -> adapter.refresh(res.results) },
-                onError = { error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
-            )
-        }
+        val search = { search: String -> network.searchStarships(search, onSuccess, onError) }
         search("")
         StarshipsSearch.addTextChangedListener(
             makeTextWatcherWithDebounce{ input -> search(input)}
         )
+
+        // 3. Init pagination
+        StarshipsPrev.setOnClickListener{ prev?.let { this.network.getStarships(it, onSuccess, onError) } }
+        StarshipsNext.setOnClickListener{ next?.let { this.network.getStarships(it, onSuccess, onError) } }
     }
+
+    private val onSuccess = { res: Results<Starship> ->
+        adapter.refresh(res.results);
+        prev = res.prev
+        next = res.next
+        refreshPaginationViews(res, StarshipsPrev, StarshipsNext, StarshipsDots)
+    }
+
+    private val onError = { err: String ->
+        Toast.makeText(this, err, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onResume() {
         super.onResume()
         configureBottomNavigation(this, StarshipsNavigation, R.id.StarshipsMenuItem)

@@ -82,7 +82,7 @@ class ParseResultsTest {
     }
 
     @Test
-    fun testNoCount() {
+    fun testCountIsZero() {
         val res = parseResults("""
            { 
                 "count": 0,
@@ -95,8 +95,27 @@ class ParseResultsTest {
         assertEquals(res.results.size, 0)
         assertNull(res.next)
         assertNull(res.prev)
-        assertEquals(res.pageCount, 1)
+        assertEquals(1, res.pageCount)
         assertEquals(res.page, 1)
         assertEquals(res.count, 0)
+    }
+
+    @Test
+    fun testCountIsARoundNumber() {
+        val res = parseResults("""
+           { 
+                "count": 60,
+                "next": "https://swapi.dev/api/planets/?page=2",
+                "previous": null,
+                "results": [],
+            }
+        """.trimIndent(), ::parsePerson)
+
+        assertEquals(0, res.results.size)
+        assertEquals("https://swapi.dev/api/planets/?page=2", res.next)
+        assertNull(res.prev)
+        assertEquals(6, res.pageCount, )
+        assertEquals(1, res.page)
+        assertEquals(60, res.count)
     }
 }
