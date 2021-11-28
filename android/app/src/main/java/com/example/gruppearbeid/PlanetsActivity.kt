@@ -41,6 +41,8 @@ class PlanetsActivity : AppCompatActivity() {
         
         // WIP: Just for testing
         requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean -> }
+
+        network = Network(this)
         network.downloadImage(URL, this, {
             val image: ImageView = findViewById<ImageView>(R.id.imagePlanets)
             image.setImageBitmap(network.bitmap)
@@ -51,7 +53,6 @@ class PlanetsActivity : AppCompatActivity() {
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
 
         // 2. Init search
-        network = Network(this)
         val search = { search: String -> network.searchPlanets(search, onSuccess, onError) }
         search("")
         PlanetsSearch.addTextChangedListener(
