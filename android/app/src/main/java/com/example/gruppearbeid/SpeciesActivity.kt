@@ -25,6 +25,11 @@ class SpeciesActivity : AppCompatActivity() {
         // 1. Get extras
         val species = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Species
         title = "🧬 ${species?.name}"
+        ActivitySpeciesClassification.text = "Classification: ${species?.classification}"
+        ActivitySpeciesDesignation.text = "Designation: ${species?.designation}"
+        ActivitySpeciesAverageHeight.text = "Average height: ${species?.average_height} cm"
+        ActivitySpeciesAverageLifespan.text = "Average lifespan: ${species?.average_lifespan} years"
+        ActivitySpeciesLanguage.text = "Language: ${species?.language}"
 
         // 2. Init people adapter
         val peopleAdapter = PeopleAdapter{ person ->

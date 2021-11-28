@@ -25,11 +25,11 @@ class PersonActivity : AppCompatActivity() {
         // 1. Get extras
         val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
         title = "👨‍🦲 ${person?.name}"
-        ActivityPersonHeight.text = "Height: " + person?.height ?: ""
-        ActivityPersonWeight.text = "Weight: " + person?.mass ?: ""
-        ActivityPersonHairColor.text = "Hair color: " + person?.hair_color ?: ""
-        ActivityPersonBirthYear.text = "Birth year: " + person?.birth_year ?: ""
-        ActivityPersonGender.text = "Gender: " + person?.gender ?: ""
+        ActivityPersonHeight.text = "Height: ${person?.height} cm"
+        ActivityPersonWeight.text = "Weight: ${person?.mass} kg"
+        ActivityPersonHairColor.text = "Hair color: ${person?.hair_color}"
+        ActivityPersonBirthYear.text = "Birth year: ${person?.birth_year}"
+        ActivityPersonGender.text = "Gender: ${person?.gender}"
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->
