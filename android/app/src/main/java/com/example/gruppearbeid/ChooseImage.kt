@@ -17,8 +17,4 @@ class ChooseImage : AppCompatActivity() {
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
         setContentView(_binding.root)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }
