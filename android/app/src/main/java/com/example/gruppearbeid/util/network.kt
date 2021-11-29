@@ -31,7 +31,7 @@ import kotlin.math.max
 interface INetwork {
     var finishedDownloadImage: Boolean
 
-    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context)
+    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context, onStatus: (errTxt: String) -> Unit)
     fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
     fun searchPeople(search: String,      onSuccess: (res: Results<Person>) -> Unit,   onError: (text: String) -> Unit)
     fun searchPlanets(search: String,     onSuccess: (res: Results<Planet>) -> Unit,   onError: (text: String) -> Unit)
@@ -63,7 +63,8 @@ class Network(private val ctx: Context) : INetwork {
     override var finishedDownloadImage: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.P)
-    override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context)
+    override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context,
+                               onStatus: (errTxt: String) -> Unit)
     //trying this:
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
@@ -72,6 +73,7 @@ class Network(private val ctx: Context) : INetwork {
             if (Patterns.WEB_URL.matcher(url).matches())
             {
                 try {
+                    runOnUIThread(activity, onStatus, "starting to fetch image from URL")
                     val realURL = URL(url)
                     val connection = realURL.openConnection() as HttpsURLConnection
 
@@ -102,6 +104,7 @@ class Network(private val ctx: Context) : INetwork {
                     Log.d(TAG, "socket timed out")
                 } catch(ex: IOException) {
                     Log.d(TAG, "Input output error. Is WIFI enabled?")
+                    runOnUIThread(activity, onStatus, "Input output error. Is WIFI enabled?")
                     Log.d(TAG, ex.message.toString())
                 } catch (ex: IllegalArgumentException)
                 {
@@ -117,6 +120,15 @@ class Network(private val ctx: Context) : INetwork {
             }
 
         }
+    }
+
+    fun runOnUIThread(activity: Activity, aFunction: (text: String) -> Unit, text: String)
+    {
+        activity?.runOnUiThread(object : Runnable {
+            override fun run() {
+                aFunction(text)
+            }
+        })
     }
 
     override fun searchFilms(search: String, onSuccess: (res: Results<Film>) -> Unit, onError: (text: String) -> Unit) {

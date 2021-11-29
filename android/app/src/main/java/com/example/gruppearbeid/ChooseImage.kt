@@ -1,6 +1,7 @@
 package com.example.gruppearbeid
 
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.StrictMode
@@ -9,6 +10,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
 import com.example.gruppearbeid.util.Constants
@@ -30,6 +32,7 @@ class ChooseImage : AppCompatActivity() {
 
     private val TAG = "ChooseImageAct"
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
@@ -57,14 +60,15 @@ class ChooseImage : AppCompatActivity() {
                 this, {
                     Log.d(TAG, "happens twice?")
                     _binding.imageChooseImage.setImageBitmap(Storage.bitmap)
-                }, fileName,  this
+                }, fileName,  this, this::statusMessage
             )
 
         }
 
         _binding.btnChooseFinalImage.setOnClickListener {
-            Storage.bitmap?.let {
-
+            val testBool = network.finishedDownloadImage
+            if (Storage.bitmap != null && network.finishedDownloadImage)
+                {
                 Storage.saveImage(Storage.bitmap, fileName, {
                     if (ContextCompat.checkSelfPermission(
                             this,
@@ -79,16 +83,12 @@ class ChooseImage : AppCompatActivity() {
                     }
                     return@saveImage false
 
-                },this, this::onError)
+                }, this, this::statusMessage)
             }
-
-
-            /*val oneUri: String = Storage.findImageFromDirectory(fileName, this).toString()
-            Log.d(TAG, "DONE: ${oneUri}")*/
         }
     }
 
-    fun onError(text: String) {
+    fun statusMessage(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 

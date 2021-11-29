@@ -30,7 +30,6 @@ object Storage {
     private val state = Environment.getExternalStorageState()
     private val executor = Executors.newSingleThreadExecutor()
 
-    private var doneSavingImage: Boolean = false
     lateinit var bitmap: Bitmap
 
     private lateinit var lastSavedImageUri: Uri
@@ -42,7 +41,6 @@ object Storage {
     fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context,
                   statusMessage: (errText: String) -> Unit)
     {
-        doneSavingImage = false
         if (Environment.MEDIA_MOUNTED == state)
         {
             Log.d(TAG, "MEdia ins mounted")
@@ -58,18 +56,24 @@ object Storage {
                     try {
                         val resolver = appContext.contentResolver
                         lastSavedImageUri = resolver.insert(theBaseUri, values)!!
+
+                        val activity: Activity? = appContext as? Activity
+
                         lastSavedImageUri?.let {
                             val output = resolver.openOutputStream(lastSavedImageUri)
                             if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)) //if compress was successful
                             {
-                                statusMessage("Image was successfully saved on local storage")
+                                activity?.let {
+                                    runOnUIThread(it, statusMessage, "Image was successfully saved on local storage")
+                                }
                             }else {
-                                statusMessage("not able to compress bitmap to external storage")
+                                activity?.let {
+                                    runOnUIThread(it, statusMessage, "not able to compress bitmap to external storage")
+                                }
                             }
 
                             output?.flush()
                             output?.close()
-                            doneSavingImage = true
                         }
                         if (lastSavedImageUri == null) {
                             Log.d(TAG, "content resolver is null")
@@ -147,5 +151,14 @@ object Storage {
         //the other "/" in fileName will be replaced with underscore character.
         fileName = fileName.replace("/", "_")                      //"/" gets replaced with "_" in file names
         return fileName
+    }
+
+    fun runOnUIThread(activity: Activity, aFunction: (text: String) -> Unit, text: String)
+    {
+        activity?.runOnUiThread(object : Runnable {
+            override fun run() {
+                aFunction(text)
+            }
+        })
     }
 }
