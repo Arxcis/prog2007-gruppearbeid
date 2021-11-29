@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -24,6 +25,8 @@ class ChooseImage : AppCompatActivity() {
     private lateinit var network: INetwork
 
     private val executor = Executors.newSingleThreadExecutor()
+
+    private lateinit var fileName: String
 
     private val TAG = "ChooseImageAct"
 
@@ -45,9 +48,8 @@ class ChooseImage : AppCompatActivity() {
             Log.d("chooseImage", "url: ${it}")
         }
 
-        var fileName = url.substring(Constants.PROTOCOL_SWAPI_URL.length, url.lastIndex)            //remove https:// from filename.
-                                                                                    //the other "/" in fileName will be replaced with underscore character.
-        fileName = fileName.replace("/", "_")                      //"/" gets replaced with "_" in file names
+        fileName = Storage.parseURL(url)
+
         _binding.btnURLChooseImage.setOnClickListener {
 
             val urlText = _binding.etURLChooseImage.text.toString()
@@ -55,29 +57,39 @@ class ChooseImage : AppCompatActivity() {
                 this, {
                     Log.d(TAG, "happens twice?")
                     _binding.imageChooseImage.setImageBitmap(Storage.bitmap)
-                }, fileName, {
+                }, fileName,  this
+            )
+
+        }
+
+        _binding.btnChooseFinalImage.setOnClickListener {
+            Storage.bitmap?.let {
+
+                Storage.saveImage(Storage.bitmap, fileName, {
                     if (ContextCompat.checkSelfPermission(
                             this,
                             android.Manifest.permission.WRITE_EXTERNAL_STORAGE
                         ) ==
                         PackageManager.PERMISSION_GRANTED
                     ) {
-                        return@downloadImage true
+                        return@saveImage true
                     } else {
                         requestCode.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        return@downloadImage true
+                        return@saveImage true
                     }
-                    return@downloadImage false
+                    return@saveImage false
 
-                }, this
-            )
+                },this, this::onError)
+            }
 
+
+            /*val oneUri: String = Storage.findImageFromDirectory(fileName, this).toString()
+            Log.d(TAG, "DONE: ${oneUri}")*/
         }
+    }
 
-        _binding.btnChooseFinalImage.setOnClickListener {
-            val oneUri: String = Storage.findImageFromDirectory(fileName, this).toString()
-            Log.d(TAG, "DONE: ${oneUri}")
-        }
+    fun onError(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     fun checkPermission() : Boolean{

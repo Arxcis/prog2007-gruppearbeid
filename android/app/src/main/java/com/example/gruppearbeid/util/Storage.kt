@@ -39,8 +39,8 @@ object Storage {
     private val theBaseUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     @RequiresApi(Build.VERSION_CODES.P)
-    fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context, updateImage: () -> Unit,
-                  onError: (errText: String) -> Unit)
+    fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context,
+                  statusMessage: (errText: String) -> Unit)
     {
         doneSavingImage = false
         if (Environment.MEDIA_MOUNTED == state)
@@ -62,9 +62,9 @@ object Storage {
                             val output = resolver.openOutputStream(lastSavedImageUri)
                             if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)) //if compress was successful
                             {
-                                Log.d(TAG, "compressing was successful")
+                                statusMessage("Image was successfully saved on local storage")
                             }else {
-                                Log.d(TAG, "not able to compress bitmap to external storage")
+                                statusMessage("not able to compress bitmap to external storage")
                             }
 
                             output?.flush()
