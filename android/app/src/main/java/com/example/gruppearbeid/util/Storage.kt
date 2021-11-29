@@ -121,18 +121,24 @@ object Storage {
 
     fun listFilesDirectoryTwo(context: Context) {
         val baseURI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        val projection = arrayOf(MediaStore.Images.Media._ID)
+
+        val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
 
         val activity: Activity? = context as? Activity
         activity?.let {
-            val cursor: Cursor? = activity.contentResolver.query(lastSavedImageUri, projection, null, null,null)
+            val cursor: Cursor? = activity.contentResolver.query(baseURI, projection, null, null,null)
 
             cursor?.let {
-                if (cursor.moveToFirst()) {  //check if the first row of URI is not empty
+                it.moveToFirst()
+                while(it.moveToNext())
+                {
                     try {
-                        val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-                        val imageID = cursor.getLong(columnIndexID)
+                        val columnIndexID = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                        val imageID = it.getLong(columnIndexID)
                         val uriImage = Uri.withAppendedPath(baseURI, "" + imageID)
+                        val fileName = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+
+                        Log.d(TAG, "fileName: ${fileName}")
                         Log.d(TAG, uriImage.toString())
                     }catch (ex: IllegalArgumentException)
                     {
