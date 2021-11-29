@@ -4,10 +4,12 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.util.Patterns
+import androidx.annotation.RequiresApi
 import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Planet
@@ -60,6 +62,7 @@ class Network(private val ctx: Context) : INetwork {
 
     override lateinit var bitmap: Bitmap
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, permission: () -> Boolean, appContext: Context)
     //trying this:
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android

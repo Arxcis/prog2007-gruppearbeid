@@ -3,6 +3,7 @@ package com.example.gruppearbeid.util
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -18,6 +19,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.lang.NullPointerException
 import java.util.concurrent.Executors
 
@@ -62,6 +64,7 @@ object Storage {
                             output?.flush()
                             output?.close()
                             fetchImage(appContext, updateImage)
+                            listFilesDirectoryTwo(appContext)
                         }
                         if (lastSavedImageUri == null) {
                             Log.d(TAG, "content resolver is null")
@@ -114,6 +117,30 @@ object Storage {
             Log.d(TAG, "null exception")
         }
 
+    }
+
+    fun listFilesDirectoryTwo(context: Context) {
+        val baseURI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val projection = arrayOf(MediaStore.Images.Media._ID)
+
+        val activity: Activity? = context as? Activity
+        activity?.let {
+            val cursor: Cursor? = activity.contentResolver.query(lastSavedImageUri, projection, null, null,null)
+
+            cursor?.let {
+                if (cursor.moveToFirst()) {  //check if the first row of URI is not empty
+                    try {
+                        val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+                        val imageID = cursor.getLong(columnIndexID)
+                        val uriImage = Uri.withAppendedPath(baseURI, "" + imageID)
+                        Log.d(TAG, uriImage.toString())
+                    }catch (ex: IllegalArgumentException)
+                    {
+                        Log.d(TAG, "${ex.message}")
+                    }
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
