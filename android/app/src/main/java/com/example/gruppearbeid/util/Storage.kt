@@ -39,7 +39,8 @@ object Storage {
     private val theBaseUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     @RequiresApi(Build.VERSION_CODES.P)
-    fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context, updateImage: () -> Unit)
+    fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context, updateImage: () -> Unit,
+                  onError: (errText: String) -> Unit)
     {
         doneSavingImage = false
         if (Environment.MEDIA_MOUNTED == state)

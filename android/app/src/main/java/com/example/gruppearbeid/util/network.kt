@@ -29,7 +29,7 @@ import kotlin.math.ceil
 import kotlin.math.max
 
 interface INetwork {
-    var bitmap: Bitmap
+    var finishedDownloadImage: Boolean
 
     fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, permission: () -> Boolean, appContext: Context)
     fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
@@ -60,7 +60,7 @@ class Network(private val ctx: Context) : INetwork {
     private val TAG = "Network.util"
     private val BASE_URL = "https://swapi.dev/api"
 
-    override lateinit var bitmap: Bitmap
+    override var finishedDownloadImage: Boolean = false
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, permission: () -> Boolean, appContext: Context)
@@ -68,6 +68,7 @@ class Network(private val ctx: Context) : INetwork {
     //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
     {
         executor.execute {
+            finishedDownloadImage = false
             if (Patterns.WEB_URL.matcher(url).matches())
             {
                 try {
@@ -80,9 +81,9 @@ class Network(private val ctx: Context) : INetwork {
                     }
 
                     val input = connection.inputStream
-                    bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)!!
+                    Storage.bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)!!
 
-                    if (bitmap != null) {
+                    if (Storage.bitmap != null) {
                                                             //Got the message "only the original view hierarchy
                                                            //can touch its views. Therefore the imageView is updated
                                                                //on its UI thread instead of through the thread from
@@ -92,7 +93,7 @@ class Network(private val ctx: Context) : INetwork {
                                 updateImage()
                             }
                         })
-                        Storage.saveImage(bitmap, fileName, permission, activity, updateImage)
+                        finishedDownloadImage = true
                     } else {
                         Log.d(TAG, "bitmap is null")
                     }

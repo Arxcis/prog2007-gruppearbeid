@@ -54,7 +54,7 @@ class ChooseImage : AppCompatActivity() {
             network.downloadImage(urlText,
                 this, {
                     Log.d(TAG, "happens twice?")
-                    _binding.imageChooseImage.setImageBitmap(network.bitmap)
+                    _binding.imageChooseImage.setImageBitmap(Storage.bitmap)
                 }, fileName, {
                     if (ContextCompat.checkSelfPermission(
                             this,
