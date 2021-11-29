@@ -3,6 +3,7 @@ package com.example.gruppearbeid
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.StrictMode
 import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
@@ -13,6 +14,7 @@ import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
 import com.example.gruppearbeid.util.Storage
+import java.util.concurrent.Executors
 
 class ChooseImage : AppCompatActivity() {
     private lateinit var _binding: ActivityChooseImageBinding
@@ -21,6 +23,8 @@ class ChooseImage : AppCompatActivity() {
     private lateinit var requestCode: ActivityResultLauncher<String>
     private lateinit var network: INetwork
 
+    private val executor = Executors.newSingleThreadExecutor()
+
     private val TAG = "ChooseImageAct"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +32,10 @@ class ChooseImage : AppCompatActivity() {
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
         setContentView(_binding.root)
 
+        executor.execute {
+            val policy: StrictMode.VmPolicy = StrictMode.VmPolicy.Builder().detectLeakedClosableObjects().build()   //for debugging purposes
+            StrictMode.setVmPolicy(policy)
+        }
         network = Network(this)
         requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean -> }
 

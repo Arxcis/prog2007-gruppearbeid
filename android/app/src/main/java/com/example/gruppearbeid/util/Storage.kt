@@ -44,7 +44,7 @@ object Storage {
         if (Environment.MEDIA_MOUNTED == state)
         {
             Log.d(TAG, "MEdia ins mounted")
-            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.Q)   //API level is under 29
+            if (android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.Q)   //API level is  29 higher
             {
                 if (permission())
                 {  //if have permissiion to write to external storage.
@@ -113,7 +113,7 @@ object Storage {
                         Log.d(TAG, "${ex.message}")
                     }
                 } while(it.moveToNext())
-                cursor.close()
+                it.close()
             }
         }
         return null         //return null if didn't find title or activity or cursor is null
