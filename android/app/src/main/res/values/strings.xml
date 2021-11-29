@@ -26,6 +26,7 @@
     <string name="URL_hint">URL</string>
     <string name="Btn_URL_text">Load image from URL</string>
     <string name="Btn_chooseFinalImage_text">Add Image</string>
+    <string name="image_textView">Images</string>
 
     <string-array name="choices_select_image">
         <item>@string/planets</item>

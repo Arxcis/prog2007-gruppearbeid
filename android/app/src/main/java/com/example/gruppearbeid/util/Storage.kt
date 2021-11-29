@@ -113,17 +113,17 @@ object Storage {
                         Log.d(TAG, "${ex.message}")
                     }
                 } while(it.moveToNext())
-                it.close()
             }
+            cursor?.close()
         }
         return null         //return null if didn't find title or activity or cursor is null
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    fun fetchImage(context: Context, updateImage: () -> Unit) {
+    fun fetchImage(context: Context, updateImage: () -> Unit, uri: Uri) {
         try {
             lastSavedImageUri?.let {
-                val imgDecoder: ImageDecoder.Source = ImageDecoder.createSource(context.contentResolver, lastSavedImageUri)
+                val imgDecoder: ImageDecoder.Source = ImageDecoder.createSource(context.contentResolver, uri)
                 val bitmap = ImageDecoder.decodeBitmap(imgDecoder)
 
                 val activity: Activity? = context as? Activity
@@ -139,5 +139,12 @@ object Storage {
         {
             Log.d(TAG, "${ex.message}")
         }
+    }
+
+    fun parseURL(url: String) : String {
+        var fileName = url.substring(Constants.PROTOCOL_SWAPI_URL.length, url.lastIndex)            //remove https:// from filename.
+        //the other "/" in fileName will be replaced with underscore character.
+        fileName = fileName.replace("/", "_")                      //"/" gets replaced with "_" in file names
+        return fileName
     }
 }

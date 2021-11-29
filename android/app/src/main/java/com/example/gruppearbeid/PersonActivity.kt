@@ -2,6 +2,8 @@ package com.example.gruppearbeid
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.view.menu.MenuView
@@ -20,16 +22,23 @@ class PersonActivity : AppCompatActivity() {
     private lateinit var network: INetwork
 
     private val viewModel: ItemViewModel by viewModels()
+    private lateinit var person: Person
+    private lateinit var image: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_person)
 
         // 1. Get extras
-        val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
-        title = "👨‍🦲 ${person?.name}"
+        val personNullable = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
+        title = "👨‍🦲 ${personNullable?.name}"
 
-        viewModel.selectItem(person?.url ?: "")
+        personNullable?.let {
+            viewModel.selectItem(personNullable.url)
+            person = personNullable
+        }
+
+        fetchImage()
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->
@@ -79,5 +88,18 @@ class PersonActivity : AppCompatActivity() {
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
         }
+    }
+
+    fun fetchImage() {
+        //test if have image
+        //load image into the bitmap.
+        image = findViewById(R.id.image_Person)
+
+        val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this)
+        uriOfImage?.let {
+            Log.d("PersonAct", uriOfImage.toString())
+        }
+
+
     }
 }
