@@ -87,11 +87,11 @@ class Network(private val ctx: Context) : INetwork {
                                                            //can touch its views. Therefore the imageView is updated
                                                                //on its UI thread instead of through the thread from
                                                                    //Network.util.
-                        /*activity.runOnUiThread(object : Runnable {
+                        activity.runOnUiThread(object : Runnable {
                             override fun run() {
                                 updateImage()
                             }
-                        })*/
+                        })
                         Storage.saveImage(bitmap, fileName, permission, activity, updateImage)
                     } else {
                         Log.d(TAG, "bitmap is null")

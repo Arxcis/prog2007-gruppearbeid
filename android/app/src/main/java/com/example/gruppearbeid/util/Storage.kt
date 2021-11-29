@@ -63,8 +63,6 @@ object Storage {
 
                             output?.flush()
                             output?.close()
-                            fetchImage(appContext, updateImage)
-                            listFilesDirectoryTwo(appContext)
                         }
                         if (lastSavedImageUri == null) {
                             Log.d(TAG, "content resolver is null")
@@ -76,50 +74,12 @@ object Storage {
                     {
                         Log.d(TAG, "could not find the provided file URI.") //from ContentResolver.openOutputStream()
                     }
-
-/*
-                    Log.d(TAG, "thread for compressing and saving image has started")
-                    executor.execute {
-                        try {
-                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutput)
-                            fileOutput.flush()
-                            fileOutput.close()
-                            Log.d(TAG, "Thread for compressing and saving image has finished.")
-                        } catch (ex: IOException) {
-                            Log.d(TAG, "Input-output exception occurred")
-                        } catch (ex: Exception) {
-                            Log.d(TAG, "an exception occurred. Please try again.")
-                            Log.d(TAG, "${ex.message}")
-                        }*/
-                    }
                 }
             }
         }
-
-    fun listFilesDirectory() {
-        try {
-            val uriStorage: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-            val fileObject = File(uriStorage.path)
-
-            val filesInDirectory = fileObject.listFiles()  //use this, loop through this.
-
-            filesInDirectory?.let {
-                Log.d(TAG, "directory path not null")
-                for (i in filesInDirectory.indices)
-                {
-                    Log.d(TAG, "${filesInDirectory[i]}")
-                }
-            }
-
-        }catch(ex: NullPointerException)
-        {
-            Log.d(TAG, "${ex.message}")
-            Log.d(TAG, "null exception")
-        }
-
     }
 
-    fun listFilesDirectoryTwo(context: Context) {
+    fun listFilesDirectory(context: Context) {
         val baseURI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
@@ -169,7 +129,5 @@ object Storage {
         {
             Log.d(TAG, "${ex.message}")
         }
-
-
     }
 }
