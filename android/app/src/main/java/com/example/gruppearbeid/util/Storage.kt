@@ -31,6 +31,7 @@ object Storage {
     private val executor = Executors.newSingleThreadExecutor()
 
     private var doneSavingImage: Boolean = false
+    lateinit var bitmap: Bitmap
 
     private lateinit var lastSavedImageUri: Uri
     private val TAG = "Storage.util"
@@ -120,21 +121,20 @@ object Storage {
     }
 
     @RequiresApi(Build.VERSION_CODES.P)
-    fun fetchImage(context: Context, updateImage: () -> Unit, uri: Uri) {
+    fun displayImage(context: Context, updateImage: () -> Unit, uri: Uri) {
         try {
-            lastSavedImageUri?.let {
-                val imgDecoder: ImageDecoder.Source = ImageDecoder.createSource(context.contentResolver, uri)
-                val bitmap = ImageDecoder.decodeBitmap(imgDecoder)
+            val imgDecoder: ImageDecoder.Source = ImageDecoder.createSource(context.contentResolver, uri)
+            bitmap = ImageDecoder.decodeBitmap(imgDecoder)
 
-                val activity: Activity? = context as? Activity
-                activity?.let {                     //try to update the bitmap with one found from external storage
-                    it.runOnUiThread(object: Runnable {
-                        override fun run() {
-                            updateImage()
-                        }
-                    })
-                }
+            val activity: Activity? = context as? Activity
+            activity?.let {                     //try to update the bitmap with one found from external storage
+                it.runOnUiThread(object: Runnable {
+                    override fun run() {
+                        updateImage()
+                    }
+                })
             }
+
         } catch(ex: IOException)
         {
             Log.d(TAG, "${ex.message}")

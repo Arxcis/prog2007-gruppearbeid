@@ -1,11 +1,13 @@
 package com.example.gruppearbeid
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.view.menu.MenuView
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Observer
@@ -90,6 +92,7 @@ class PersonActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun fetchImage() {
         //test if have image
         //load image into the bitmap.
@@ -98,6 +101,9 @@ class PersonActivity : AppCompatActivity() {
         val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this)
         uriOfImage?.let {
             Log.d("PersonAct", uriOfImage.toString())
+            Storage.displayImage(this, {
+                image.setImageBitmap(Storage.bitmap)
+            },uriOfImage)
         }
 
 
