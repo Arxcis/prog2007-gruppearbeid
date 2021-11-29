@@ -27,6 +27,8 @@ class PersonActivity : AppCompatActivity() {
     private lateinit var person: Person
     private lateinit var image: ImageView
 
+    private val TAG = "PersonActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_person)
@@ -40,7 +42,10 @@ class PersonActivity : AppCompatActivity() {
             person = personNullable
         }
 
-        fetchImage()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            image = findViewById(R.id.image_Person)
+            fetchImage()
+        }
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->
@@ -92,20 +97,24 @@ class PersonActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            fetchImage()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.P)
     fun fetchImage() {
         //test if have image
         //load image into the bitmap.
-        image = findViewById(R.id.image_Person)
 
         val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this)
         uriOfImage?.let {
             Log.d("PersonAct", uriOfImage.toString())
             Storage.displayImage(this, {
                 image.setImageBitmap(Storage.bitmap)
-            },uriOfImage)
+                },uriOfImage)
         }
-
-
     }
 }
