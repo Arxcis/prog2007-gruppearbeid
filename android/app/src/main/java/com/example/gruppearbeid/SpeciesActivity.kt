@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PeopleAdapter
+import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.types.Film
 import com.example.gruppearbeid.types.Person
 import com.example.gruppearbeid.types.Species
@@ -25,6 +26,18 @@ class SpeciesActivity : AppCompatActivity() {
         // 1. Get extras
         val species = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Species
         title = "🧬 ${species?.name}"
+        ActivitySpeciesClassification.text = "Classification: ${species?.classification}"
+        ActivitySpeciesDesignation.text = "Designation: ${species?.designation}"
+        ActivitySpeciesAverageHeight.text = "Average height: ${species?.average_height} cm"
+        ActivitySpeciesAverageLifespan.text = "Average lifespan: ${species?.average_lifespan} years"
+        ActivitySpeciesLanguage.text = "Language: ${species?.language}"
+
+        // 2. Init homeworld adapter
+        val homeworldAdapter = PlanetsAdapter{ homeworld ->
+            navigateToThing(this, PlanetActivity::class.java, homeworld)
+        }
+        ActivitySpeciesHomeworld.adapter = homeworldAdapter
+        ActivitySpeciesHomeworld.layoutManager = LinearLayoutManager(this)
 
         // 2. Init people adapter
         val peopleAdapter = PeopleAdapter{ person ->
@@ -40,9 +53,15 @@ class SpeciesActivity : AppCompatActivity() {
         ActivitySpeciesFilms.adapter = filmsAdapter
         ActivitySpeciesFilms.layoutManager = LinearLayoutManager(this)
 
+
+
         // 3. Get data from network
         network = Network(this)
         if (species != null) {
+            network.getPlanetsByURL(species.homeworld,
+                onSuccess = { homeworld -> homeworldAdapter.refresh(homeworld) },
+                onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
+            )
             network.getPeopleByURL(species.people,
                 onSuccess = { people -> peopleAdapter.refresh(people) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }

@@ -330,6 +330,8 @@ fun parsePerson(item: JSONObject): Person {
     return Person(
         name = item.getString("name"),
         height = item.getString("height"),
+        mass = item.getString("mass"),
+        hair_color = item.getString("hair_color"),
         birth_year = item.getString("birth_year"),
         gender = item.getString("gender"),
         homeworld = homeworld,
@@ -393,9 +395,17 @@ fun parseSpecies(item: JSONObject): Species {
     for (k in 0 until jsonFilms.length()) {
         films.add(jsonFilms.get(k).toString())
     }
+    // Homeworld:
+    val homeworld = arrayListOf(item.getString("homeworld"))
 
     return Species(
         name = item.getString("name"),
+        classification = item.getString("classification"),
+        designation = item.getString("designation"),
+        average_height = item.getString("average_height"),
+        average_lifespan = item.getString("average_lifespan"),
+        language = item.getString("language"),
+        homeworld = homeworld,
         people = people,
         films = films,
     )
