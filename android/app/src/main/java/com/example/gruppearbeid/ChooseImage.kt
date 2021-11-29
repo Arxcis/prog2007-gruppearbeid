@@ -21,6 +21,8 @@ class ChooseImage : AppCompatActivity() {
     private lateinit var requestCode: ActivityResultLauncher<String>
     private lateinit var network: INetwork
 
+    private val TAG = "ChooseImageAct"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityChooseImageBinding.inflate(layoutInflater)
@@ -43,6 +45,7 @@ class ChooseImage : AppCompatActivity() {
             val urlText = _binding.etURLChooseImage.text.toString()
             network.downloadImage(urlText,
                 this, {
+                    Log.d(TAG, "happens twice?")
                     _binding.imageChooseImage.setImageBitmap(network.bitmap)
                 }, fileName, {
                     if (ContextCompat.checkSelfPermission(
@@ -60,7 +63,6 @@ class ChooseImage : AppCompatActivity() {
 
                 }, this
             )
-            Storage.listFilesDirectory()
 
         }
     }
