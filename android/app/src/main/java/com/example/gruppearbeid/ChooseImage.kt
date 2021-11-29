@@ -12,6 +12,7 @@ import com.example.gruppearbeid.databinding.ActivityChooseImageBinding
 import com.example.gruppearbeid.util.Constants
 import com.example.gruppearbeid.util.INetwork
 import com.example.gruppearbeid.util.Network
+import com.example.gruppearbeid.util.Storage
 
 class ChooseImage : AppCompatActivity() {
     private lateinit var _binding: ActivityChooseImageBinding
@@ -59,6 +60,7 @@ class ChooseImage : AppCompatActivity() {
 
                 }, this
             )
+            Storage.listFilesDirectory()
 
         }
     }

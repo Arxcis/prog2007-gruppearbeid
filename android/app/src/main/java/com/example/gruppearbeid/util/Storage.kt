@@ -87,10 +87,11 @@ object Storage {
 
     fun listFilesDirectory() {
         try {
-            val uriStorage: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val uriStorage: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
             val fileObject = File(uriStorage.path)
 
-            val filesInDirectory = fileObject.listFiles()  //use this, loop through this. 
+            val filesInDirectory = fileObject.listFiles()  //use this, loop through this.
+            Log.d(TAG, "listDir works")
         }catch(ex: NullPointerException)
         {
             Log.d(TAG, "null exception")

@@ -30,7 +30,6 @@ class PlanetsActivity : AppCompatActivity() {
     private var prev: String? = null
     private var next: String? = null
 
-    private lateinit var requestCode: ActivityResultLauncher<String>
     val URL = "https://image.slidesharecdn.com/7thingsstockimages-140124084729-phpapp01/95/7-types-of-stock-images-you-must-stop-using-today-40-638.jpg?cb=1390828351"
 
 
@@ -38,13 +37,12 @@ class PlanetsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planets)
         title = getString(R.string.planets)
-        
-        // WIP: Just for testing
-        requestCode = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean -> }
 
         // 1. Init adapter
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
+
+        network = Network(this)
 
         // 2. Init search
         val search = { search: String -> network.searchPlanets(search, onSuccess, onError) }
@@ -72,18 +70,5 @@ class PlanetsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         configureBottomNavigation(this, PlanetsNavigation, R.id.PlanetsMenuItem)
-    }
-
-    fun checkPermission() : Boolean{
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED)
-        {
-            return true
-        }
-        else {
-            requestCode.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            return true
-        }
-        return false
     }
 }
