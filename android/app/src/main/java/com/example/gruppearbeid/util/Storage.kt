@@ -14,6 +14,7 @@ import android.util.Log
 import androidx.annotation.BoolRes
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -21,6 +22,7 @@ import java.io.IOException
 import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.lang.NullPointerException
+import java.net.URI
 import java.util.concurrent.Executors
 
 object Storage {
@@ -28,13 +30,17 @@ object Storage {
     private val state = Environment.getExternalStorageState()
     private val executor = Executors.newSingleThreadExecutor()
 
-    private lateinit var lastSavedImageUri: Uri
+    private var doneSavingImage: Boolean = false
 
+    private lateinit var lastSavedImageUri: Uri
     private val TAG = "Storage.util"
+
+    private val theBaseUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
     @RequiresApi(Build.VERSION_CODES.P)
     fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context, updateImage: () -> Unit)
     {
+        doneSavingImage = false
         if (Environment.MEDIA_MOUNTED == state)
         {
             Log.d(TAG, "MEdia ins mounted")
@@ -47,11 +53,9 @@ object Storage {
                         put(MediaStore.Images.ImageColumns.DISPLAY_NAME, "${fileName}.jpg")
                     }
 
-                    val imageUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
                     try {
                         val resolver = appContext.contentResolver
-                        lastSavedImageUri = resolver.insert(imageUri, values)!!
+                        lastSavedImageUri = resolver.insert(theBaseUri, values)!!
                         lastSavedImageUri?.let {
                             val output = resolver.openOutputStream(lastSavedImageUri)
                             if (bitmap.compress(Bitmap.CompressFormat.JPEG, 100, output)) //if compress was successful
@@ -63,6 +67,7 @@ object Storage {
 
                             output?.flush()
                             output?.close()
+                            doneSavingImage = true
                         }
                         if (lastSavedImageUri == null) {
                             Log.d(TAG, "content resolver is null")
@@ -79,34 +84,39 @@ object Storage {
         }
     }
 
-    fun listFilesDirectory(context: Context) {
-        val baseURI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
+    fun findImageFromDirectory(fileName: String, context: Context) : Uri? {
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
 
         val activity: Activity? = context as? Activity
         activity?.let {
-            val cursor: Cursor? = activity.contentResolver.query(baseURI, projection, null, null,null)
+
+            val cursor: Cursor? = activity.contentResolver.query(theBaseUri, projection, null, null,null)
 
             cursor?.let {
                 it.moveToFirst()
-                while(it.moveToNext())
-                {
+                do {
                     try {
                         val columnIndexID = it.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
                         val imageID = it.getLong(columnIndexID)
-                        val uriImage = Uri.withAppendedPath(baseURI, "" + imageID)
-                        val fileName = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
+                        val uriImage = Uri.withAppendedPath(theBaseUri, "" + imageID)
+                        val currentFileName = it.getString(it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME))
 
-                        Log.d(TAG, "fileName: ${fileName}")
+                        Log.d(TAG, "fileName: ${currentFileName}")
                         Log.d(TAG, uriImage.toString())
+                        if (currentFileName.contains(fileName))
+                        {
+                            return uriImage
+                        }
+
                     }catch (ex: IllegalArgumentException)
                     {
                         Log.d(TAG, "${ex.message}")
                     }
-                }
+                } while(it.moveToNext())
+                cursor.close()
             }
         }
+        return null         //return null if didn't find title or activity or cursor is null
     }
 
     @RequiresApi(Build.VERSION_CODES.P)

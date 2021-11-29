@@ -37,9 +37,9 @@ class ChooseImage : AppCompatActivity() {
             Log.d("chooseImage", "url: ${it}")
         }
 
-        val fileName = url.substring(("https://").length, url.lastIndex)            //remove https:// from filename.
+        var fileName = url.substring(Constants.PROTOCOL_SWAPI_URL.length, url.lastIndex)            //remove https:// from filename.
                                                                                     //the other "/" in fileName will be replaced with underscore character.
-
+        fileName = fileName.replace("/", "_")                      //"/" gets replaced with "_" in file names
         _binding.btnURLChooseImage.setOnClickListener {
 
             val urlText = _binding.etURLChooseImage.text.toString()
@@ -64,6 +64,11 @@ class ChooseImage : AppCompatActivity() {
                 }, this
             )
 
+        }
+
+        _binding.btnChooseFinalImage.setOnClickListener {
+            val oneUri: String = Storage.findImageFromDirectory(fileName, this).toString()
+            Log.d(TAG, "DONE: ${oneUri}")
         }
     }
 

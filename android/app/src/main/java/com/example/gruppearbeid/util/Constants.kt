@@ -11,5 +11,6 @@ class Constants {
         const val RESULTS_PAGE_SIZE = 10
         const val DOT_BIG = "•"
         const val DOT_SMALL ="∙"
+        const val PROTOCOL_SWAPI_URL = "https://"
     }
 }
