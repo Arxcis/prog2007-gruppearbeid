@@ -51,6 +51,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/homeworld" />
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentPerson"
+                android:name="com.example.gruppearbeid.addImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ActivityPersonHomeworld"
@@ -90,6 +97,16 @@
                 android:id="@+id/ActivityPersonSpecies"
                 style="@style/activity_content"
                 android:layout_width="match_parent" />
+            <TextView
+                android:text="@string/image_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <ImageView
+                android:id="@+id/image_Person"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
         </LinearLayout>
     </ScrollView>
 

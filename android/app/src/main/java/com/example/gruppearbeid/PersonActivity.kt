@@ -1,35 +1,56 @@
 package com.example.gruppearbeid
 
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
+import androidx.appcompat.view.menu.MenuView
+import androidx.core.os.bundleOf
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.FilmsAdapter
 import com.example.gruppearbeid.adapters.PlanetsAdapter
 import com.example.gruppearbeid.adapters.SpeciesListAdapter
 import com.example.gruppearbeid.adapters.StarshipsAdapter
 import com.example.gruppearbeid.types.*
-import com.example.gruppearbeid.util.Constants
-import com.example.gruppearbeid.util.INetwork
-import com.example.gruppearbeid.util.Network
-import com.example.gruppearbeid.util.navigateToThing
+import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_person.*
 
 class PersonActivity : AppCompatActivity() {
     private lateinit var network: INetwork
+
+    private val viewModel: ItemViewModel by viewModels()
+    private lateinit var person: Person
+    private lateinit var image: ImageView
+
+    private val TAG = "PersonActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_person)
 
         // 1. Get extras
-        val person = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
-        title = "👨‍🦲 ${person?.name}"
-        ActivityPersonHeight.text = "Height: ${person?.height} cm"
-        ActivityPersonWeight.text = "Weight: ${person?.mass} kg"
-        ActivityPersonHairColor.text = "Hair color: ${person?.hair_color}"
-        ActivityPersonBirthYear.text = "Birth year: ${person?.birth_year}"
-        ActivityPersonGender.text = "Gender: ${person?.gender}"
+        val personNullable = intent.extras?.getSerializable(Constants.EXTRA_THING) as? Person
+        title = "👨‍🦲 ${personNullable?.name}"
+        ActivityPersonHeight.text = "Height: ${personNullable?.height} cm"
+        ActivityPersonWeight.text = "Weight: ${personNullable?.mass} kg"
+        ActivityPersonHairColor.text = "Hair color: ${personNullable?.hair_color}"
+        ActivityPersonBirthYear.text = "Birth year: ${personNullable?.birth_year}"
+        ActivityPersonGender.text = "Gender: ${personNullable?.gender}"
+
+        personNullable?.let {
+            viewModel.selectItem(personNullable.url)
+            person = personNullable
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            image = findViewById(R.id.image_Person)
+            fetchImage()
+        }
 
         // 2. Init homeworld adapter
         val homeworldAdapter = PlanetsAdapter{ homeworld ->
@@ -78,6 +99,27 @@ class PersonActivity : AppCompatActivity() {
                 onSuccess = { species -> speciesListAdapter.refresh(species) },
                 onError = {  error -> Toast.makeText(this, error, Toast.LENGTH_SHORT).show() }
             )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            fetchImage()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    fun fetchImage() {
+        //test if have image
+        //load image into the bitmap.
+
+        val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this)
+        uriOfImage?.let {
+            Log.d("PersonAct", uriOfImage.toString())
+            Storage.displayImage(this, {
+                image.setImageBitmap(Storage.bitmap)
+                },uriOfImage)
         }
     }
 }

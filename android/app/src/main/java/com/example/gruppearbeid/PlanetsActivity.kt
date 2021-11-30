@@ -1,20 +1,37 @@
 package com.example.gruppearbeid
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gruppearbeid.adapters.PlanetsAdapter
+import com.example.gruppearbeid.databinding.ActivityPlanetsBinding
 import com.example.gruppearbeid.types.Planet
 import com.example.gruppearbeid.types.Results
 import com.example.gruppearbeid.util.*
 import kotlinx.android.synthetic.main.activity_planets.*
+import com.example.gruppearbeid.util.configureBottomNavigation
+import com.example.gruppearbeid.util.makeTextWatcherWithDebounce
+import com.example.gruppearbeid.util.navigateToThing
+import java.util.jar.Manifest
 
 class PlanetsActivity : AppCompatActivity() {
     private lateinit var network: INetwork
     private val adapter = PlanetsAdapter{ planet -> navigateToThing(this, PlanetActivity::class.java, planet) }
     private var prev: String? = null
     private var next: String? = null
+
+    val URL = "https://image.slidesharecdn.com/7thingsstockimages-140124084729-phpapp01/95/7-types-of-stock-images-you-must-stop-using-today-40-638.jpg?cb=1390828351"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +42,9 @@ class PlanetsActivity : AppCompatActivity() {
         PlanetRecycler.adapter = adapter
         PlanetRecycler.layoutManager = LinearLayoutManager(this)
 
-        // 2. Init search
         network = Network(this)
+
+        // 2. Init search
         val search = { search: String -> network.searchPlanets(search, onSuccess, onError) }
         search("")
         PlanetsSearch.addTextChangedListener(

@@ -44,5 +44,6 @@ class FilmsActivity : AppCompatActivity() {
         super.onResume()
         configureBottomNavigation(this, FilmsNavigation, R.id.FilmsMenuItem)
     }
+
 }
 

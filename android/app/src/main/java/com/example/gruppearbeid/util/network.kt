@@ -1,23 +1,37 @@
 package com.example.gruppearbeid.util
 
+import android.app.Activity
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.util.Patterns
+import androidx.annotation.RequiresApi
+import com.example.gruppearbeid.types.Film
+import com.example.gruppearbeid.types.Person
+import com.example.gruppearbeid.types.Planet
+import com.example.gruppearbeid.types.Starship
 import com.example.gruppearbeid.adapters.*
 import com.example.gruppearbeid.types.*
-import com.example.gruppearbeid.util.Constants.Companion.BASE_URL
 import java.util.concurrent.Executors
 import org.json.JSONObject
 
 import org.json.JSONException
 import java.io.*
-import java.net.HttpURLConnection
+import java.net.SocketTimeoutException
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
+import java.net.HttpURLConnection
 import kotlin.math.ceil
 import kotlin.math.max
 
 interface INetwork {
+    var finishedDownloadImage: Boolean
+
+    fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context, onStatus: (errTxt: String) -> Unit)
     fun searchFilms(search: String,       onSuccess: (res: Results<Film>) -> Unit,     onError: (text: String) -> Unit)
     fun searchPeople(search: String,      onSuccess: (res: Results<Person>) -> Unit,   onError: (text: String) -> Unit)
     fun searchPlanets(search: String,     onSuccess: (res: Results<Planet>) -> Unit,   onError: (text: String) -> Unit)
@@ -42,6 +56,80 @@ class Network(private val ctx: Context) : INetwork {
     private val responseCache: ICache = SimpleCache(ctx, Constants.CACHE_REQUESTS)
     private val executor = Executors.newSingleThreadExecutor()
     private val handler = Handler(Looper.getMainLooper())
+
+    private val TAG = "Network.util"
+    private val BASE_URL = "https://swapi.dev/api"
+
+    override var finishedDownloadImage: Boolean = false
+
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun downloadImage(url: String, activity: Activity, updateImage: () -> Unit, fileName: String, appContext: Context,
+                               onStatus: (errTxt: String) -> Unit)
+    //trying this:
+    //https://stackoverflow.com/questions/18210700/best-method-to-download-image-from-url-in-android
+    {
+        executor.execute {
+            finishedDownloadImage = false
+            if (Patterns.WEB_URL.matcher(url).matches())
+            {
+                try {
+                    runOnUIThread(activity, onStatus, "starting to fetch image from URL")
+                    val realURL = URL(url)
+                    val connection = realURL.openConnection() as HttpsURLConnection
+
+                    val bitmapOption = BitmapFactory.Options().apply {
+                        inSampleSize = 2    //load image where widht and height is divided by two to save memory
+                                            //when displaying picture
+                    }
+
+                    val input = connection.inputStream
+                    Storage.bitmap = BitmapFactory.decodeStream(input,null,bitmapOption)!!
+
+                    if (Storage.bitmap != null) {
+                                                            //Got the message "only the original view hierarchy
+                                                           //can touch its views. Therefore the imageView is updated
+                                                               //on its UI thread instead of through the thread from
+                                                                   //Network.util.
+                        activity.runOnUiThread(object : Runnable {
+                            override fun run() {
+                                updateImage()
+                            }
+                        })
+                        finishedDownloadImage = true
+                    } else {
+                        Log.d(TAG, "bitmap is null")
+                    }
+
+                } catch(ex: SocketTimeoutException) {
+                    Log.d(TAG, "socket timed out")
+                } catch(ex: IOException) {
+                    Log.d(TAG, "Input output error. Is WIFI enabled?")
+                    runOnUIThread(activity, onStatus, "Input output error. Is WIFI enabled?")
+                    Log.d(TAG, ex.message.toString())
+                } catch (ex: IllegalArgumentException)
+                {
+                    Log.d("Planets", "illegalARgumentException in BitmapFactory.decodeStream()")
+                }
+                catch(ex: Exception) {
+                    Log.d(TAG, "an exception occurred")
+                    Log.d(TAG, "${ex.message}")
+                }
+
+            }else {
+                Log.d(TAG, "the format of the URL was incorrect.")
+            }
+
+        }
+    }
+
+    fun runOnUIThread(activity: Activity, aFunction: (text: String) -> Unit, text: String)
+    {
+        activity?.runOnUiThread(object : Runnable {
+            override fun run() {
+                aFunction(text)
+            }
+        })
+    }
 
     override fun searchFilms(search: String, onSuccess: (res: Results<Film>) -> Unit, onError: (text: String) -> Unit) {
         getThings("$BASE_URL/films?search=${search}", ::parseFilms, onSuccess, onError)
@@ -328,6 +416,7 @@ fun parsePerson(item: JSONObject): Person {
     }
 
     return Person(
+        url = item.getString("url"),
         name = item.getString("name"),
         height = item.getString("height"),
         mass = item.getString("mass"),

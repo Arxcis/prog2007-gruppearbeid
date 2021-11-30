@@ -81,7 +81,6 @@
                     android:textAlignment="center"
                     android:visibility="invisible" />
             </LinearLayout>
-
         </LinearLayout>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
