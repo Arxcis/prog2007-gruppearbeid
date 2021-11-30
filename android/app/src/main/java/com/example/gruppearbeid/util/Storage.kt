@@ -41,6 +41,7 @@ object Storage {
     fun saveImage(bitmap: Bitmap, fileName: String, permission: () -> Boolean, appContext: Context,
                   statusMessage: (errText: String) -> Unit)
     {
+        val activity: Activity? = appContext as? Activity
         if (Environment.MEDIA_MOUNTED == state)
         {
             Log.d(TAG, "MEdia ins mounted")
@@ -57,7 +58,7 @@ object Storage {
                         val resolver = appContext.contentResolver
                         lastSavedImageUri = resolver.insert(theBaseUri, values)!!
 
-                        val activity: Activity? = appContext as? Activity
+
 
                         lastSavedImageUri?.let {
                             val output = resolver.openOutputStream(lastSavedImageUri)
@@ -81,6 +82,9 @@ object Storage {
 
                     }catch (ex: Exception) {
                         Log.d(TAG, "exception: ${ex.message}")
+                        activity?.let {
+                            runOnUIThread(it, statusMessage, "Something went wrong.")
+                        }
                     } catch(ex:FileNotFoundException)
                     {
                         Log.d(TAG, "could not find the provided file URI.") //from ContentResolver.openOutputStream()
@@ -90,7 +94,7 @@ object Storage {
         }
     }
 
-    fun findImageFromDirectory(fileName: String, context: Context) : Uri? {
+    fun findImageFromDirectory(fileName: String, context: Context, statusMessage: (errText: String) -> Unit) : Uri? {
         val projection = arrayOf(MediaStore.Images.Media._ID, MediaStore.Images.Media.DISPLAY_NAME)
 
         val activity: Activity? = context as? Activity
@@ -117,6 +121,13 @@ object Storage {
                     }catch (ex: IllegalArgumentException)
                     {
                         Log.d(TAG, "${ex.message}")
+                    }
+                    catch (ex: Exception)
+                    {
+                        val activity: Activity? = context as? Activity
+                        activity?.let {
+                            runOnUIThread(activity, statusMessage, "Something went wrong when fetching image")
+                        }
                     }
                 } while(it.moveToNext())
             }

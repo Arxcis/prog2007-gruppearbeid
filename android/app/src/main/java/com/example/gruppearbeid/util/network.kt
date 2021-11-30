@@ -111,8 +111,8 @@ class Network(private val ctx: Context) : INetwork {
                     Log.d("Planets", "illegalARgumentException in BitmapFactory.decodeStream()")
                 }
                 catch(ex: Exception) {
-                    Log.d(TAG, "an exception occurred")
                     Log.d(TAG, "${ex.message}")
+                    runOnUIThread(activity, onStatus, "Something went wrong.")
                 }
 
             }else {
