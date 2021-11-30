@@ -109,12 +109,16 @@ class PersonActivity : AppCompatActivity() {
         }
     }
 
+    fun statusMessage(text: String) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
+    }
+
     @RequiresApi(Build.VERSION_CODES.P)
     fun fetchImage() {
         //test if have image
         //load image into the bitmap.
 
-        val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this)
+        val uriOfImage = Storage.findImageFromDirectory(Storage.parseURL(person.url), this, this::statusMessage)
         uriOfImage?.let {
             Log.d("PersonAct", uriOfImage.toString())
             Storage.displayImage(this, {

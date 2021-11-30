@@ -66,7 +66,6 @@ class ChooseImage : AppCompatActivity() {
         }
 
         _binding.btnChooseFinalImage.setOnClickListener {
-            val testBool = network.finishedDownloadImage
             if (Storage.bitmap != null && network.finishedDownloadImage)
                 {
                 Storage.saveImage(Storage.bitmap, fileName, {
